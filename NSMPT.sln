@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.156
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NSMPT", "NSMPT\NSMPT.csproj", "{14A297DF-E35E-4228-9181-BE357AB837AA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{14A297DF-E35E-4228-9181-BE357AB837AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14A297DF-E35E-4228-9181-BE357AB837AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14A297DF-E35E-4228-9181-BE357AB837AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14A297DF-E35E-4228-9181-BE357AB837AA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D543D232-632C-4C23-A565-02DE3950EF33}
+	EndGlobalSection
+EndGlobal
