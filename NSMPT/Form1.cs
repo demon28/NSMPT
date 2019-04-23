@@ -16,5 +16,12 @@ namespace NSMPT
         {
             InitializeComponent();
         }
+
+        private void Button1_Click(object sender, EventArgs e)
+        {
+            NSMPT.Facade.SendFacade send = new Facade.SendFacade();
+
+            send.SingleSend("274733956@qq.com", "jelly", "jelly2019@clearandfresh.net", "Near", "jelly2019@clearandfresh.net", "Aa654321@", "测试邮件", "<span syle='color:red'>发送一个测试邮件</span>", "smtp.exmail.qq.com");
+        }
     }
 }

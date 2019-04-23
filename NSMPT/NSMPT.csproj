@@ -79,5 +79,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NSMPT.Facade\NSMPT.Facade.csproj">
+      <Project>{9e029c20-9fb4-42a1-8f65-ed9bf5271d81}</Project>
+      <Name>NSMPT.Facade</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

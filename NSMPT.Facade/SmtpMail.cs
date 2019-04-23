@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
@@ -73,11 +75,10 @@ namespace NSMPT.Facade
         /// </summary>		
         private bool _html = false;
 
-
         /// <summary>
         /// 邮件附件列表
         /// </summary>
-        private IList Attachments;
+        private Dictionary<string,string> Attachments;
 
         /// <summary>
         /// 邮件发送优先级,可设置为"High","Normal","Low"或"1","3","5"
@@ -146,10 +147,12 @@ namespace NSMPT.Facade
         #endregion
 
 
-
-
-
         #region Properties
+
+        public Dictionary<string,string> AttachmentFile {
+            get { return this.Attachments; }
+            set { this.Attachments = value; }
+        }
 
 
         /// <summary>
@@ -283,8 +286,6 @@ namespace NSMPT.Facade
             }
         }
 
-
-
         /// <summary>
         /// 邮件服务器端口号
         /// </summary>	
@@ -295,8 +296,6 @@ namespace NSMPT.Facade
                 mailserverport = value;
             }
         }
-
-
 
         /// <summary>
         /// SMTP认证时使用的用户名
@@ -328,7 +327,6 @@ namespace NSMPT.Facade
                 password = value;
             }
         }
-
 
         public string ErrCodeHTMessage(string code)
         {
@@ -389,7 +387,6 @@ namespace NSMPT.Facade
             }
         }
 
-
         /// <summary>
         /// 错误消息反馈
         /// </summary>		
@@ -423,7 +420,6 @@ namespace NSMPT.Facade
             }
         }
 
-
         #endregion
 
 
@@ -451,20 +447,10 @@ namespace NSMPT.Facade
             }
         }
 
-        private void Dispose()
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Send()
-        {
-            return false;
-        }
-
         /// <summary>
-        /// 添加多个收件人
+        /// 添加收件人
         /// </summary>
-        /// <param name="username"></param>
+        /// <param name="Recipients"></param>
         /// <returns></returns>
         public bool AddRecipient(params string[] Recipients)
         {
@@ -494,5 +480,68 @@ namespace NSMPT.Facade
             }
             return true;
         }
+        private void Dispose()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Send()
+        {
+            using (SmtpClient smtp = new SmtpClient(mailserver))
+            {
+                smtp.Credentials = new NetworkCredential(username, password);//身份认证
+
+                MailMessage mail = new MailMessage();//建立邮件
+                mail.SubjectEncoding = Encoding.GetEncoding(Charset);//主题编码
+                mail.BodyEncoding = Encoding.GetEncoding(Charset);//正文编码
+                mail.Priority = MailPriority.Normal;//邮件的优先级为中等
+                mail.IsBodyHtml = Html;//正文为纯文本，如果需要用HTML则为true
+               
+                mail.From = new MailAddress(From);//发件人
+
+                if ((Recipient == null) || (Recipient.Count == 0)) //未填写收件人地址
+                {
+                    return false;
+                }
+                else
+                {
+
+                    for (int i = 0; i < Recipient.Count; i++)
+                    {
+                        mail.To.Add(Recipient[i].ToString());
+                    }
+
+
+                    mail.Subject = Subject;//主题
+                    mail.Body = Body;//正文
+
+                    if (Attachments != null)
+                    {
+                        foreach (string key in Attachments.Keys)
+                        {
+                            Attachment file = new Attachment(Attachments[key]);
+                            file.Name = key;
+                            mail.Attachments.Add(file);
+                        }
+                    }
+                    try
+                    {
+                        smtp.Send(mail);//正式发邮件
+                        mail.Dispose();
+                        smtp.Dispose();
+                        return true;
+                    }
+                    catch (Exception ex) { 
+                        return false;
+                    }
+                }
+
+            }
+    
+         
+        }
+
+  
+     
     }
 }
