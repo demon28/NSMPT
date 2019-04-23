@@ -422,8 +422,6 @@ namespace NSMPT.Facade
 
         #endregion
 
-
-
         /// <summary>
         /// 添加一个收件人
         /// </summary>
