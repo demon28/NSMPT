@@ -18,13 +18,16 @@ CKEDITOR.editorConfig = function( config ) {
 		{ name: 'tools' },
 		{ name: 'document',	   groups: [ 'mode', 'document', 'doctools' ] },
 		{ name: 'others' },
-		'/',
+		
 		{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
 		{ name: 'paragraph',   groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ] },
 		{ name: 'styles' },
 		{ name: 'colors' },
-		{ name: 'about' }
-	];
+       
+    ];
+
+    config.extraPlugins = 'colorbutton,panelbutton';
+
 
 	// Remove some buttons provided by the standard plugins, which are
 	// not needed in the Standard(s) toolbar.
@@ -35,4 +38,11 @@ CKEDITOR.editorConfig = function( config ) {
 
 	// Simplify the dialog windows.
 	config.removeDialogTabs = 'image:advanced;link:advanced';
+
+    config.keystrokes = [ [CKEDITOR.CTRL + 86 /* V */, 'paste']];
+    
+      // 设置快捷键，可能与浏览器冲突plugins/keystrokes/plugin.js
+     // 用于实现Ctrl + V进行粘贴
+      // 此配置将会启动粘贴之前进行过滤，若无此配置，将会出现粘贴之后才弹出过滤框
+     config.blockedKeystrokes = [ CKEDITOR.CTRL + 86];
 };
