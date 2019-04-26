@@ -39,6 +39,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="~/Scripts/jquery-3.3.1.min.js"></script>
     <script src="~/Scripts/vue.min.js"></script>
     <script src="~/Scripts/bootstrap.min.js"></script>
+  
 
     @RenderSection("Htmlhead", false)
 </head>
@@ -271,13 +272,13 @@ desired effect
                     <li class="active"><a href="Index"><i class="fa fa-dashboard"></i> <span>仪表盘</span></a></li>
                     <li class="header">基础功能</li>
                     <!-- Optionally, you can add icons to the links -->
-                    <li ><a href="Index"><i class="fa fa-pencil-square-o"></i> <span>写邮件</span></a></li>
+                    <li><a href="/Home/Index"><i class="fa fa-pencil-square-o"></i> <span>写邮件</span></a></li>
                     <li><a href="#"><i class="fa fa-cloud-download"></i> <span>收件箱</span></a></li>
                     <li><a href="#"><i class="fa fa-send"></i> <span>已发送</span></a></li>
                     <li><a href="#"><i class="fa fa-files-o"></i> <span>草稿箱</span></a></li>
                     <li><a href="#"><i class="fa fa-users"></i> <span>联系人</span></a></li>
                     <li class="header">设置</li>
-                    <li><a href="#"><i class="fa fa-cog"></i> <span>账户配置</span></a></li>
+                    <li><a href="/Account/Index"><i class="fa fa-cog"></i> <span>账户配置</span></a></li>
 
                     <li class="header">高级功能</li>
 
@@ -290,7 +291,8 @@ desired effect
                             </span>
                         </a>
                         <ul class="treeview-menu">
-                            <li><a href="#">
+                            <li>
+                                <a href="#">
                                     <i class="fa fa-circle-o"> 自定义模板</i>
                                 </a></>
                             <li><a href="#">   <i class="fa fa-circle-o"> 系统模板</i></a></li>
@@ -326,30 +328,37 @@ desired effect
         <div class="content-wrapper">
             <!-- Content Header (Page header) -->
             <section class="content-header">
-                @RenderSection("Pageheader", false)
-             
-                @*
-                <h1>
 
-                    <small>Optional description</small>
-                </h1>
-                <ol class="breadcrumb">
-                    <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
-                    <li class="active">Here</li>
-                </ol>*@
+                <div id="div_alert">
+
+                </div>
+
+
+
+                @RenderSection("Pageheader", false)
+
+                @*
+                    <h1>
+
+                        <small>Optional description</small>
+                    </h1>
+                    <ol class="breadcrumb">
+                        <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
+                        <li class="active">Here</li>
+                    </ol>*@
             </section>
 
-                <!-- Main content -->
-                <section class="content container-fluid">
+            <!-- Main content -->
+            <section class="content container-fluid">
 
 
-                    @RenderBody()
-                    <!--------------------------
-            | Your Page Content Here |
-            -------------------------->
+                @RenderBody()
+                <!--------------------------
+                | Your Page Content Here |
+                -------------------------->
 
-                </section>
-                <!-- /.content -->
+            </section>
+            <!-- /.content -->
         </div>
         <!-- /.content-wrapper -->
         <!-- Main Footer -->
@@ -448,9 +457,13 @@ desired effect
     <!-- AdminLTE App -->
     <script src="~/AdminLTE-2.4.10/dist/js/adminlte.min.js"></script>
 
+    <script src="~/AdminLTE-2.4.10/bower_components/fastclick/lib/fastclick.js"></script>
+
     <!-- Optionally, you can add Slimscroll and FastClick plugins.
          Both of these plugins are recommended to enhance the
          user experience. -->
+    <script src="~/AdminLTE-2.4.10/dist/js/demo.js"></script>
+    <script src="~/Scripts/alertsjavascrtpt.js"></script>
 
 
 </body>

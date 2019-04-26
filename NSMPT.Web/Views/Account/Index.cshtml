@@ -1,0 +1,276 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+@section Pageheader{
+
+
+    <h1>
+        <small>  Setting Account</small>
+
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Setting</li>
+    </ol>
+
+}
+
+
+<section class="content">
+    <div class="row">
+        <div class="col-md-3">
+
+
+            <div class="box box-solid">
+                <div class="box box-info">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Add Account</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <!-- form start -->
+                    <form class="form-horizontal">
+                        <div class="box-body">
+                            <div class="form-group">
+                                <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
+
+                                <div class="col-sm-10">
+                                    <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputPassword3" class="col-sm-2 control-label">Password</label>
+
+                                <div class="col-sm-10">
+                                    <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="inputPassword3" class="col-sm-2 control-label">Type</label>
+
+                                <div class="col-sm-10">
+                                    <select class="form-control" id="sl_add_mailtype">
+                             
+
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- /.box-body -->
+                        <div class="box-footer">
+                            <button type="submit" class="btn btn-info pull-right">Submit</button>
+                        </div>
+                        <!-- /.box-footer -->
+                    </form>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /. box -->
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+        <div class="col-md-9">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">Account List</h3>
+
+                    <div class="box-tools">
+                        <div class="input-group input-group-sm" style="width: 150px;">
+                            <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
+
+                            <div class="input-group-btn">
+                                <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body table-responsive no-padding">
+                    <table class="table table-hover">
+                        <tbody>
+                            <tr>
+                                <th>ID</th>
+                                <th>Email Account</th>
+                                <th>PassWord</th>
+                                <th>type</th>
+                                <th>Date</th>
+                                <th>Status</th>
+
+                                <th>operation</th>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>John@clearandfresh.net</td>
+                                <td>********</td>
+                                <td>腾讯企业邮箱</td>
+                                <td>11-7-2014</td>
+                                <td><span class="label label-success">默认账户</span></td>
+                                <td>
+                                    <button type="button" class="btn bg-purple  btn-xs">默认</button>  &nbsp; &nbsp;
+                                    <button type="button" class="btn bg-purple  btn-xs" data-toggle="modal" data-target="#modal-default">修改</button>  &nbsp; &nbsp;
+                                    <button type="button" class="btn bg-maroon  btn-xs">删除</button> &nbsp;
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>John@clearandfresh.net</td>
+                                <td>********</td>
+                                <td>腾讯企业邮箱</td>
+                                <td>11-7-2014</td>
+                                <td></td>
+                                <td>
+                                    <button type="button" class="btn bg-purple  btn-xs">默认</button>  &nbsp; &nbsp;
+
+                                    <button type="button" class="btn bg-purple  btn-xs">修改</button>  &nbsp; &nbsp;
+                                    <button type="button" class="btn bg-maroon  btn-xs">删除</button> &nbsp;
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>John@clearandfresh.net</td>
+                                <td>********</td>
+                                <td>腾讯企业邮箱</td>
+                                <td>11-7-2014</td>
+                                <td></td>
+                                <td>
+                                    <button type="button" class="btn bg-purple  btn-xs">默认</button>  &nbsp; &nbsp;
+
+                                    <button type="button" class="btn bg-purple  btn-xs">修改</button>  &nbsp; &nbsp;
+                                    <button type="button" class="btn bg-maroon  btn-xs">删除</button> &nbsp;
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>John@clearandfresh.net</td>
+                                <td>********</td>
+                                <td>腾讯企业邮箱</td>
+                                <td>11-7-2014</td>
+                                <td></td>
+                                <td>
+                                    <button type="button" class="btn bg-purple  btn-xs">默认</button>  &nbsp; &nbsp;
+
+                                    <button type="button" class="btn bg-purple  btn-xs">修改</button>  &nbsp; &nbsp;
+                                    <button type="button" class="btn bg-maroon  btn-xs">删除</button> &nbsp;
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /. box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+
+
+
+<div class="modal fade" id="modal-default">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-body">
+
+                <div class="box box-info">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Update Account</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <!-- form start -->
+                    <form class="form-horizontal">
+                        <div class="box-body">
+                            <div class="form-group">
+                                <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
+
+                                <div class="col-sm-10">
+                                    <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputPassword3" class="col-sm-2 control-label">Password</label>
+
+                                <div class="col-sm-10">
+                                    <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="inputPassword3" class="col-sm-2 control-label">Type</label>
+
+                                <div class="col-sm-10">
+                                    <select class="form-control" id="sl_update_mailtype">
+                                        <option>腾讯企业邮箱</option>
+                                        <option>163企业邮箱</option>
+
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+                  
+                        <!-- /.box-footer -->
+                    </form>
+                </div>
+
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<script type="text/javascript">
+
+
+    
+    $(document).ready(function () {
+        load_mailtype();
+
+    }
+    );
+
+    function load_mailtype() {
+        
+        $.ajax({
+            url: "/Account/LoadMailType",
+            type: "POST",
+            data: {
+         
+            },
+            success: function (result) {
+                if (!result.Success) {
+
+
+                } else {
+             
+                    if (result.Content.Data.length > 0) {
+
+                        for (var i = 0; i < result.Content.Count; i++) {
+
+                            $("#sl_add_mailtype").append("<option value='" + result.Content.Data[i].mtid + "'>" + result.Content.Data[i].Mailname + "</option>");
+                            $("#sl_update_mailtype").append("<option value='" + result.Content.Data[i].mtid + "'>" + result.Content.Data[i].Mailname + "</option>");
+                            
+                        }
+
+                    }
+                }
+            }
+        });
+
+
+    }
+
+
+</script>
