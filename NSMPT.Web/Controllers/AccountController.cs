@@ -10,6 +10,7 @@ using Winner.Framework.Utils;
 
 namespace NSMPT.Web.Controllers
 {
+    [AuthLogin]
     public class AccountController :TopControllerBase
     {
         // GET: Account
@@ -19,7 +20,7 @@ namespace NSMPT.Web.Controllers
         }
 
 
-        [HttpPost]
+     
         public ActionResult LoadMailType()
         {
             NSMPT.DataAccess.Tnsmtp_MailtypeCollection tnsmtp_MailtypeCollection = new DataAccess.Tnsmtp_MailtypeCollection();
@@ -32,7 +33,7 @@ namespace NSMPT.Web.Controllers
       
         }
 
-        [AuthLogin]
+ 
         [HttpPost]
         public ActionResult ListAccount() {
             int userid = 1;
@@ -48,7 +49,6 @@ namespace NSMPT.Web.Controllers
         }
 
 
-        [AuthLogin]
         [HttpPost]
         public ActionResult AddAccount(AccountModel model) {
 
@@ -81,7 +81,7 @@ namespace NSMPT.Web.Controllers
             return SuccessResult("添加成功！");
 
         }
-        [AuthLogin]
+   
         [HttpPost]
         public ActionResult DeleteAccount(int aid) {
 
@@ -101,7 +101,7 @@ namespace NSMPT.Web.Controllers
 
             return SuccessResult("删除成功！");
         }
-        [AuthLogin]
+  
         [HttpPost]
         public ActionResult SetDefault(int aid)
         {
@@ -128,7 +128,7 @@ namespace NSMPT.Web.Controllers
 
             return SuccessResult("设置成功！");
         }
-        [AuthLogin]
+
         [HttpPost]
         public ActionResult UpdateAccount(AccountModel model) {
 

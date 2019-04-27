@@ -1,3 +1,4 @@
+using Javirs.Common.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,8 +21,38 @@ namespace NSMPT.Web
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             ProviderManager.RegisterAccountProvider(new UserAccountProvider());
-            ProviderManager.RegisterLoginProvider(new OAuthLoginProvider("admin.shop", "bb54708175854cac960ba606ddb8966e", "basic_api", "8B242CD4B2CA4B77BB3811DBFF0D2B99", null));
+            ProviderManager.RegisterLoginProvider(new OAuthLoginProvider("nsmtp", "247aaae1be104bf4bf988708f2112e32", "basic_api", "f97c0202b0394f228643dad86da155e5", new OAuthUserTokenResolver("247aaae1be104bf4bf988708f2112e32", "f97c0202b0394f228643dad86da155e5")));
             
         }
     }
+
+
+    public class OAuthUserTokenResolver : IUserTokenResolver
+    {
+        private string _uuidkey, _secret;
+        public OAuthUserTokenResolver(string secret, string uuidkey)
+        {
+            this._uuidkey = uuidkey;
+            this._secret = secret;
+        }
+        public int GetUserId(string json)
+        {
+            if (string.IsNullOrEmpty(json))
+            {
+                return -1;
+            }
+            DefaultUserTokenResolver resolver = new DefaultUserTokenResolver(this._secret, this._uuidkey);
+            int userid = resolver.GetUserId(json);
+            if (userid <= 0)
+            {
+                return userid;
+            }
+            JsonObject JObject = JsonObject.Parse(json);
+            JsonObject JContent = JObject.GetObject("Content");
+            string token = JContent.GetString("Token");
+            HttpContext.Current.Session["token_" + userid] = token;
+            return userid;
+        }
+    }
+
 }

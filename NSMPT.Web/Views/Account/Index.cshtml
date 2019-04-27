@@ -305,9 +305,12 @@
     }
 
     function add_count() {
+
+
         var account = $("#txt_mail").val();
         var pwd = $("#txt_pwd").val();
         var maitype = $("#sl_add_mailtype").val();
+
         if (account == "" || pwd == "") {
                  alert_danger("邮箱账号或密码不能为空！");
             return;
