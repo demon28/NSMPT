@@ -36,14 +36,14 @@
                                 <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
 
                                 <div class="col-sm-10">
-                                    <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
+                                    <input type="email" class="form-control" id="txt_mail" placeholder="Email">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="inputPassword3" class="col-sm-2 control-label">Password</label>
 
                                 <div class="col-sm-10">
-                                    <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
+                                    <input type="password" class="form-control" id="txt_pwd" placeholder="Password">
                                 </div>
                             </div>
 
@@ -61,7 +61,7 @@
                         </div>
                         <!-- /.box-body -->
                         <div class="box-footer">
-                            <button type="submit" class="btn btn-info pull-right">Submit</button>
+                            <button type="submit" class="btn btn-info pull-right" onclick="add_count()">Submit</button>
                         </div>
                         <!-- /.box-footer -->
                     </form>
@@ -237,9 +237,41 @@
     
     $(document).ready(function () {
         load_mailtype();
+     //   load_account();
 
     }
     );
+
+    var vm = new Vue([]);
+
+    function VueMode(date) {
+
+
+    }
+
+    function load_account() {
+         
+        $.ajax({
+            url: "/Account/LoadAccount",
+            type: "POST",
+            data: {
+         
+            },
+            success: function (result) {
+                if (!result.Success) {
+
+                } else {
+                    if (result.Content.Data.length > 0) {
+                     
+
+                    }
+                }
+            }
+        });
+
+
+    }
+
 
     function load_mailtype() {
         
@@ -258,9 +290,9 @@
                     if (result.Content.Data.length > 0) {
 
                         for (var i = 0; i < result.Content.Count; i++) {
-
-                            $("#sl_add_mailtype").append("<option value='" + result.Content.Data[i].mtid + "'>" + result.Content.Data[i].Mailname + "</option>");
-                            $("#sl_update_mailtype").append("<option value='" + result.Content.Data[i].mtid + "'>" + result.Content.Data[i].Mailname + "</option>");
+                        
+                            $("#sl_add_mailtype").append("<option value='" + result.Content.Data[i].Mtid + "'>" + result.Content.Data[i].Mailname + "</option>");
+                            $("#sl_update_mailtype").append("<option value='" + result.Content.Data[i].Mtid + "'>" + result.Content.Data[i].Mailname + "</option>");
                             
                         }
 
@@ -270,6 +302,37 @@
         });
 
 
+    }
+
+    function add_count() {
+        var account = $("#txt_mail").val();
+        var pwd = $("#txt_pwd").val();
+        var maitype = $("#sl_add_mailtype").val();
+        if (account == "" || pwd == "") {
+                 alert_danger("邮箱账号或密码不能为空！");
+            return;
+        }
+        $.ajax({
+            url: "/Account/AddAccount",
+            type: "POST",
+            data: {
+                Account:account ,
+                Password:pwd,
+                Mail_Type: maitype
+            },
+            success: function (result) {
+                alert(JSON.stringify(result));
+
+                if (!result.Success) {
+                
+                    alert_danger("添加失败！");
+
+                } else {
+                     
+                    alert_success("添加成功！");
+                }
+            }
+        });
     }
 
 

@@ -46,5 +46,8 @@ namespace NSMPT.DataAccess
            return ListByCondition(strwhere);
 
         }
+
+      
+
 	}
 }

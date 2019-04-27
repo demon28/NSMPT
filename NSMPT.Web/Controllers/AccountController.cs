@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Winner.Framework.MVC;
 using Winner.Framework.MVC.Controllers;
 using Winner.Framework.Utils;
 
 namespace NSMPT.Web.Controllers
 {
-    public class AccountController : TopControllerBase
+    public class AccountController :TopControllerBase
     {
         // GET: Account
         public ActionResult Index()
@@ -31,6 +32,7 @@ namespace NSMPT.Web.Controllers
       
         }
 
+        [AuthLogin]
         [HttpPost]
         public ActionResult ListAccount() {
             int userid = 1;
@@ -45,6 +47,8 @@ namespace NSMPT.Web.Controllers
             return SuccessResultList(list, tnsmtp_AccountCollection.ChangePage);
         }
 
+
+        [AuthLogin]
         [HttpPost]
         public ActionResult AddAccount(AccountModel model) {
 
@@ -54,7 +58,7 @@ namespace NSMPT.Web.Controllers
             tnsmtp_Account.Password = model.Password;
 
             DataAccess.Tnsmtp_AccountCollection tnsmtp_AccountCollection = new DataAccess.Tnsmtp_AccountCollection();
-            tnsmtp_AccountCollection.ListAll();
+            tnsmtp_AccountCollection.ListByUserId(SysUser.UserId);
 
             if (tnsmtp_AccountCollection.DataTable.Rows.Count>0)
             {
@@ -67,7 +71,7 @@ namespace NSMPT.Web.Controllers
 
             tnsmtp_Account.MailType = model.Mail_Type;
             tnsmtp_Account.Status = 0;
-            tnsmtp_Account.Userid = 1;
+            tnsmtp_Account.Userid = SysUser.UserId;
 
             if (!tnsmtp_Account.Insert())
             {
@@ -77,6 +81,7 @@ namespace NSMPT.Web.Controllers
             return SuccessResult("添加成功！");
 
         }
+        [AuthLogin]
         [HttpPost]
         public ActionResult DeleteAccount(int aid) {
 
@@ -96,6 +101,7 @@ namespace NSMPT.Web.Controllers
 
             return SuccessResult("删除成功！");
         }
+        [AuthLogin]
         [HttpPost]
         public ActionResult SetDefault(int aid)
         {
@@ -122,7 +128,7 @@ namespace NSMPT.Web.Controllers
 
             return SuccessResult("设置成功！");
         }
-
+        [AuthLogin]
         [HttpPost]
         public ActionResult UpdateAccount(AccountModel model) {
 
