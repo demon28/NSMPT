@@ -1,4 +1,5 @@
 ﻿using NSMPT.Entites;
+using NSMPT.Entites.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +25,7 @@ namespace NSMPT.Web.Controllers
         public ActionResult LoadMailType()
         {
             NSMPT.DataAccess.Tnsmtp_MailtypeCollection tnsmtp_MailtypeCollection = new DataAccess.Tnsmtp_MailtypeCollection();
-            if (tnsmtp_MailtypeCollection.ListAll())
+            if (tnsmtp_MailtypeCollection.ListMailtype())
             {
                 var list = MapProvider.Map<Mailtype>(tnsmtp_MailtypeCollection.DataTable);
                 return SuccessResultList(list, tnsmtp_MailtypeCollection.ChangePage);
@@ -36,15 +37,14 @@ namespace NSMPT.Web.Controllers
  
         [HttpPost]
         public ActionResult ListAccount() {
-            int userid = 1;
+        
             DataAccess.Tnsmtp_AccountCollection tnsmtp_AccountCollection = new DataAccess.Tnsmtp_AccountCollection();
-
-            if (!tnsmtp_AccountCollection.ListByUserId(userid))
+            if (!tnsmtp_AccountCollection.ListByUserId(SysUser.UserId))
             {
                 return FailResult("获取账户失败！");
             }
 
-            var list = MapProvider.Map<AccountModel>(tnsmtp_AccountCollection.DataTable);
+            var list = MapProvider.Map<AccountListModel>(tnsmtp_AccountCollection.DataTable);
             return SuccessResultList(list, tnsmtp_AccountCollection.ChangePage);
         }
 
@@ -91,9 +91,7 @@ namespace NSMPT.Web.Controllers
                 return FailResult("删除失败！");
             }
 
-            tnsmtp_Account.Status = 1;
-
-            if (!tnsmtp_Account.Update())
+            if (!tnsmtp_Account.Delete())
             {
                 return FailResult("删除失败！");
             }
@@ -110,7 +108,11 @@ namespace NSMPT.Web.Controllers
             if (tnsmtp_Account1.SelectByDefault(1))
             {
                 tnsmtp_Account1.Isdefault = 0;
-                tnsmtp_Account1.Update();
+                if (!tnsmtp_Account1.Update())
+                {
+                    return FailResult("设置失败！");
+                }
+               
             }
 
             DataAccess.Tnsmtp_Account tnsmtp_Account2 = new DataAccess.Tnsmtp_Account();

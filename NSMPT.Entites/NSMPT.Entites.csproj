@@ -42,7 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="Model\AccountListModel.cs" />
     <Compile Include="Model\AccountModel.cs" />
     <Compile Include="Model\MailtypeModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

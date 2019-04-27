@@ -18,7 +18,7 @@ function alert_danger(message) {
     var html = "<div class=\"alert alert-danger alert-dismissible\">  <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">×</button> <h4><i class=\"icon fa fa-check\"></i> Alert!</h4> " + message + " </div > ";
     $("#div_alert").html(html);
     $("#div_alert").hide();
-    $("#div_alert").show().delay(2000).hide(300);
+    $("#div_alert").show().delay(3000).hide(300);
 
 }
 

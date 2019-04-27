@@ -27,7 +27,7 @@ namespace NSMPT.DataAccess
         public bool SelectByDefault(int defaultstatus)
         {
             string strwhere = " isdefault=:defaultstatus";
-            AddParameter("isdefault", defaultstatus);
+            AddParameter("defaultstatus", defaultstatus);
 
             return SelectByCondition(strwhere);
 
@@ -40,10 +40,12 @@ namespace NSMPT.DataAccess
 	{
 		public bool ListByUserId(int userid)
         {
-            string strwhere = " userid=:userid";
+
+
+            string sql = "select t.aid,t.account,t.userid,t.status,t.isdefault,tm.mailname,t.createtime,t.password,t.mail_type from tnsmtp_account t left join tnsmtp_mailtype tm on t.mail_type=tm.mtid where t.status=0 and t.userid=:userid order by t.createtime asc";
             AddParameter("userid", userid);
 
-           return ListByCondition(strwhere);
+           return ListBySql(sql);
 
         }
 

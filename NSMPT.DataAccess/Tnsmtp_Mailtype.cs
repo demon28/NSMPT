@@ -31,6 +31,11 @@ namespace NSMPT.DataAccess
 	/// </summary>
 	public partial class Tnsmtp_MailtypeCollection
 	{
-		
+        public bool ListMailtype() {
+
+            string sql = "select t.mtid,t.mailname from tnsmtp_mailtype t where t.status = 0";
+
+            return ListBySql(sql);
+        }
 	}
 }
