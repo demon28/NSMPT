@@ -28,6 +28,14 @@ namespace NSMPT.DataAccess
     public partial class Tnsmtp_Contact : DataAccessBase
     {
         //Custom Extension Class
+
+        public bool SelectByUserId(int userid,int contactid) {
+            string where = " userid=:userid  and ContactId=:contactid";
+            AddParameter("userid", userid);
+            AddParameter("contactid", contactid);
+            return SelectByCondition(where);
+
+        }
     }
 
     /// <summary>

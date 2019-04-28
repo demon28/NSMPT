@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EnumType.cs" />
     <Compile Include="Model\AccountListModel.cs" />
     <Compile Include="Model\AccountModel.cs" />
     <Compile Include="Model\MailtypeModel.cs" />

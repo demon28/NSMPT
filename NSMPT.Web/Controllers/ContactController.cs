@@ -46,6 +46,48 @@ namespace NSMPT.Web.Controllers
             return SuccessResultList(list, tnsmtp_ContactgroupCollection.ChangePage);
         }
 
+        [HttpPost]
+        public ActionResult DeleteContact(int ContactId) {
+
+            DataAccess.Tnsmtp_Contact tnsmtp_Contact = new DataAccess.Tnsmtp_Contact();
+            if (!tnsmtp_Contact.SelectByUserId(SysUser.UserId,ContactId))
+            {
+                return FailResult();
+            }
+
+            tnsmtp_Contact.Status = (int)Status.删除;
+
+            if (!tnsmtp_Contact.Update())
+            {
+                return FailResult();
+            }
+            return SuccessResult();
+        }
+
+        [HttpPost]
+        public ActionResult UpdateContact(Tnsmtp_ContactMap model)
+        {
+
+            DataAccess.Tnsmtp_Contact tnsmtp_Contact = new DataAccess.Tnsmtp_Contact();
+            if (!tnsmtp_Contact.SelectByUserId(SysUser.UserId, model.ContactId))
+            {
+                return FailResult();
+            }
+            tnsmtp_Contact.Email = model.Email;
+            tnsmtp_Contact.ContactName = model.ContactName;
+            tnsmtp_Contact.Gid = model.Gid;
+          
+            tnsmtp_Contact.Status = (int)Status.正常;
+
+            if (!tnsmtp_Contact.Update())
+            {
+                return FailResult();
+            }
+            return SuccessResult();
+        }
+
+
+
 
         [HttpPost]
         public ActionResult AddGroup(Tnsmtp_ContactgroupMap model) {
