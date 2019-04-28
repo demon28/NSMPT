@@ -59,7 +59,7 @@
                         </div>
                         <!-- /.box-body -->
                         <div class="box-footer">
-                            <button type="button" class="btn btn-info pull-right">Submit</button>
+                            <button type="button" class="btn btn-info pull-right" id="btn_addContact">Submit</button>
                         </div>
                         <!-- /.box-footer -->
                     </form>
@@ -171,6 +171,7 @@
 
 
     var account_vm;
+    var contact_vm;
     $(document).ready(function () {
 
         account_vm = new Vue({
@@ -250,11 +251,75 @@
             }
 
         });
+
+        contact_vm = new Vue({
+
+            el: "#App_Contact",
+            data: {
+                list: {}
+            },
+            created: function () {
+                this.Init();
+            },
+            methods: {
+                Init: function () {
+
+                    var self = this;
+                    $.ajax({
+                        url: "/Contact/ListContact",
+                        type: "POST",
+                        success: function (result) {
+
+                            if (result.Success) {
+                                self.list = result.Content.Data;
+                            }
+
+                        }
+                    })
+                }
+
+            }
+
+
+
+
+
+        });
+
+    })
+
+    $("#btn_addContact").click(function () {
+
+        var contactName = $("#txt_name").val();
+        var contactEmail = $("#txt_mail").val();
+        var groupid= $("#sl_add_Contact").val();
+         $.ajax({
+            url: "/Contact/AddContact",
+             type: "POST",
+             data:{
+                 ContactName:contactName,
+                 Email: contactEmail,
+                 Gid:groupid
+             },
+            success: function (result) {
+             
+                if (result.Success) {
+                    alert_success("添加成功！");
+                 
+
+                } else {
+                    alert_danger("添加失败！");
+                     
+                    }
+
+                }
+
+         
+        })
+
+
+
     });
-
-
-
-
 
     function loadgroupselect() {
 

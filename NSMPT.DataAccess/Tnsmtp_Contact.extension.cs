@@ -30,7 +30,7 @@ namespace NSMPT.DataAccess
         //Custom Extension Class
 
         public bool SelectByUserId(int userid,int contactid) {
-            string where = " userid=:userid  and ContactId=:contactid";
+            string where = " user_id=:userid  and ContactId=:contactid";
             AddParameter("userid", userid);
             AddParameter("contactid", contactid);
             return SelectByCondition(where);
@@ -47,7 +47,7 @@ namespace NSMPT.DataAccess
 
         public bool ListByUserid(int userid)
         {
-            string where = " userid=:userid";
+            string where = " user_id=:userid";
             AddParameter("userid", userid);
 
             return ListByCondition(where);
