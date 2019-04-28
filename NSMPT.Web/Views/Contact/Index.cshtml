@@ -197,10 +197,10 @@
 
                     var groupname = $("#txt_gourpname").val();
                     if (groupname == "" || groupname == null) {
-                         alert_danger("请添加分组名称！");
+                        alert_danger("请添加分组名称！");
                         return;
                     }
-                    
+
                     $.ajax({
                         url: "/Contact/AddGroup",
                         type: "POST",
@@ -210,7 +210,7 @@
                         success: function (result) {
                             if (result.Success) {
                                 alert_success("添加功能！");
-                                loadgroupselect();
+                                account_vm.InitGroup();
                             } else {
                                 alert_danger("添加失败！");
                             }
@@ -220,37 +220,33 @@
                 },
                 DeleteGroup: function (item) {
 
-                     $.ajax({
-            url: "/Contact/DeleteGroup",
-                         type: "POST",
-                         data: { Gid:item.Gid },
-                      success: function (result) {
-                   $("#sl_add_Contact").html("");
-                if (result.Success) {
+                    $.ajax({
+                        url: "/Contact/DeleteGroup",
+                        type: "POST",
+                        data: { Gid: item.Gid },
+                        success: function (result) {
+                            $("#sl_add_Contact").html("");
+                            if (result.Success) {
 
-                    InitGroup();
-                    loadgroupselect()
+                                  account_vm.InitGroup();
 
-                    } else {
-                     
-                     
+                            } else {
 
-                    }
+
+
+
+                            }
+
+                        }
+
+                    });
+
 
                 }
-
-            }
-        })
-
-                }
-
             }
 
         });
-
-
-    }
-    );
+    });
 
 
 
