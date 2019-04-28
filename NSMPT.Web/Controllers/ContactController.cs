@@ -90,10 +90,11 @@ namespace NSMPT.Web.Controllers
 
 
         [HttpPost]
-        public ActionResult AddGroup(Tnsmtp_ContactgroupMap model) {
+        public ActionResult AddGroup(string Groupname) {
             DataAccess.Tnsmtp_Contactgroup tnsmtp_Contactgroup = new DataAccess.Tnsmtp_Contactgroup();
-            tnsmtp_Contactgroup.Groupname = model.Groupname;
+            tnsmtp_Contactgroup.Groupname = Groupname;
             tnsmtp_Contactgroup.Userid = SysUser.UserId;
+            tnsmtp_Contactgroup.Status = (int)Entites.Status.正常;
             if (!tnsmtp_Contactgroup.Insert())
             {
                 return FailResult();
