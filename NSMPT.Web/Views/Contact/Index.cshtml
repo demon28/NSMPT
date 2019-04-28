@@ -16,6 +16,8 @@
     </ol>
 
 }
+
+
 <section class="content">
 
     <div class="row">
@@ -166,6 +168,8 @@
 
 <script type="text/javascript">
 
+
+
     var account_vm;
     $(document).ready(function () {
 
@@ -228,7 +232,7 @@
                             $("#sl_add_Contact").html("");
                             if (result.Success) {
 
-                                  account_vm.InitGroup();
+                                account_vm.InitGroup();
 
                             } else {
 
@@ -258,18 +262,18 @@
             url: "/Contact/ListGroup",
             type: "POST",
             success: function (result) {
-                   $("#sl_add_Contact").html("");
+                $("#sl_add_Contact").html("");
                 if (result.Success) {
 
                     if (result.Content.Data.length > 0) {
-                     
+
                         for (var i = 0; i < result.Content.Data.length; i++) {
 
                             $("#sl_add_Contact").append("<option value='" + result.Content.Data[i].Gid + "'>" + result.Content.Data[i].Groupname + "</option>");
                         }
 
                     } else {
-                     
+
                         $("#sl_add_Contact").append("<option value='0'>默认小组</option>");
 
                     }

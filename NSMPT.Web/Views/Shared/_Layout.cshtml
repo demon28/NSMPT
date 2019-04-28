@@ -39,8 +39,9 @@
 
     <script src="~/Scripts/jquery-3.3.1.min.js"></script>
     <script src="~/Scripts/vue.min.js"></script>
-    <script src="~/Scripts/bootstrap.min.js"></script>
-    <script src="~/Scripts/alertsjavascrtpt.js"></script>
+
+
+
     @RenderSection("Htmlhead", false)
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -620,14 +621,14 @@
                 @RenderSection("Pageheader", false)
 
                 @*
-                <h1>
+                    <h1>
 
-                    <small>Optional description</small>
-                </h1>
-                <ol class="breadcrumb">
-                    <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
-                    <li class="active">Here</li>
-                </ol>*@
+                        <small>Optional description</small>
+                    </h1>
+                    <ol class="breadcrumb">
+                        <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
+                        <li class="active">Here</li>
+                    </ol>*@
             </section>
 
             <!-- Main content -->
@@ -636,8 +637,8 @@
 
                 @RenderBody()
                 <!--------------------------
-            | Your Page Content Here |
-            -------------------------->
+                | Your Page Content Here |
+                -------------------------->
 
             </section>
             <!-- /.content -->
@@ -844,7 +845,7 @@
         </aside>
         <!-- /.control-sidebar -->
         <!-- Add the sidebar's background. This div must be placed
-     immediately after the control sidebar -->
+        immediately after the control sidebar -->
         <div class="control-sidebar-bg"></div>
     </div>
     <!-- ./wrapper -->
@@ -885,5 +886,9 @@
     <script src="~/AdminLTE-2.4.10/dist/js/pages/dashboard.js"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="~/AdminLTE-2.4.10/dist/js/demo.js"></script>
+
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery.bootstrap-growl.js"></script>
+    <script src="~/Scripts/alertsjavascrtpt.js"></script>
 </body>
 </html>
