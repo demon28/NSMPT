@@ -55,9 +55,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Code\Tnsmtp_Account.generate.cs" />
+    <Compile Include="Code\Tnsmtp_Contact.generate.cs" />
+    <Compile Include="Code\Tnsmtp_Contactgroup.generate.cs" />
     <Compile Include="Code\Tnsmtp_Mailtype.generate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tnsmtp_Account.cs" />
+    <Compile Include="Tnsmtp_Contact.extension.cs" />
+    <Compile Include="Tnsmtp_Contactgroup.extension.cs" />
     <Compile Include="Tnsmtp_Mailtype.cs" />
   </ItemGroup>
   <ItemGroup>

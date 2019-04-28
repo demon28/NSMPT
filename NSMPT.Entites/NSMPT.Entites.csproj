@@ -45,6 +45,8 @@
     <Compile Include="Model\AccountListModel.cs" />
     <Compile Include="Model\AccountModel.cs" />
     <Compile Include="Model\MailtypeModel.cs" />
+    <Compile Include="Model\Tnsmtp_ContactgroupMap.generate.cs" />
+    <Compile Include="Model\Tnsmtp_ContactMap.generate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
