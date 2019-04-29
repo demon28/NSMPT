@@ -89,7 +89,12 @@
                         <li class="list-group-item" v-for="item in groupitems">
 
                             <b>{{item.Groupname}}</b>&nbsp;&nbsp;
-                            <a class="pull-right" v-on:click="DeleteGroup(item)">delete</a>
+
+
+                            <a class="pull-right" v-on:click="UpdateGroup(item)"> delete</a>
+                            <div class="col-xs-1 pull-right"> </div>
+                            <a class="pull-right" v-on:click="DeleteGroup(item)">update</a>
+
                         </li>
 
                     </ul>
@@ -164,166 +169,6 @@
     <!-- /.row -->
 
 </section>
-
-
-<script type="text/javascript">
-
-
-
-    var account_vm;
-    var contact_vm;
-    $(document).ready(function () {
-
-        account_vm = new Vue({
-            el: "#app",
-            data: {
-                groupitems: {}
-            },
-            created: function () {
-                this.InitGroup();
-            },
-            methods: {
-                InitGroup: function () {
-
-                    var self = this;
-                    $.ajax({
-                        url: "/Contact/ListGroup",
-                        type: "POST",
-                        success: function (result) {
-
-                            if (result.Success) {
-                                self.groupitems = result.Content.Data;
-                            }
-                            loadgroupselect();
-                        }
-                    })
-                },
-                AddGroup: function () {
-
-                    var groupname = $("#txt_gourpname").val();
-                    if (groupname == "" || groupname == null) {
-                        alert_danger("请添加分组名称！");
-                        return;
-                    }
-
-                    $.ajax({
-                        url: "/Contact/AddGroup",
-                        type: "POST",
-                        data: {
-                            Groupname: groupname
-                        },
-                        success: function (result) {
-                            if (result.Success) {
-                                alert_success("添加功能！");
-                                account_vm.InitGroup();
-                            } else {
-                                alert_danger("添加失败！");
-                            }
-                        }
-                    })
-
-                },
-                DeleteGroup: function (item) {
-
-                    $.ajax({
-                        url: "/Contact/DeleteGroup",
-                        type: "POST",
-                        data: { Gid: item.Gid },
-                        success: function (result) {
-                            $("#sl_add_Contact").html("");
-                            if (result.Success) {
-
-                                account_vm.InitGroup();
-
-                            } else {
-
-
-
-
-                            }
-
-                        }
-
-                    });
-
-
-                }
-            }
-
-        });
-
-
-    });
-
-
-
-
-
-    $("#btn_addContact").click(function () {
-
-        var contactName = $("#txt_name").val();
-        var contactEmail = $("#txt_mail").val();
-        var groupid = $("#sl_add_Contact").val();
-        $.ajax({
-            url: "/Contact/AddContact",
-            type: "POST",
-            data: {
-                ContactName: contactName,
-                Email: contactEmail,
-                Gid: groupid
-            },
-            success: function (result) {
-
-                if (result.Success) {
-                    alert_success("添加成功！");
-
-
-                } else {
-                    alert_danger("添加失败！");
-
-                }
-
-            }
-
-
-        })
-
-
-
-    });
-
-    function loadgroupselect() {
-
-        $.ajax({
-            url: "/Contact/ListGroup",
-            type: "POST",
-            success: function (result) {
-                $("#sl_add_Contact").html("");
-                if (result.Success) {
-
-                    if (result.Content.Data.length > 0) {
-
-                        for (var i = 0; i < result.Content.Data.length; i++) {
-
-                            $("#sl_add_Contact").append("<option value='" + result.Content.Data[i].Gid + "'>" + result.Content.Data[i].Groupname + "</option>");
-                        }
-
-                    } else {
-
-                        $("#sl_add_Contact").append("<option value='0'>默认小组</option>");
-
-                    }
-
-                }
-
-            }
-        })
-    }
-
-
-</script>
-
-
 @section scripts{
     <link href="~/Content/wui/css/theme/438eb9/wui.base.min.css" rel="stylesheet" />
     <link href="~/Content/wui/css/theme/438eb9/wui.web.min.css" rel="stylesheet" />
@@ -331,30 +176,170 @@
     <script src="~/Content/wui/scripts/wui.web.js"></script>
 
     <script type="text/javascript">
-        $(function () {
-            bindView();
+
+        var account_vm;
+        var contact_vm;
+        $(document).ready(function () {
+
+            account_vm = new Vue({
+                el: "#app",
+                data: {
+                    groupitems: {}
+                },
+                created: function () {
+                    this.InitGroup();
+                },
+                methods: {
+                    InitGroup: function () {
+
+                        var self = this;
+                        $.ajax({
+                            url: "/Contact/ListGroup",
+                            type: "POST",
+                            success: function (result) {
+
+                                if (result.Success) {
+                                    self.groupitems = result.Content.Data;
+                                }
+                                loadgroupselect();
+                            }
+                        })
+                    },
+                    AddGroup: function () {
+
+                        var groupname = $("#txt_gourpname").val();
+                        if (groupname == "" || groupname == null) {
+                            alert_danger("请添加分组名称！");
+                            return;
+                        }
+
+                        $.ajax({
+                            url: "/Contact/AddGroup",
+                            type: "POST",
+                            data: {
+                                Groupname: groupname
+                            },
+                            success: function (result) {
+                                if (result.Success) {
+                                    alert_success("添加功能！");
+                                    account_vm.InitGroup();
+                                } else {
+                                    alert_danger("添加失败！");
+                                }
+                            }
+                        })
+
+                    },
+                    DeleteGroup: function (item) {
+
+                        $.ajax({
+                            url: "/Contact/DeleteGroup",
+                            type: "POST",
+                            data: { Gid: item.Gid },
+                            success: function (result) {
+                                $("#sl_add_Contact").html("");
+                                if (result.Success) {
+                                    account_vm.InitGroup();
+                                } else {
+
+                                }
+
+                            }
+
+                        });
+
+
+                    }
+                }
+
+            });
+
+
+        });
+
+        $("#btn_addContact").click(function () {
+
+            var contactName = $("#txt_name").val();
+            var contactEmail = $("#txt_mail").val();
+            var groupid = $("#sl_add_Contact").val();
+            $.ajax({
+                url: "/Contact/AddContact",
+                type: "POST",
+                data: {
+                    ContactName: contactName,
+                    Email: contactEmail,
+                    Gid: groupid
+                },
+                success: function (result) {
+
+                    if (result.Success) {
+                        alert_success("添加成功！");
+
+
+                    } else {
+                        alert_danger("添加失败！");
+
+                    }
+
+                }
+            })
+
+        });
+
+        function loadgroupselect() {
+
+            $.ajax({
+                url: "/Contact/ListGroup",
+                type: "POST",
+                success: function (result) {
+                    $("#sl_add_Contact").html("");
+                    if (result.Success) {
+
+                        if (result.Content.Data.length > 0) {
+
+                            for (var i = 0; i < result.Content.Data.length; i++) {
+
+                                $("#sl_add_Contact").append("<option value='" + result.Content.Data[i].Gid + "'>" + result.Content.Data[i].Groupname + "</option>");
+                            }
+                        } else {
+                            $("#sl_add_Contact").append("<option value='0'>默认小组</option>");
+                        }
+
+                    }
+
+                }
+            })
+        }
+
+
+
+
+
+
+            $(function () {
+                bindView();
             $("#btnSearch").click(function () {
                 $(".pagination").paging("refresh");
             });
         });
 
-        function bindView() {
-            paging = $(".pagination").paging({
-                el: "#tab_contact",
-                url: "/Contact/ListContact",
-                methods: {
-                  
-                },
-                getData: function () {
+            function bindView() {
+                paging = $(".pagination").paging({
+                    el: "#tab_contact",
+                    url: "/Contact/ListContact",
+                    methods: {
 
-                    var data = {};
-                    return data;
-                },
-                
-               
-                
-            });
-        }
+                    },
+                    getData: function () {
+
+                        var data = {};
+                        return data;
+                    },
+
+
+
+                });
+            }
     </script>
 
 }
