@@ -92,7 +92,11 @@ namespace NSMPT.Entites
 		public int? Gid { get; set; }
 
 
-
+        /// <summary>
+        /// 分组名称
+        /// [default:string.Empty]
+        /// </summary>
+        public string Groupname { get; set; }
         #endregion 公开属性
     } 
 }

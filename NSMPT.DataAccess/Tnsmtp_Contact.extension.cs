@@ -47,10 +47,9 @@ namespace NSMPT.DataAccess
 
         public bool ListByUserid(int userid)
         {
-            string where = " user_id=:userid";
+            string sql = "select t.*,tc.groupname from tnsmtp_contact t left join tnsmtp_contactgroup tc on t.gid=tc.gid where t.user_id=:userid";
             AddParameter("userid", userid);
-
-            return ListByCondition(where);
+            return ListBySql(sql);
         }
     }
 }

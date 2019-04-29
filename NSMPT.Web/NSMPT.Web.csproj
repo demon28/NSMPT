@@ -7002,6 +7002,20 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\jquery.growl.css" />
     <Content Include="Content\nsmpt.css" />
+    <Content Include="Content\wui\css\theme\438eb9\bootstrap.min.css" />
+    <Content Include="Content\wui\css\theme\438eb9\wui.base.min.css" />
+    <Content Include="Content\wui\css\theme\438eb9\wui.wap.min.css" />
+    <Content Include="Content\wui\css\theme\438eb9\wui.web.min.css" />
+    <Content Include="Content\wui\scripts\template\wui.alert.html" />
+    <Content Include="Content\wui\scripts\template\wui.combobox-2.0.html" />
+    <Content Include="Content\wui\scripts\template\wui.combobox.html" />
+    <Content Include="Content\wui\scripts\template\wui.flyout.iframe.html" />
+    <Content Include="Content\wui\scripts\template\wui.passwordbox.html" />
+    <Content Include="Content\wui\scripts\template\wui.win.html" />
+    <Content Include="Content\wui\scripts\wui.base.js" />
+    <Content Include="Content\wui\scripts\wui.wap.js" />
+    <Content Include="Content\wui\scripts\wui.web.js" />
+    <Content Include="Content\wui\wui.config.js" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -7669,6 +7683,7 @@
     <Content Include="Scripts\vue.runtime.esm.js" />
     <Content Include="Scripts\vue.runtime.js" />
     <Content Include="Scripts\vue.runtime.min.js" />
+    <Content Include="Scripts\wui.base.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

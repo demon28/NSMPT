@@ -38,6 +38,7 @@ namespace NSMPT.Web.Controllers
         public ActionResult ListContact()
         {
             DataAccess.Tnsmtp_ContactCollection tnsmtp_ContactgroupCollection = new DataAccess.Tnsmtp_ContactCollection();
+            tnsmtp_ContactgroupCollection.ChangePage = this.ChangePage();
             if (!tnsmtp_ContactgroupCollection.ListByUserid(SysUser.UserId))
             {
                 return FailResult();
@@ -125,12 +126,15 @@ namespace NSMPT.Web.Controllers
         [HttpPost]
         public ActionResult ListGroup() {
             DataAccess.Tnsmtp_ContactgroupCollection collection = new DataAccess.Tnsmtp_ContactgroupCollection();
+  
+
             if (!collection.ListByUserid(SysUser.UserId))
             {
                 return FailResult("获取列表信息失败！ ");
             }
+         
             var list = MapProvider.Map<Tnsmtp_ContactgroupMap>(collection.DataTable);
-            return SuccessResultList(list, collection.ChangePage);
+            return SuccessResultList(list);
 
         }
     }
