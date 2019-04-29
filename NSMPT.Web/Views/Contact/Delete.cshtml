@@ -1,38 +1,35 @@
 ﻿
 @{
     ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_LayoutDefault.cshtml";
 }
-
-
-<div class="modal fade" id="modal-default">
-    <div class="modal-dialog">
-        <div class="modal-content">
-
-            <div class="modal-body">
-
-                <div class="box box-info">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">Info</h3>
-                    </div>
-                    <!-- /.box-header -->
-                    <!-- form start -->
-                    <form class="form-horizontal">
-                            您确定要删除该信息吗？
-                        <!-- /.box-footer -->
-                    </form>
-                </div>
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="update_account()">Save changes</button>
-            </div>
-        </div>
-        <!-- /.modal-content -->
+<style type="text/css">
+    .container-fluid {
+        padding: 0 !important;
+    }
+</style>
+<form id="_form">
+    <input type="hidden" id="Id" name="Id" value="@ViewBag.Id" />
+    <div class="alert-warning" style="padding:10px;">
+        <strong>系统提醒：</strong><br /> <p>  您确定是否需要删除此项？</p>
     </div>
-    <!-- /.modal-dialog -->
-</div>
-
-
+</form>
+@section scripts{
+    <script type="text/javascript">
+       var _url = "@Url.Content("/admin/Goods/Delete")";
+        $(document).ready(function () {
+            wui.win.submit(function () {
+                $.post(_url, $("#_form").serialize(), function (result) {
+                    if (!result.Success) {
+                        alert(result.Message);
+                        return false;
+                    }
+                    wui.win.callback(result.Content);
+                    wui.win.close();
+                });
+            });
+        })
+    </script>
+}
 
 

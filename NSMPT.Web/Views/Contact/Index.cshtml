@@ -91,9 +91,9 @@
                             <b>{{item.Groupname}}</b>&nbsp;&nbsp;
 
 
-                            <a class="pull-right" v-on:click="UpdateGroup(item)"> delete</a>
+                            <a class="pull-right" v-on:click="DeleteGroup(item)"> delete</a>
                             <div class="col-xs-1 pull-right"> </div>
-                            <a class="pull-right" v-on:click="DeleteGroup(item)">update</a>
+                            <a class="pull-right" v-on:click="UpdateGroup(item)">update</a>
 
                         </li>
 
@@ -170,13 +170,14 @@
 
 </section>
 @section scripts{
-    <link href="~/Content/wui/css/theme/438eb9/wui.base.min.css" rel="stylesheet" />
-    <link href="~/Content/wui/css/theme/438eb9/wui.web.min.css" rel="stylesheet" />
+
+
+
     <script src="~/Content/wui/scripts/wui.base.js"></script>
     <script src="~/Content/wui/scripts/wui.web.js"></script>
 
     <script type="text/javascript">
-
+        var _url_Delete_Group = "@Url.Content("/Contact/Delete?gid=")";
         var account_vm;
         var contact_vm;
         $(document).ready(function () {
@@ -221,7 +222,7 @@
                             },
                             success: function (result) {
                                 if (result.Success) {
-                                    alert_success("添加功能！");
+                                    alert_success("添加成功！");
                                     account_vm.InitGroup();
                                 } else {
                                     alert_danger("添加失败！");
@@ -231,21 +232,14 @@
 
                     },
                     DeleteGroup: function (item) {
-
-                        $.ajax({
-                            url: "/Contact/DeleteGroup",
-                            type: "POST",
-                            data: { Gid: item.Gid },
-                            success: function (result) {
-                                $("#sl_add_Contact").html("");
-                                if (result.Success) {
-                                    account_vm.InitGroup();
-                                } else {
-
-                                }
-
+                    wui.win.show({
+                            url: _url_Delete_Group + item.Gid,
+                            title: "删除商品",
+                            height: 65,
+                            icoClass: "glyphicon glyphicon-trash",
+                            callback: function () {
+                                account_vm.InitGroup();
                             }
-
                         });
 
 

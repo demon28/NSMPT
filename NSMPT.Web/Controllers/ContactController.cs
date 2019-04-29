@@ -137,5 +137,12 @@ namespace NSMPT.Web.Controllers
             return SuccessResultList(list);
 
         }
+
+
+        public ActionResult Delete(int Gid)
+        {
+            ViewBag.Id = Gid;
+            return View();
+        }
     }
 }
