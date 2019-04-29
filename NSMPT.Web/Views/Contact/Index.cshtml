@@ -171,18 +171,58 @@
 </section>
 @section scripts{
 
+    <link href="~/Resources/css/theme/5nsmtp/wui.web.min.css" rel="stylesheet" />
+    <script src="~/Resources/scripts/knockout-3.1.0.js"></script>
 
-
-    <script src="~/Content/wui/scripts/wui.base.js"></script>
-    <script src="~/Content/wui/scripts/wui.web.js"></script>
+    <script src="~/Resources/scripts/wui/wui.web.js"></script>
 
     <script type="text/javascript">
         var _url_Delete_Group = "@Url.Content("/Contact/Delete?gid=")";
-        var account_vm;
+        var group_vm;
         var contact_vm;
         $(document).ready(function () {
+          
+            bindContactView();
+            bindGroupView();
+            setEvent();
+        });
 
-            account_vm = new Vue({
+        function setEvent() {
+            $("#btn_addContact").click(function () {
+
+            var contactName = $("#txt_name").val();
+            var contactEmail = $("#txt_mail").val();
+            var groupid = $("#sl_add_Contact").val();
+            $.ajax({
+                url: "/Contact/AddContact",
+                type: "POST",
+                data: {
+                    ContactName: contactName,
+                    Email: contactEmail,
+                    Gid: groupid
+                },
+                success: function (result) {
+
+                    if (result.Success) {
+                        alert_success("添加成功！");
+
+
+                    } else {
+                        alert_danger("添加失败！");
+
+                    }
+
+                }
+            })
+
+               });
+          $("#btnSearch").click(function () {
+                $(".pagination").paging("refresh");
+                });
+
+        }
+        function bindGroupView() {
+              account_vm = new Vue({
                 el: "#app",
                 data: {
                     groupitems: {}
@@ -201,8 +241,14 @@
 
                                 if (result.Success) {
                                     self.groupitems = result.Content.Data;
+                                    for (var i = 0; i < result.Content.Data.length; i++) {
+                                        $("#sl_add_Contact").append("<option value='" + result.Content.Data[i].Gid + "'>" + result.Content.Data[i].Groupname + "</option>");
+                                    }
+                                } else {
+                                      $("#sl_add_Contact").append("<option value='0'>默认小组</option>");
+
                                 }
-                                loadgroupselect();
+                               
                             }
                         })
                     },
@@ -238,7 +284,7 @@
                             height: 65,
                             icoClass: "glyphicon glyphicon-trash",
                             callback: function () {
-                                account_vm.InitGroup();
+                                group_vm.InitGroup();
                             }
                         });
 
@@ -247,77 +293,9 @@
                 }
 
             });
+        }   
 
-
-        });
-
-        $("#btn_addContact").click(function () {
-
-            var contactName = $("#txt_name").val();
-            var contactEmail = $("#txt_mail").val();
-            var groupid = $("#sl_add_Contact").val();
-            $.ajax({
-                url: "/Contact/AddContact",
-                type: "POST",
-                data: {
-                    ContactName: contactName,
-                    Email: contactEmail,
-                    Gid: groupid
-                },
-                success: function (result) {
-
-                    if (result.Success) {
-                        alert_success("添加成功！");
-
-
-                    } else {
-                        alert_danger("添加失败！");
-
-                    }
-
-                }
-            })
-
-        });
-
-        function loadgroupselect() {
-
-            $.ajax({
-                url: "/Contact/ListGroup",
-                type: "POST",
-                success: function (result) {
-                    $("#sl_add_Contact").html("");
-                    if (result.Success) {
-
-                        if (result.Content.Data.length > 0) {
-
-                            for (var i = 0; i < result.Content.Data.length; i++) {
-
-                                $("#sl_add_Contact").append("<option value='" + result.Content.Data[i].Gid + "'>" + result.Content.Data[i].Groupname + "</option>");
-                            }
-                        } else {
-                            $("#sl_add_Contact").append("<option value='0'>默认小组</option>");
-                        }
-
-                    }
-
-                }
-            })
-        }
-
-
-
-
-
-
-            $(function () {
-                bindView();
-            $("#btnSearch").click(function () {
-                $(".pagination").paging("refresh");
-            });
-        });
-
-            function bindView() {
+        function bindContactView() {
                 paging = $(".pagination").paging({
                     el: "#tab_contact",
                     url: "/Contact/ListContact",
@@ -329,8 +307,6 @@
                         var data = {};
                         return data;
                     },
-
-
 
                 });
             }

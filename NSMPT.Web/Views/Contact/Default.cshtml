@@ -1,0 +1,43 @@
+﻿
+@{
+    ViewBag.Title = "Default";
+    Layout = null;
+}
+
+<link href="~/Resources/css/font-awesome.min.css" rel="stylesheet" />
+
+<link href="~/Resources/css/theme/438eb9/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Resources/css/theme/438eb9/wui.base.min.css" rel="stylesheet" />
+<link href="~/Resources/css/theme/438eb9/wui.web.min.css" rel="stylesheet" />
+
+
+<script src="~/Resources/scripts/jquery-2.2.3.js"></script>
+<script src="~/Resources/scripts/wui/wui.base.js"></script>
+<script src="~/Resources/scripts/wui/wui.web.js"></script>
+
+<script src="~/Resources/scripts/vue.js"></script>
+
+
+<script src="~/Scripts/bootstrap.js"></script>
+
+<h2>Default</h2>
+<button type="button" onclick="test()">删除</button> &nbsp;
+
+
+<div class="alert alert-warning view-tip" style="display:none"></div>
+<script type="text/javascript">
+        var _url_Delete_Group = "@Url.Content("/Contact/DeleteGroup?gid=1")";
+    function test() {
+
+        wui.win.show({
+            url: _url_Delete_Group ,
+            title: "删除商品",
+            height: 65,
+            icoClass: "glyphicon glyphicon-trash",
+            callback: function () {
+                account_vm.InitGroup();
+            }
+        });
+    }
+
+</script>
