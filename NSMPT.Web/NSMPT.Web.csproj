@@ -7302,6 +7302,9 @@
     <Content Include="Resources\scripts\wui\wui.web.js" />
     <None Include="Resources\scripts\_references.js" />
     <Content Include="Scripts\alertsjavascrtpt.js" />
+    <Content Include="Scripts\bootbox.all.min.js" />
+    <Content Include="Scripts\bootbox.locales.min.js" />
+    <Content Include="Scripts\bootbox.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="AdminLTE-2.4.10\.npmignore" />
@@ -7960,6 +7963,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\vue-pager.js" />
     <Content Include="Scripts\vue.common.dev.js" />
     <Content Include="Scripts\vue.common.js" />
     <Content Include="Scripts\vue.common.prod.js" />
@@ -7990,7 +7994,6 @@
     <Content Include="Views\Contact\Index.cshtml" />
     <Content Include="Views\Dashboard\Index.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Contact\Delete.cshtml" />
     <Content Include="Views\Shared\_LayoutDefault.cshtml" />
   </ItemGroup>
   <ItemGroup>

@@ -36,6 +36,14 @@ namespace NSMPT.DataAccess
             return SelectByCondition(where);
 
         }
+        public bool SelectByGidCount(int Gid)
+        {
+            string sql = "select  count(0) gcount  from tnsmtp_contact t where t.gid=:gid";
+            AddParameter("gid",Gid);
+            return SelectBySql(sql);
+
+        }
+
     }
 
     /// <summary>
@@ -47,9 +55,12 @@ namespace NSMPT.DataAccess
 
         public bool ListByUserid(int userid)
         {
-            string sql = "select t.*,tc.groupname from tnsmtp_contact t left join tnsmtp_contactgroup tc on t.gid=tc.gid where t.user_id=:userid";
+            string sql = "select t.*,tc.groupname from tnsmtp_contact t left join tnsmtp_contactgroup tc on t.gid=tc.gid where t.user_id=:userid order by t.createtime desc";
             AddParameter("userid", userid);
             return ListBySql(sql);
         }
+
+
+
     }
 }

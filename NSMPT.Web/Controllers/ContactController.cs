@@ -105,18 +105,29 @@ namespace NSMPT.Web.Controllers
         [HttpPost]
         public ActionResult DeleteGroup(int Gid)
         {
+
+            DataAccess.Tnsmtp_Contact tnsmtp_Contact = new DataAccess.Tnsmtp_Contact();
+
+            if (tnsmtp_Contact.SelectByGidCount(Gid))
+            {
+                if (Convert.ToInt32(tnsmtp_Contact.DataRow["gcount"])>0)
+                {
+                    return FailResult("该分类包含联系人信息，不可删除！");
+                }
+            }
+           
             DataAccess.Tnsmtp_Contactgroup tnsmtp_Contactgroup = new DataAccess.Tnsmtp_Contactgroup();
 
             if (!tnsmtp_Contactgroup.SelecByUserid(SysUser.UserId, Gid))
             {
-                return FailResult();
+                return FailResult("删除失败！");
             }
 
             tnsmtp_Contactgroup.Status = 1;
           
             if (!tnsmtp_Contactgroup.Update())
             {
-                return FailResult();
+                return FailResult("删除失败！");
             }
             return SuccessResult();
         }
@@ -139,10 +150,5 @@ namespace NSMPT.Web.Controllers
         }
 
 
-        public ActionResult Delete(int Gid)
-        {
-            ViewBag.Id = Gid;
-            return View();
-        }
     }
 }
