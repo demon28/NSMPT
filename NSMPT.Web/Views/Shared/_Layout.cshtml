@@ -21,7 +21,7 @@
          folder instead of downloading all of them to reduce the load. -->
     <link rel="stylesheet" href="~/Reference/adminLTE/dist/css/skins/_all-skins.min.css">
     <!-- Morris chart -->
-    <link rel="stylesheet" href="~/Reference/adminLTE/bower_components/morris.js/morris.css">
+    @*<link rel="stylesheet" href="~/Reference/adminLTE/bower_components/morris.js/morris.css">
     <!-- jvectormap -->
     <link rel="stylesheet" href="~/Reference/adminLTE/bower_components/jvectormap/jquery-jvectormap.css">
     <!-- Date Picker -->
@@ -29,7 +29,7 @@
     <!-- Daterange picker -->
     <link rel="stylesheet" href="~/Reference/adminLTE/bower_components/bootstrap-daterangepicker/daterangepicker.css">
     <!-- bootstrap wysihtml5 - text editor -->
-    <link rel="stylesheet" href="~/Reference/adminLTE/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
+    <link rel="stylesheet" href="~/Reference/adminLTE/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">*@
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -850,7 +850,7 @@
         immediately after the control sidebar -->
         <div class="control-sidebar-bg"></div>
     </div>
- 
+
     <!-- ./wrapper -->
     <!-- jQuery 3 -->
     <script src="~/Reference/adminLTE/bower_components/jquery/dist/jquery.min.js"></script>
@@ -862,39 +862,48 @@
     </script>
     <!-- Bootstrap 3.3.7 -->
     <script src="~/Reference/adminLTE/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-    <!-- Morris.js charts -->
-    @*<script src="~/Reference/adminLTE/bower_components/raphael/raphael.min.js"></script>
-    <script src="~/Reference/adminLTE/bower_components/morris.js/morris.js"></script>*@
+
     <!-- Sparkline -->
     <script src="~/Reference/adminLTE/bower_components/jquery-sparkline/dist/jquery.sparkline.min.js"></script>
-    <!-- jvectormap -->
-    <script src="~/Reference/adminLTE/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
-    <script src="~/Reference/adminLTE/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+
     <!-- jQuery Knob Chart -->
     <script src="~/Reference/adminLTE/bower_components/jquery-knob/dist/jquery.knob.min.js"></script>
-    <!-- daterangepicker -->
-    <script src="~/Reference/adminLTE/bower_components/moment/min/moment.min.js"></script>
-    <script src="~/Reference/adminLTE/bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
-    <!-- datepicker -->
-    <script src="~/Reference/adminLTE/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
-    <!-- Bootstrap WYSIHTML5 -->
-    <script src="~/Reference/adminLTE/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
+
     <!-- Slimscroll -->
     <script src="~/Reference/adminLTE/bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
     <!-- FastClick -->
     <script src="~/Reference/adminLTE/bower_components/fastclick/lib/fastclick.js"></script>
     <!-- AdminLTE App -->
     <script src="~/Reference/adminLTE/dist/js/adminlte.min.js"></script>
-    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-    @*<script src="~/Reference/adminLTE/dist/js/pages/dashboard.js"></script>*@
+
     <!-- AdminLTE for demo purposes -->
     <script src="~/Reference/adminLTE/dist/js/demo.js"></script>
 
+    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+    @*<script src="~/Reference/adminLTE/dist/js/pages/dashboard.js"></script>
+        <!-- Bootstrap WYSIHTML5 -->
+        <script src="~/Reference/adminLTE/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
+        <!-- Morris.js charts -->
+        <script src="~/Reference/adminLTE/bower_components/raphael/raphael.min.js"></script>
+            <script src="~/Reference/adminLTE/bower_components/morris.js/morris.js"></script>
+
+        <!-- daterangepicker -->
+        <script src="~/Reference/adminLTE/bower_components/moment/min/moment.min.js"></script>
+        <script src="~/Reference/adminLTE/bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
+        <!-- datepicker -->
+        <script src="~/Reference/adminLTE/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+
+       <!-- jvectormap -->
+    <script src="~/Reference/adminLTE/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
+    <script src="~/Reference/adminLTE/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+    *@
+
+
     <script src="~/Reference/scripts/jquery.bootstrap-growl.js"></script>
     <script src="~/Reference/scripts/alertsjavascrtpt.js"></script>
- 
 
 
-      @RenderSection("scripts", false)
+
+    @RenderSection("scripts", false)
 </body>
 </html>
