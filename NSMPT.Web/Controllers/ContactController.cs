@@ -30,9 +30,9 @@ namespace NSMPT.Web.Controllers
 
             if (!tnsmtp_Contact.Insert())
             {
-                return FailResult();
+                return FailResult("添加失败！");
             }
-            return SuccessResult();
+            return SuccessResult("添加成功！");
         }
         [HttpPost]
         public ActionResult ListContact()

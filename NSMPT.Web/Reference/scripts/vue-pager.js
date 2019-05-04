@@ -153,7 +153,7 @@ function VueChangePage(options) {
         if ($(self.setting.el).parent().find(".dataTables_paginate").length > 0) {
             $(self.setting.el).parent().find(".dataTables_paginate").empty().append(ul);
         } else {
-            var div_pagination = $("<div class=\"dataTables_paginate paging_bootstrap\"></div>");
+            var div_pagination = $("<div class=\"dataTables_paginate paging_bootstrap pull-right\" style=\"margin-right:10px\"></div>");
             div_pagination.append(ul);
             $(self.setting.el).after(div_pagination);//.empty().append(ul);
         }

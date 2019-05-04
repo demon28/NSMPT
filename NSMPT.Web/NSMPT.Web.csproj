@@ -6950,6 +6950,9 @@
     <Content Include="Reference\scripts\jquery.bootstrap-growl.js" />
     <Content Include="Reference\scripts\knockout-3.1.0.js" />
     <Content Include="Reference\scripts\vue-pager.js" />
+    <Content Include="Reference\vuejs-paginate\index.js" />
+    <Content Include="Reference\vue\vue-paginate.js" />
+    <Content Include="Reference\vue\vue-paginate.min.js" />
     <Content Include="Reference\vue\vue.common.dev.js" />
     <Content Include="Reference\vue\vue.common.js" />
     <Content Include="Reference\vue\vue.common.prod.js" />
