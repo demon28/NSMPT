@@ -25,10 +25,15 @@ namespace NSMPT.Web.Controllers
         [HttpPost]
         public ActionResult AddContact(Tnsmtp_ContactMap model)
         {
+            if (model.Gid==0)
+            {
+                return FailResult("请先添加小组！");
+            }
+
             DataAccess.Tnsmtp_Contact tnsmtp_Contact = new DataAccess.Tnsmtp_Contact();
             tnsmtp_Contact.ContactName = model.ContactName;
             tnsmtp_Contact.Email = model.Email;
-            tnsmtp_Contact.Gid = model.Gid;
+             tnsmtp_Contact.Gid = model.Gid;
             tnsmtp_Contact.Status = 0;
             tnsmtp_Contact.UserId = SysUser.UserId;
 

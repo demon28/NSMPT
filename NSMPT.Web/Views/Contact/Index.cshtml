@@ -286,6 +286,23 @@
                 var contactName = $("#txt_name").val();
                 var contactEmail = $("#txt_mail").val();
                 var groupid = $("#sl_add_Contact").val();
+
+
+                 if (groupid == "" || groupid == null) {
+                            alert_danger("请先添加分组！");
+                            return;
+                 }
+       
+                if (contactName == "" || contactName == null) {
+                            alert_danger("请添加联系人名称！");
+                            return;
+                }
+                  if (contactEmail == "" || contactEmail == null) {
+                            alert_danger("请添加联系人邮箱！");
+                            return;
+                }
+
+
                 $.ajax({
                     url: "/Contact/AddContact",
                     type: "POST",
@@ -367,7 +384,7 @@
                                 }
 
                              var dialog = bootbox.dialog({
-    title: 'A custom dialog with init',
+    title: '正在导入中,请稍等...',
     message: '<p><i class="fa fa-spin fa-spinner"></i> Loading...</p>'
 });
 
@@ -429,7 +446,7 @@
                                     self.groupitems = result.Content.Data;
 
                                     $("#sl_add_Contact").html("");
-                                    $("#dl_Search").html("");
+                                    $("#dl_Search").html("");     
                                     $("#sl_update_group").html("");
                                     $("#dl_Search").append("<option value='999999999'>--请选择--</option>");
                                     if (0 < result.Content.Data.length) {
@@ -441,10 +458,9 @@
                                     }
                                     else {
 
-                                        $("#sl_add_Contact").append("<option value='0'>默认小组</option>");
-                                        $("#dl_Search").append("<option value='999999999'>--请选择--</option>");
-                                        $("#dl_Search").append("<option value='0'>默认小组</option>");
-                                        $("#sl_update_group").append("<option value='0'>默认小组</option>");
+                                        //$("#sl_add_Contact").append("<option value='0'>默认小组</option>");
+                                        //$("#dl_Search").append("<option value='0'>默认小组</option>");
+                                        //$("#sl_update_group").append("<option value='0'>默认小组</option>");
 
                                     }
 
