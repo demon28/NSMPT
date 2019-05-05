@@ -6951,6 +6951,7 @@
     <Content Include="Reference\scripts\jquery.form.min.js" />
     <Content Include="Reference\scripts\knockout-3.1.0.js" />
     <Content Include="Reference\scripts\vue-pager.js" />
+    <Content Include="Reference\scripts\xhrUpload.js" />
     <Content Include="Reference\vue\vue-paginate.js" />
     <Content Include="Reference\vue\vue-paginate.min.js" />
     <Content Include="Reference\vue\vue.common.dev.js" />

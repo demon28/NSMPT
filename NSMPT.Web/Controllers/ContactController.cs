@@ -1,6 +1,7 @@
 ﻿using NSMPT.Entites;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -183,23 +184,39 @@ namespace NSMPT.Web.Controllers
                 HttpPostedFileBase uploadFile = Request.Files[0] as HttpPostedFileBase;
                 if (uploadFile != null && uploadFile.ContentLength > 0)
                 {
-                    if (Path.GetExtension(uploadFile.FileName)!= ".xls" || Path.GetExtension(uploadFile.FileName) != ".xlsx")
+                    if (Path.GetExtension(uploadFile.FileName)!= ".xls" && Path.GetExtension(uploadFile.FileName) != ".xlsx")
                     {
                             return FailResult("请上传excel文件！");
                     }
-                    if (Directory.Exists(Server.MapPath("/File/"+SysUser.UserId+"/")) == false)
+                    if (Directory.Exists(Server.MapPath("/File/UserFile/" + SysUser.UserId+"/")) == false)
                     {
-                        Directory.CreateDirectory(Server.MapPath("/File/" + SysUser.UserId + "/"));
+                        Directory.CreateDirectory(Server.MapPath("/File/UserFile/" + SysUser.UserId + "/"));
                     }
                     filename += Path.GetExtension(uploadFile.FileName);
-                    path = Path.Combine("/File/" + SysUser.UserId + "/", filename);
+                    path = Path.Combine("/File/UserFile/" + SysUser.UserId + "/", filename);
                     uploadFile.SaveAs(Server.MapPath(path));
                 }
 
             }
 
 
-            return SuccessResult("上传成功！");
+            return SuccessResult(path);
+
+
+
+        }
+
+
+        [HttpPost]
+        public ActionResult ImportContact(string url)
+        {
+            DataTable dataTable = new DataTable();
+
+
+            //https://www.cnblogs.com/pdbs/p/9474748.html
+
+
+            return SuccessResult("导入成功！");
 
 
 

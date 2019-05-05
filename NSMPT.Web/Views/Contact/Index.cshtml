@@ -170,10 +170,11 @@
                     </table>
                 </div>
                 <div class="box-footer">
-                    <form id="updateForm" method="post" enctype="multipart/form-data">
-                        <input type="file" id="file_excel" class="btn btn-xs btn-success pull-left" style="margin-left:20px;margin-top:15px;width:200px" />
-
-                        <button type="button" class="btn btn-sm m-4 btn-success pull-left" id="btn_uploadtemp" style="margin-left:20px;margin-top:15px">导入联系人</button>
+                    <form id="updateForm" method="post" enctype="multipart/form-data" >
+                       
+                        <input type="file" id="file_excel" class="btn btn-xs btn-success pull-left" data-upload-url="/Contact/ExpExcelContact" style="margin-left:20px;margin-top:15px;" />
+                      
+                        @*<button type="button" class="btn btn-sm m-4 btn-success pull-left" id="btn_uploadtemp" style="margin-left:20px;margin-top:15px">导入联系人</button>*@
 
                         <button type="button" class="btn btn-sm m-4 btn-success pull-left" id="btn_downloadtemp" style="margin-left:20px;margin-top:15px">下载模板</button>
                     </form>
@@ -261,16 +262,22 @@
 
     <script src="~/Reference/scripts/vue-pager.js"></script>
     <script src="~/Reference/scripts/jquery.form.min.js"></script>
+    <script src="~/Reference/scripts/xhrUpload.js"></script>
 
     <script type="text/javascript">
 
         var group_vm;
         var contact_vm;
+        var dialog;
         $(document).ready(function () {
 
             bindContactView();
             bindGroupView();
             setEvent();
+
+
+
+
         });
 
         function setEvent() {
@@ -340,33 +347,39 @@
             })
             $("#btn_uploadtemp").click(function () {
 
-                var dialog = bootbox.dialog({
-                    title: '数据正在导入中，请稍等...',
-                    message: '<p><i class="fa fa-spin fa-spinner"></i> Loading...</p>'
-                });
+            
+            });
 
 
-                $("#updateForm").ajaxSubmit({
 
-                    url: "/Contact/ExpExcelContact",
-                    type: 'POST',
-                    data: {
-                        url: $("#file_excel").val()
-                    },
-                    headers: { "ClientCallMode": "ajax" }, 
-                    success: function (result) {
-                        dialog.modal('hide');
-                        alert_success("导入成功！");
-                        return true;
-                    },
-                    error: function (data) {
-                           dialog.modal('hide');
-                        alert_danger("导入失败！");
+               $("#file_excel").xhrUpload({
+                   completed: function (response) {
+
+                    console.log(response);
+                    if (!response) {
+                      alert_danger("上传出现错误");
+                    } else {
+                        if (response.Success) {
+
+
+                            bootbox.confirm("excel上传成功是否导入联系人", function (res) {
+
+                                if (!res) {
+                                    return;
+                                }
+
+                                
+
+                            });
+
+
+                        } else {
+                            var message = response.Message || "上传文件出现错误";
+                            alert_danger("上传失败："+message);
+                        }
                     }
-                });
-
-                return false; //返回false阻止表单再次提交
-
+                }
+             
             });
 
         }
@@ -512,10 +525,7 @@
             });
         }
 
-
         function bindContactView() {
-
-
 
             contact_vm = wui.pagination({
                 el: "#App_Contact",
