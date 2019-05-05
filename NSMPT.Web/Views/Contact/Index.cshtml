@@ -170,10 +170,10 @@
                     </table>
                 </div>
                 <div class="box-footer">
-                    <form id="updateForm" method="post" enctype="multipart/form-data" >
-                       
+                    <form id="updateForm" method="post" enctype="multipart/form-data">
+
                         <input type="file" id="file_excel" class="btn btn-xs btn-success pull-left" data-upload-url="/Contact/ExpExcelContact" style="margin-left:20px;margin-top:15px;" />
-                      
+
                         @*<button type="button" class="btn btn-sm m-4 btn-success pull-left" id="btn_uploadtemp" style="margin-left:20px;margin-top:15px">导入联系人</button>*@
 
                         <button type="button" class="btn btn-sm m-4 btn-success pull-left" id="btn_downloadtemp" style="margin-left:20px;margin-top:15px">下载模板</button>
@@ -347,39 +347,61 @@
             })
             $("#btn_uploadtemp").click(function () {
 
-            
             });
 
 
 
-               $("#file_excel").xhrUpload({
-                   completed: function (response) {
+            $("#file_excel").xhrUpload({
+                completed: function (response) {
 
-                    console.log(response);
                     if (!response) {
-                      alert_danger("上传出现错误");
+                        alert_danger("上传出现错误");
                     } else {
                         if (response.Success) {
-
-
+                            console.log(response);
+                            var filename = response.Content;
                             bootbox.confirm("excel上传成功是否导入联系人", function (res) {
 
                                 if (!res) {
                                     return;
                                 }
 
-                                
+                             var dialog = bootbox.dialog({
+    title: 'A custom dialog with init',
+    message: '<p><i class="fa fa-spin fa-spinner"></i> Loading...</p>'
+});
+
+                                $.ajax({
+                                    url: "/Contact/ImportContact",
+                                    type: "POST",
+                                    data: {
+                                        filename: filename,
+                                    },
+                                    success: function (result) {
+                                        if (result.Success) {
+                                            alert_success("导入成功！");
+                                            contact_vm.reload();
+                                            $("#file_excel").val("");
+                                            dialog.modal('hide');
+                                        }
+                                        else {
+                                            alert_danger(result.Message);
+                                        }
+                                    }
+                                })
+
+
 
                             });
 
 
                         } else {
                             var message = response.Message || "上传文件出现错误";
-                            alert_danger("上传失败："+message);
+                            alert_danger("上传失败：" + message);
                         }
                     }
                 }
-             
+
             });
 
         }

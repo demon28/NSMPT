@@ -43,6 +43,10 @@ namespace NSMPT.DataAccess
             return SelectBySql(sql);
 
         }
+        public bool InsertAllContact(string sql) {
+
+            return ExecuteNonQuery(sql)>0;
+        }
 
     }
 

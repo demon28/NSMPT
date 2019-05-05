@@ -1,4 +1,6 @@
 ﻿using NSMPT.Entites;
+using NSMPT.Entites.Tool;
+using NSMPT.Facade;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -200,25 +202,26 @@ namespace NSMPT.Web.Controllers
             }
 
 
-            return SuccessResult(path);
+            return SuccessResult(filename);
 
 
 
         }
 
-
+      
         [HttpPost]
-        public ActionResult ImportContact(string url)
+        public ActionResult ImportContact(string filename)
         {
-            DataTable dataTable = new DataTable();
 
-
-            //https://www.cnblogs.com/pdbs/p/9474748.html
-
-
+            string path = Server.MapPath("/File/UserFile/" + SysUser.UserId + "/") + filename;
+            DataTable excelTable = new DataTable();
+            excelTable =  ImportExcel.GetExcelDataTable(path);
+            ImportContactFacade import = new ImportContactFacade();
+            if (!import.Import(excelTable, SysUser.UserId))
+            {
+                return FailResult(import.PromptInfo.Message);
+            }
             return SuccessResult("导入成功！");
-
-
 
         }
 

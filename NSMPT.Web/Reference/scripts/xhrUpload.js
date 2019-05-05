@@ -22,7 +22,7 @@
                             + "</div>"
                         + "</div>"
                         + "<div class='xhr-upload-button' style='display: table-cell; height: 100%; width: 32px;'>"
-                            + "<button type='button' name='btn-xhr-file' class='btn btn-sm btn-xhr-file' style=' display: block; height: 100%; width: 100%;'>"
+                    + "<button type='button' name='btn-xhr-file' class='btn btn-sm btn-xhr-file btn-success' style=' display: block; height: 100%; width: 100%;'>"
                                 + "<i class='icon-upload' style='font-size:10px;'> Import</i>"
                             + "</button>"
                         + "</div>"
