@@ -1,6 +1,7 @@
 ﻿using NSMPT.Entites;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -168,6 +169,39 @@ namespace NSMPT.Web.Controllers
          
             var list = MapProvider.Map<Tnsmtp_ContactgroupMap>(collection.DataTable);
             return SuccessResultList(list);
+
+        }
+
+        [HttpPost]
+        public ActionResult ExpExcelContact(string url) {
+            string filename = SysUser.UserId+"_"+Guid.NewGuid().ToString();
+            var path = string.Empty;
+
+            if (Request.Files.Count > 0)
+            {
+
+                HttpPostedFileBase uploadFile = Request.Files[0] as HttpPostedFileBase;
+                if (uploadFile != null && uploadFile.ContentLength > 0)
+                {
+                    if (Path.GetExtension(uploadFile.FileName)!= ".xls" || Path.GetExtension(uploadFile.FileName) != ".xlsx")
+                    {
+                            return FailResult("请上传excel文件！");
+                    }
+                    if (Directory.Exists(Server.MapPath("/File/"+SysUser.UserId+"/")) == false)
+                    {
+                        Directory.CreateDirectory(Server.MapPath("/File/" + SysUser.UserId + "/"));
+                    }
+                    filename += Path.GetExtension(uploadFile.FileName);
+                    path = Path.Combine("/File/" + SysUser.UserId + "/", filename);
+                    uploadFile.SaveAs(Server.MapPath(path));
+                }
+
+            }
+
+
+            return SuccessResult("上传成功！");
+
+
 
         }
 

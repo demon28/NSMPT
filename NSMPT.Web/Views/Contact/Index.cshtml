@@ -63,6 +63,7 @@
                             <button type="button" class="btn btn-info pull-right" id="btn_addContact">Submit</button>
                         </div>
                         <!-- /.box-footer -->
+
                     </form>
                 </div>
                 <!-- /.box-body -->
@@ -169,6 +170,13 @@
                     </table>
                 </div>
                 <div class="box-footer">
+                    <form id="updateForm" method="post" enctype="multipart/form-data">
+                        <input type="file" id="file_excel" class="btn btn-xs btn-success pull-left" style="margin-left:20px;margin-top:15px;width:200px" />
+
+                        <button type="button" class="btn btn-sm m-4 btn-success pull-left" id="btn_uploadtemp" style="margin-left:20px;margin-top:15px">导入联系人</button>
+
+                        <button type="button" class="btn btn-sm m-4 btn-success pull-left" id="btn_downloadtemp" style="margin-left:20px;margin-top:15px">下载模板</button>
+                    </form>
 
                 </div>
                 <!-- /.box-body -->
@@ -180,7 +188,6 @@
     <!-- /.row -->
 
 </section>
-
 
 
 
@@ -242,7 +249,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="btn_model_close">Close</button>
-                <button type="button" class="btn btn-primary" id="btn_UpdateContact" >Save changes</button>
+                <button type="button" class="btn btn-primary" id="btn_UpdateContact">Save changes</button>
             </div>
         </div>
         <!-- /.modal-content -->
@@ -253,7 +260,7 @@
 @section scripts{
 
     <script src="~/Reference/scripts/vue-pager.js"></script>
-
+    <script src="~/Reference/scripts/jquery.form.min.js"></script>
 
     <script type="text/javascript">
 
@@ -299,34 +306,69 @@
                 contact_vm.reload();
             });
             $("#btn_UpdateContact").click(function () {
-                 var cid=  $("#span_id").val();
-                 var cname= $("#txt_cname").val();
-                 var cmail= $("#txt_cmail").val();
+                var cid = $("#span_id").val();
+                var cname = $("#txt_cname").val();
+                var cmail = $("#txt_cmail").val();
                 var gid = $("#sl_update_group").val();
 
-                   $.ajax({
-                            url: "/Contact/UpdateContact",
-                            type: "POST",
-                            data: {
-                                ContactId: cid,
-                                ContactName: cname,
-                                Email: cmail,
-                                Gid:gid
-                            },
-                            success: function (result) {
-                                if (result.Success) {
-                                    $("#modal-default").modal("hide");
-                                    alert_success("修改成功！");
-                                    contact_vm.reload();
+                $.ajax({
+                    url: "/Contact/UpdateContact",
+                    type: "POST",
+                    data: {
+                        ContactId: cid,
+                        ContactName: cname,
+                        Email: cmail,
+                        Gid: gid
+                    },
+                    success: function (result) {
+                        if (result.Success) {
+                            $("#modal-default").modal("hide");
+                            alert_success("修改成功！");
+                            contact_vm.reload();
 
-                                } else {
-                                    alert_danger(result.Message);
-                                }
-                            }
-                        })
-                  
+                        } else {
+                            alert_danger(result.Message);
+                        }
+                    }
+                })
+
 
             });
+            $("#btn_downloadtemp").click(function () {
+                window.location = "/File/ContactTemp.xls";
+
+            })
+            $("#btn_uploadtemp").click(function () {
+
+                var dialog = bootbox.dialog({
+                    title: '数据正在导入中，请稍等...',
+                    message: '<p><i class="fa fa-spin fa-spinner"></i> Loading...</p>'
+                });
+
+
+                $("#updateForm").ajaxSubmit({
+
+                    url: "/Contact/ExpExcelContact",
+                    type: 'POST',
+                    data: {
+                        url: $("#file_excel").val()
+                    },
+                    headers: { "ClientCallMode": "ajax" }, 
+                    success: function (result) {
+                        dialog.modal('hide');
+                        alert_success("导入成功！");
+                        return true;
+                    },
+                    error: function (data) {
+                           dialog.modal('hide');
+                        alert_danger("导入失败！");
+                    }
+                });
+
+                return false; //返回false阻止表单再次提交
+
+            });
+
         }
 
 
@@ -359,7 +401,7 @@
                                         for (var i = 0; i < result.Content.Data.length; i++) {
                                             $("#sl_add_Contact").append("<option value='" + result.Content.Data[i].Gid + "'>" + result.Content.Data[i].Groupname + "</option>");
                                             $("#dl_Search").append("<option value='" + result.Content.Data[i].Gid + "'>" + result.Content.Data[i].Groupname + "</option>");
-                                               $("#sl_update_group").append("<option value='" + result.Content.Data[i].Gid + "'>" + result.Content.Data[i].Groupname + "</option>");
+                                            $("#sl_update_group").append("<option value='" + result.Content.Data[i].Gid + "'>" + result.Content.Data[i].Groupname + "</option>");
                                         }
                                     }
                                     else {
@@ -368,7 +410,7 @@
                                         $("#dl_Search").append("<option value='999999999'>--请选择--</option>");
                                         $("#dl_Search").append("<option value='0'>默认小组</option>");
                                         $("#sl_update_group").append("<option value='0'>默认小组</option>");
-                                     
+
                                     }
 
 
@@ -492,9 +534,9 @@
                 },
                 methods: {
                     updateitem: function (item) {
-                    
-                         $("#span_id").val(item.ContactId);
-                         $("#txt_cname").val(item.ContactName);
+
+                        $("#span_id").val(item.ContactId);
+                        $("#txt_cname").val(item.ContactName);
                         $("#txt_cmail").val(item.Email);
                         $("#sl_update_group").val(item.Gid);
 
@@ -518,7 +560,7 @@
                                 }
                             }
                         })
-                    }
+                    },
 
                 },
                 showTips: alert_danger

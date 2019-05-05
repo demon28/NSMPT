@@ -6948,6 +6948,7 @@
     <Content Include="Reference\scripts\jquery-3.3.1.js" />
     <Content Include="Reference\scripts\jquery-3.3.1.min.js" />
     <Content Include="Reference\scripts\jquery.bootstrap-growl.js" />
+    <Content Include="Reference\scripts\jquery.form.min.js" />
     <Content Include="Reference\scripts\knockout-3.1.0.js" />
     <Content Include="Reference\scripts\vue-pager.js" />
     <Content Include="Reference\vue\vue-paginate.js" />
@@ -7002,8 +7003,10 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="File\UserFile\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="File\ContactTemp.xls" />
     <None Include="packages.config" />
     <Content Include="Reference\font\font-awesome\.bower.json" />
     <Content Include="Reference\font\font-awesome\.npmignore" />
