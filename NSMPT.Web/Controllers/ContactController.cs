@@ -89,7 +89,6 @@ namespace NSMPT.Web.Controllers
 
 
 
-
         [HttpPost]
         public ActionResult AddGroup(string Groupname) {
             DataAccess.Tnsmtp_Contactgroup tnsmtp_Contactgroup = new DataAccess.Tnsmtp_Contactgroup();

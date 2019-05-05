@@ -30,7 +30,7 @@ namespace NSMPT.DataAccess
         //Custom Extension Class
 
         public bool SelectByUserId(int userid,int contactid) {
-            string where = " user_id=:userid  and ContactId=:contactid";
+            string where = " user_id=:userid  and CONTACT_ID=:contactid";
             AddParameter("userid", userid);
             AddParameter("contactid", contactid);
             return SelectByCondition(where);
@@ -55,7 +55,7 @@ namespace NSMPT.DataAccess
 
         public bool ListByUserid(int userid,string keyword,int? gid)
         {
-            string sql = "select t.*,tc.groupname from tnsmtp_contact t left join tnsmtp_contactgroup tc on t.gid=tc.gid where t.user_id=:userid ";
+            string sql = "select t.*,tc.groupname from tnsmtp_contact t left join tnsmtp_contactgroup tc on t.gid=tc.gid where t.user_id=:userid  and t.status=0";
             AddParameter("userid", userid);
 
             if (!string.IsNullOrEmpty( keyword))
@@ -67,7 +67,7 @@ namespace NSMPT.DataAccess
                 sql += " and tc.gid=:gid";
                 AddParameter("gid", gid.Value);
             }
-            sql += " order by t.createtime desc";
+            sql += "  order by t.createtime desc";
 
 
             return ListBySql(sql);
