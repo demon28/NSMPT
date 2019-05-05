@@ -53,10 +53,23 @@ namespace NSMPT.DataAccess
     {
         //Custom Extension Class
 
-        public bool ListByUserid(int userid)
+        public bool ListByUserid(int userid,string keyword,int? gid)
         {
-            string sql = "select t.*,tc.groupname from tnsmtp_contact t left join tnsmtp_contactgroup tc on t.gid=tc.gid where t.user_id=:userid order by t.createtime desc";
+            string sql = "select t.*,tc.groupname from tnsmtp_contact t left join tnsmtp_contactgroup tc on t.gid=tc.gid where t.user_id=:userid ";
             AddParameter("userid", userid);
+
+            if (!string.IsNullOrEmpty( keyword))
+            {
+                sql += " and " + SQLHelper.ToSQLLike("t.CONTACT_NAME ",keyword);
+            }
+            if (gid.HasValue)
+            {
+                sql += " and tc.gid=:gid";
+                AddParameter("gid", gid.Value);
+            }
+            sql += " order by t.createtime desc";
+
+
             return ListBySql(sql);
         }
 

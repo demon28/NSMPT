@@ -116,12 +116,22 @@
                 <div class="box-header">
                     <h3 class="box-title">Contact List</h3>
 
+
+
+
                     <div class="box-tools">
-                        <div class="input-group input-group-sm" style="width: 150px;">
-                            <input type="text" name="btnSearch" class="form-control pull-right" placeholder="Search">
+
+                        <div class="input-group input-group-sm" style="width: 150px;float:left;margin-right:20px">
+                            <select id="dl_Search" class="form-control pull-right"></select>
+                        </div>
+
+                        <div class="input-group input-group-sm" style="width: 150px;float:left">
+
+                            <input type="text" name="btnSearch" id="txt_keyword" class="form-control pull-right" placeholder="Search">
 
                             <div class="input-group-btn">
-                                <button type="button" id="btnSearch" class="btn btn-default"><i class="fa fa-search"></i></button>
+                                <button type="button" id="btn_Search" class="btn btn-default"><i class="fa fa-search"></i></button>
+
                             </div>
                         </div>
                     </div>
@@ -181,7 +191,7 @@
 @section scripts{
 
     <script src="~/Reference/scripts/vue-pager.js"></script>
-   
+
 
     <script type="text/javascript">
 
@@ -222,11 +232,14 @@
                 })
 
             });
-            $("#btnSearch").click(function () {
+            $("#btn_Search").click(function () {
 
+                contact_vm.reload();
             });
 
         }
+
+
         function bindGroupView() {
             group_vm = new Vue({
                 el: "#app",
@@ -249,14 +262,19 @@
                                     self.groupitems = result.Content.Data;
 
                                     $("#sl_add_Contact").html("");
+                                    $("#dl_Search").html("");
+                                    $("#dl_Search").append("<option value='999999999'>--请选择--</option>");
                                     if (0 < result.Content.Data.length) {
                                         for (var i = 0; i < result.Content.Data.length; i++) {
                                             $("#sl_add_Contact").append("<option value='" + result.Content.Data[i].Gid + "'>" + result.Content.Data[i].Groupname + "</option>");
+                                            $("#dl_Search").append("<option value='" + result.Content.Data[i].Gid + "'>" + result.Content.Data[i].Groupname + "</option>");
                                         }
                                     }
                                     else {
 
                                         $("#sl_add_Contact").append("<option value='0'>默认小组</option>");
+                                        $("#dl_Search").append("<option value='999999999'>--请选择--</option>");
+                                        $("#dl_Search").append("<option value='0'>默认小组</option>");
 
                                     }
 
@@ -321,55 +339,66 @@
                         });
 
 
+                    },
+                    UpdateGroup: function (item) {
+                        bootbox.prompt("please set new group name!", function (result) {
+
+
+                            if (result == null) {
+                                return;
+                            }
+
+                            $.ajax({
+                                url: "/Contact/UpdateGroup",
+                                type: "POST",
+                                data: {
+                                    Gid: item.Gid,
+                                    Groupname: result
+
+                                },
+                                success: function (result) {
+                                    if (result.Success) {
+                                        alert_success("修改成功！");
+                                        group_vm.InitGroup();
+                                    } else {
+
+
+                                        alert_danger(result.Message);
+                                    }
+                                }
+                            });
+
+                        })
+
                     }
+
                 }
 
             });
         }
 
 
-    @*
         function bindContactView() {
-            contact_vm = new Vue({
-                el: "#App_Contact",
-                data: {
-                    Data: {}
-                },
-                created: function () {
-                    this.InitContact();
-                },
-                methods: {
-                    InitContact: function () {
-                        var self = this;
-                        $.ajax({
-                            url: "/Contact/ListContact",
-                            type: "POST",
-                            success: function (result) {
-
-                                if (result.Success) {
-                                    self.Data = result.Content.Data;
-
-                                } else {
 
 
-                                }
 
-                            }
-                        })
-                    },
-
-                }
-            });
-
-        }*@
-
-        
-        function bindContactView() {
-               contact_vm = wui.pagination({
+            contact_vm = wui.pagination({
                 el: "#App_Contact",
                 url: "/Contact/ListContact",
+                query: function () {
+                    var gid = $("#dl_Search").val();
+                    if (gid == "999999999") {
+                        gid = null;
+                    }
+                    var keywords = $("#txt_keyword").val();
+                    var data = {
+                        keyword: keywords,
+                        Gid: gid
+                    };
+                    return data;
+                },
                 methods: {},
-                showTips: wui.toast
+                showTips: alert_danger
             });
 
         }

@@ -46,13 +46,19 @@ function VueChangePage(options) {
             };
         }
         loading.show();
-        var ajaxdata = self.setting.query;
+        var cusData = {};
+        if(typeof self.setting.query =='function'){
+            cusData = self.setting.query();
+        }else{
+            cusData = self.setting.query;
+        }
+        var ajaxdata = cusData;
         if (arg) {
-            ajaxdata = $.extend(arg, self.setting.query);
+            ajaxdata = $.extend(arg, cusData);
             ajaxdata.pageindex = arg.pageindex || ajaxdata.pageindex || 1;
             ajaxdata.pagesize = ajaxdata.pagesize;
         } else {
-            ajaxdata = $.extend({ "pagesize": self.setting.pagesize, "pageindex": 1 }, self.setting.query);
+            ajaxdata = $.extend({ "pagesize": self.setting.pagesize, "pageindex": 1 }, cusData);
         }
         ajaxdata.pagesize = ajaxdata.pagesize || 10;
         $.ajax({
@@ -153,7 +159,7 @@ function VueChangePage(options) {
         if ($(self.setting.el).parent().find(".dataTables_paginate").length > 0) {
             $(self.setting.el).parent().find(".dataTables_paginate").empty().append(ul);
         } else {
-            var div_pagination = $("<div class=\"dataTables_paginate paging_bootstrap pull-right\" style=\"margin-right:10px\"></div>");
+            var div_pagination = $("<div class=\"dataTables_paginate paging_bootstrap pull-right\" style=\"margin-right:20px\"></div>");
             div_pagination.append(ul);
             $(self.setting.el).after(div_pagination);//.empty().append(ul);
         }

@@ -35,11 +35,11 @@ namespace NSMPT.Web.Controllers
             return SuccessResult("添加成功！");
         }
         [HttpPost]
-        public ActionResult ListContact()
+        public ActionResult ListContact(string keyword,int? Gid)
         {
             DataAccess.Tnsmtp_ContactCollection tnsmtp_ContactgroupCollection = new DataAccess.Tnsmtp_ContactCollection();
             tnsmtp_ContactgroupCollection.ChangePage = this.ChangePage();
-            if (!tnsmtp_ContactgroupCollection.ListByUserid(SysUser.UserId))
+            if (!tnsmtp_ContactgroupCollection.ListByUserid(SysUser.UserId, keyword,Gid))
             {
                 return FailResult();
             }
@@ -130,6 +130,29 @@ namespace NSMPT.Web.Controllers
                 return FailResult("删除失败！");
             }
             return SuccessResult();
+        }
+
+
+        [HttpPost]
+        public ActionResult UpdateGroup(int Gid,string Groupname)
+        {
+
+    
+
+            DataAccess.Tnsmtp_Contactgroup tnsmtp_Contactgroup = new DataAccess.Tnsmtp_Contactgroup();
+
+            if (!tnsmtp_Contactgroup.SelecByUserid(SysUser.UserId, Gid))
+            {
+                return FailResult("查询失败！");
+            }
+
+            tnsmtp_Contactgroup.Groupname = Groupname;
+
+            if (!tnsmtp_Contactgroup.Update())
+            {
+                return FailResult("修改失败！");
+            }
+            return SuccessResult("修改成功");
         }
 
 
