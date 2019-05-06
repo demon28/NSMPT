@@ -57,12 +57,20 @@
     <Compile Include="Code\Tnsmtp_Account.generate.cs" />
     <Compile Include="Code\Tnsmtp_Contact.generate.cs" />
     <Compile Include="Code\Tnsmtp_Contactgroup.generate.cs" />
+    <Compile Include="Code\Tnsmtp_Dynamictable.generate.cs" />
+    <Compile Include="Code\Tnsmtp_Dynamicvalue.generate.cs" />
+    <Compile Include="Code\Tnsmtp_Mailtemplate.generate.cs" />
     <Compile Include="Code\Tnsmtp_Mailtype.generate.cs" />
+    <Compile Include="Code\Tnsmtp_Raplcemark.generate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tnsmtp_Account.cs" />
     <Compile Include="Tnsmtp_Contact.extension.cs" />
     <Compile Include="Tnsmtp_Contactgroup.extension.cs" />
+    <Compile Include="Tnsmtp_Dynamictable.extension.cs" />
+    <Compile Include="Tnsmtp_Dynamicvalue.extension.cs" />
+    <Compile Include="Tnsmtp_Mailtemplate.extension.cs" />
     <Compile Include="Tnsmtp_Mailtype.cs" />
+    <Compile Include="Tnsmtp_Raplcemark.extension.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

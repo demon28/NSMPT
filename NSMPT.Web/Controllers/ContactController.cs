@@ -221,6 +221,7 @@ namespace NSMPT.Web.Controllers
             string path = Server.MapPath("/File/UserFile/" + SysUser.UserId + "/") + filename;
             DataTable excelTable = new DataTable();
             excelTable =  ImportExcel.GetExcelDataTable(path);
+
             ImportContactFacade import = new ImportContactFacade();
             if (!import.Import(excelTable, SysUser.UserId))
             {

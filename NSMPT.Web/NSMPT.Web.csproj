@@ -173,6 +173,7 @@
     <Compile Include="Controllers\ContactController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\TemplateController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -7520,6 +7521,7 @@
     <Content Include="Reference\adminLTE\bower_components\select2\src\scss\theme\default\layout.scss" />
     <Content Include="Reference\adminLTE\plugins\input-mask\phone-codes\phone-be.json" />
     <Content Include="Reference\adminLTE\plugins\input-mask\phone-codes\phone-codes.json" />
+    <Content Include="Views\Template\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Reference\adminLTE\bower_components\moment\moment.d.ts" />

@@ -24,7 +24,9 @@ namespace NSMPT.Facade
             for (int i = 0; i < dt.Rows.Count; i++)
             {
                 DataAccess.Tnsmtp_Contact tnsmtp_Contact = new DataAccess.Tnsmtp_Contact();
-                ReferenceTransactionFrom(Transaction);
+             
+                tnsmtp_Contact.ReferenceTransactionFrom(this.Transaction);
+
                 tnsmtp_Contact.ContactName = dt.Rows[i]["name"].ToString();
                 tnsmtp_Contact.Email = dt.Rows[i]["email"].ToString();
                 int gid = 0;

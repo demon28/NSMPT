@@ -22,8 +22,7 @@
 
     <div class="row">
         <div class="col-md-3">
-
-
+            <!--添加联系人-->
             <div class="box box-solid">
                 <div class="box box-info">
                     <div class="box-header with-border">
@@ -68,8 +67,10 @@
                 </div>
                 <!-- /.box-body -->
             </div>
+            <!--/添加联系人-->
 
 
+            <!--添加分组-->
             <div class="box box-info" id="app">
 
                 <div class="box-header with-border">
@@ -106,12 +107,11 @@
                 <!-- /.box-body -->
             </div>
 
-
-
-            <!-- /.box -->
+            <!--/添加分组-->
             <!-- /.box -->
         </div>
         <!-- /.col -->
+        <!--联系人列表-->
         <div class="col-md-9">
             <div class="box">
                 <div class="box-header">
@@ -184,13 +184,14 @@
             </div>
             <!-- /.nav-tabs-custom -->
         </div>
+        <!--/联系人列表-->
         <!-- /.col -->
     </div>
     <!-- /.row -->
 
 </section>
 
-
+<!-- 修改联系人 -->
 
 <div class="modal fade" id="modal-default">
     <div class="modal-dialog">
@@ -257,11 +258,10 @@
     </div>
     <!-- /.modal-dialog -->
 </div>
-
+<!-- /修改联系人 -->
 @section scripts{
 
     <script src="~/Reference/scripts/vue-pager.js"></script>
-    <script src="~/Reference/scripts/jquery.form.min.js"></script>
     <script src="~/Reference/scripts/xhrUpload.js"></script>
 
     <script type="text/javascript">
@@ -288,18 +288,18 @@
                 var groupid = $("#sl_add_Contact").val();
 
 
-                 if (groupid == "" || groupid == null) {
-                            alert_danger("请先添加分组！");
-                            return;
-                 }
-       
-                if (contactName == "" || contactName == null) {
-                            alert_danger("请添加联系人名称！");
-                            return;
+                if (groupid == "" || groupid == null) {
+                    alert_danger("请先添加分组！");
+                    return;
                 }
-                  if (contactEmail == "" || contactEmail == null) {
-                            alert_danger("请添加联系人邮箱！");
-                            return;
+
+                if (contactName == "" || contactName == null) {
+                    alert_danger("请添加联系人名称！");
+                    return;
+                }
+                if (contactEmail == "" || contactEmail == null) {
+                    alert_danger("请添加联系人邮箱！");
+                    return;
                 }
 
 
@@ -383,10 +383,10 @@
                                     return;
                                 }
 
-                             var dialog = bootbox.dialog({
-    title: '正在导入中,请稍等...',
-    message: '<p><i class="fa fa-spin fa-spinner"></i> Loading...</p>'
-});
+                                var dialog = bootbox.dialog({
+                                    title: '正在导入中,请稍等...',
+                                    message: '<p><i class="fa fa-spin fa-spinner"></i> Loading...</p>'
+                                });
 
                                 $.ajax({
                                     url: "/Contact/ImportContact",
@@ -446,7 +446,7 @@
                                     self.groupitems = result.Content.Data;
 
                                     $("#sl_add_Contact").html("");
-                                    $("#dl_Search").html("");     
+                                    $("#dl_Search").html("");
                                     $("#sl_update_group").html("");
                                     $("#dl_Search").append("<option value='999999999'>--请选择--</option>");
                                     if (0 < result.Content.Data.length) {
