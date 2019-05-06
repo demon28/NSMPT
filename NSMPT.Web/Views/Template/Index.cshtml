@@ -60,7 +60,7 @@
                     </table>
                 </div>
                 <div class="box-footer">
-             
+
                 </div>
                 <!-- /.box-body -->
             </div>
@@ -79,8 +79,8 @@
                     <ul class="list-group">
                         <li class="list-group-item" v-for="item in items">
 
-                            <a>{{item.MarkName}}</a>&nbsp;&nbsp;
-                            <a class="pull-right">{{item.MarkValue}}</a>&nbsp;&nbsp;
+                            <a  v-on:click="SetMark(item)">{{item.MarkName}}</a>&nbsp;&nbsp;
+                            <a v-on:click="SetMark(item)" class="pull-right">{{item.MarkValue}}</a>&nbsp;&nbsp;
 
                         </li>
 
@@ -94,7 +94,7 @@
             <!-- /.box -->
         </div>
         <!-- /.col -->
-  
+
         <div class="col-md-9">
 
             <div class="box box-success">
@@ -117,13 +117,13 @@
                             </div>
                             <div class="col-sm-3">
                                 <button type="button" class="btn btn-default " id="btn_addtemp" style="margin-left:20px">添加模板</button>
-                           
+
                                 <button type="button" class="btn btn-default" id="btn_updatetemp" style="margin-left:20px">修改模板</button>
                             </div>
 
                         </div>
 
-                        </div>
+                    </div>
                     <!-- /.box-body -->
                     <!-- /.box-footer -->
 
@@ -137,7 +137,7 @@
 
 
         </div>
-     
+
     </div>
     <!-- /.row -->
 
@@ -149,7 +149,9 @@
 @section scripts{
 
     <script src="~/Reference/scripts/vue-pager.js"></script>
-    <script src="~/Reference/ckeditor/ckeditor.js"></script>
+
+    <script src="~/Reference/adminLTE/bower_components/ckeditor/ckeditor.js"></script>
+
     <script type="text/javascript">
         window.onload = function () {
             CKEDITOR.replace('description', {
@@ -195,6 +197,10 @@
 
                         })
 
+                    },
+                    SetMark: function (item) {
+
+                        CKEDITOR.instances['description'].insertText(mark);
                     }
                 }
 
@@ -215,29 +221,29 @@
 
                         $("#txt_tempname").val(item.TempName);
                         CKEDITOR.instances['description'].setData(item.TempContent);
-                        $("#lb_aid").val(item.MtId); 
+                        $("#lb_aid").val(item.MtId);
                     },
                     deleteitem: function (item) {
 
                         bootbox.confirm("您确定删除该模板吗？", function (res) {
                             if (res) {
-                                
-                        $.ajax({
-                            url: "/Template/DelTemp",
-                            type: "POST",
-                            data: {
-                                mtid: item.MtId
-                            },
-                            success: function (result) {
-                                if (result.Success) {
-                                    alert_success("删除成功！");
-                                    temp_vm.reload();
 
-                                } else {
-                                    alert_danger(result.Message);
-                                }
-                            }
-                        })
+                                $.ajax({
+                                    url: "/Template/DelTemp",
+                                    type: "POST",
+                                    data: {
+                                        mtid: item.MtId
+                                    },
+                                    success: function (result) {
+                                        if (result.Success) {
+                                            alert_success("删除成功！");
+                                            temp_vm.reload();
+
+                                        } else {
+                                            alert_danger(result.Message);
+                                        }
+                                    }
+                                })
                             }
 
                         });
@@ -266,33 +272,33 @@
                     return
                 }
 
-                  $.ajax({
-                            url: "/Template/AddTemp",
-                            type: "POST",
-                            data: {
-                                TempName: temp_name,
-                                TempContent:temp_content
-                            },
-                            success: function (result) {
-                                if (result.Success) {
-                                    alert_success("添加成功！");
-                                    temp_vm.reload();
+                $.ajax({
+                    url: "/Template/AddTemp",
+                    type: "POST",
+                    data: {
+                        TempName: temp_name,
+                        TempContent: temp_content
+                    },
+                    success: function (result) {
+                        if (result.Success) {
+                            alert_success("添加成功！");
+                            temp_vm.reload();
 
-                                } else {
-                                    alert_danger(result.Message);
-                                }
-                            }
-                        })
+                        } else {
+                            alert_danger(result.Message);
+                        }
+                    }
+                })
 
             });
 
             $("#btn_updatetemp").click(function () {
 
-                 var mtid= $("#lb_aid").val(); 
-                  var temp_name = $("#txt_tempname").val();
+                var mtid = $("#lb_aid").val();
+                var temp_name = $("#txt_tempname").val();
                 var temp_content = CKEDITOR.instances['description'].getData();
 
-                 if (mtid == "" || mtid == null) {
+                if (mtid == "" || mtid == null) {
                     alert_danger("请选择您要修改的模板！")
                     return
                 }
@@ -306,26 +312,26 @@
                 }
 
 
-                  $.ajax({
-                            url: "/Template/UpdateTemp",
-                            type: "POST",
-                      data: {
-                                Mtid:mtid,
-                                TempName: temp_name,
-                                TempContent:temp_content
-                            },
-                            success: function (result) {
-                                if (result.Success) {
-                                    alert_success("修改成功！");
-                                    temp_vm.reload();
+                $.ajax({
+                    url: "/Template/UpdateTemp",
+                    type: "POST",
+                    data: {
+                        Mtid: mtid,
+                        TempName: temp_name,
+                        TempContent: temp_content
+                    },
+                    success: function (result) {
+                        if (result.Success) {
+                            alert_success("修改成功！");
+                            temp_vm.reload();
 
-                                } else {
-                                    alert_danger(result.Message);
-                                }
-                            }
-                        })
+                        } else {
+                            alert_danger(result.Message);
+                        }
+                    }
+                })
             });
-        } 
+        }
 
     </script>
 
