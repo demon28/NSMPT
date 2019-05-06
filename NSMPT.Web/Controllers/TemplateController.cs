@@ -78,7 +78,7 @@ namespace NSMPT.Web.Controllers
             return SuccessResult();
 
         }
-
+        [ValidateInput(false)]
         [HttpPost]
         public ActionResult UpdateTemp(Tnsmtp_MailtemplateMap model) {
 
@@ -92,7 +92,7 @@ namespace NSMPT.Web.Controllers
             tnsmtp_Mailtemplate.TempName = model.TempName;
             tnsmtp_Mailtemplate.TempContent = model.TempContent;
             
-            if (tnsmtp_Mailtemplate.Update())
+            if (!tnsmtp_Mailtemplate.Update())
             {
                 return FailResult("修改失败");
             }

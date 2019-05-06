@@ -116,9 +116,9 @@
 
                             </div>
                             <div class="col-sm-3">
-                                <button type="button" class="btn btn-default " id="btn_addtemp">添加模板</button>
+                                <button type="button" class="btn btn-default " id="btn_addtemp" style="margin-left:20px">添加模板</button>
                            
-                                <button type="button" class="btn btn-default" id="btn_updatetemp">修改模板</button>
+                                <button type="button" class="btn btn-default" id="btn_updatetemp" style="margin-left:20px">修改模板</button>
                             </div>
 
                         </div>
@@ -215,6 +215,7 @@
 
                         $("#txt_tempname").val(item.TempName);
                         CKEDITOR.instances['description'].setData(item.TempContent);
+                        $("#lb_aid").val(item.MtId); 
                     },
                     deleteitem: function (item) {
 
@@ -287,8 +288,42 @@
 
             $("#btn_updatetemp").click(function () {
 
+                 var mtid= $("#lb_aid").val(); 
+                  var temp_name = $("#txt_tempname").val();
+                var temp_content = CKEDITOR.instances['description'].getData();
+
+                 if (mtid == "" || mtid == null) {
+                    alert_danger("请选择您要修改的模板！")
+                    return
+                }
+                if (temp_name == "" || temp_name == null) {
+                    alert_danger("请添加模板名称！")
+                    return
+                }
+                if (temp_content == "" || temp_content == null) {
+                    alert_danger("当前模板内容为空，请添加内容");
+                    return
+                }
 
 
+                  $.ajax({
+                            url: "/Template/UpdateTemp",
+                            type: "POST",
+                      data: {
+                                Mtid:mtid,
+                                TempName: temp_name,
+                                TempContent:temp_content
+                            },
+                            success: function (result) {
+                                if (result.Success) {
+                                    alert_success("修改成功！");
+                                    temp_vm.reload();
+
+                                } else {
+                                    alert_danger(result.Message);
+                                }
+                            }
+                        })
             });
         } 
 
