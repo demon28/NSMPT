@@ -30,7 +30,7 @@ function VueChangePage(options) {
         };
         this.close = function () {
             $(self.setting.el).mask("close");
-        }
+        };
     }
     function _complete(data) {
         if (data && self.setting.onComplete && typeof self.setting.onComplete == 'function') {

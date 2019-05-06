@@ -45,12 +45,12 @@
                             <tr>
                                 <th>ID</th>
                                 <th>Name</th>
-                                <th>operation</th>
+                                <th class="text-right">operation</th>
                             </tr>
                             <tr v-for="(item,index) in Data">
                                 <td>{{item.MtId}}</td>
                                 <td>{{item.TempName}}</td>
-                                <td>
+                                <td class="text-right">
                                     <button type="button" class="btn bg-purple  btn-xs" v-on:click="updateitem(item)">编辑</button>  &nbsp; &nbsp;
                                     <button type="button" class="btn bg-maroon  btn-xs" v-on:click="deleteitem(item)">删除</button> &nbsp;
                                 </td>
@@ -116,9 +116,12 @@
 
                             </div>
                             <div class="col-sm-3">
-                                <button type="button" class="btn btn-default" id="btn_addtemp">添加该模板</button>
+                                <button type="button" class="btn btn-default " id="btn_addtemp">添加模板</button>
+                           
+                                <button type="button" class="btn btn-default" id="btn_updatetemp">修改模板</button>
                             </div>
-                         </div>
+
+                        </div>
 
                         </div>
                     <!-- /.box-body -->
@@ -215,22 +218,30 @@
                     },
                     deleteitem: function (item) {
 
+                        bootbox.confirm("您确定删除该模板吗？", function (res) {
+                            if (res) {
+                                
                         $.ajax({
                             url: "/Template/DelTemp",
                             type: "POST",
                             data: {
-                                ContactId: item.ContactId
+                                mtid: item.MtId
                             },
                             success: function (result) {
                                 if (result.Success) {
                                     alert_success("删除成功！");
-                                    contact_vm.reload();
+                                    temp_vm.reload();
 
                                 } else {
                                     alert_danger(result.Message);
                                 }
                             }
                         })
+                            }
+
+                        });
+
+
                     },
 
                 },
@@ -273,7 +284,13 @@
                         })
 
             });
-        }
+
+            $("#btn_updatetemp").click(function () {
+
+
+
+            });
+        } 
 
     </script>
 

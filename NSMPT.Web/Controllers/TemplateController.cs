@@ -47,14 +47,16 @@ namespace NSMPT.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateInput(false)]
         public ActionResult AddTemp(Entites.Tnsmtp_MailtemplateMap model)
         {
             DataAccess.Tnsmtp_Mailtemplate tnsmtp_Mailtemplate = new DataAccess.Tnsmtp_Mailtemplate();
             tnsmtp_Mailtemplate.TempName = model.TempName;
             tnsmtp_Mailtemplate.TempContent = model.TempContent;
             tnsmtp_Mailtemplate.Userid = SysUser.UserId;
+            tnsmtp_Mailtemplate.Status = 0;
 
-            if (tnsmtp_Mailtemplate.Insert())
+            if (!tnsmtp_Mailtemplate.Insert())
             {
                 return FailResult("添加失败");
             }
