@@ -155,7 +155,8 @@
     <script type="text/javascript">
         window.onload = function () {
             CKEDITOR.replace('description', {
-                height: 400
+                height: 400,
+                filebrowserImageUploadUrl :"/Template/UploadImage?",
             });
         }
         var mark_vm;
@@ -200,7 +201,7 @@
                     },
                     SetMark: function (item) {
 
-                        CKEDITOR.instances['description'].insertText(mark);
+                        CKEDITOR.instances['description'].insertText(item.MarkValue);
                     }
                 }
 

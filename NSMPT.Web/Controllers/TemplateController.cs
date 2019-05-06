@@ -1,5 +1,8 @@
 ﻿using NSMPT.DataAccess;
 using NSMPT.Entites;
+using System;
+using System.IO;
+using System.Web;
 using System.Web.Mvc;
 using Winner.Framework.MVC;
 using Winner.Framework.MVC.Controllers;
@@ -98,6 +101,56 @@ namespace NSMPT.Web.Controllers
             }
             return SuccessResult();
 
+        }
+
+        [ValidateInput(false)]
+        [HttpPost]
+        public ActionResult UploadImage()
+        {
+
+            string CKEditorFuncNum = Request.Form[0];
+            string filename = SysUser.UserId + "_" + Guid.NewGuid().ToString();
+            string filepath = "/File/UserFile/" + SysUser.UserId + "/Image/";
+
+            if (Request.Files.Count > 0)
+            {
+
+                HttpPostedFileBase uploadFile = Request.Files[0] as HttpPostedFileBase;
+               ;
+                if (uploadFile != null && uploadFile.ContentLength > 0)
+                {
+
+                    if (Path.GetExtension(uploadFile.FileName) != ".png" && Path.GetExtension(uploadFile.FileName) != ".jpg")
+                    {
+                        return Content("请上传png,jpg文件！");
+                    }
+
+                    if (Directory.Exists(Server.MapPath(filepath)) == false)
+                    {
+                        Directory.CreateDirectory(Server.MapPath(filepath));
+                    }
+                    filename += Path.GetExtension(uploadFile.FileName);
+                    filepath = Path.Combine(filepath, filename);
+                    uploadFile.SaveAs(Server.MapPath(filepath));
+                }
+
+            }
+
+
+
+            string url = GetSiteUrl() + filepath ;
+            // return Content(url);
+            return  Content(url);
+
+
+        }
+
+        public string GetSiteUrl()
+        {
+            string fullUrl = Request.Url.AbsoluteUri;
+            string querystring = Request.Url.PathAndQuery;
+            string url = fullUrl.Replace(querystring, "");
+            return url;
         }
 
 

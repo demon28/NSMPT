@@ -177,6 +177,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="HandlerImageUpload.ashx.cs">
+      <DependentUpon>HandlerImageUpload.ashx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -6601,6 +6604,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="File\ContactTemp.xls" />
+    <Content Include="HandlerImageUpload.ashx" />
     <None Include="packages.config" />
     <Content Include="Reference\font\font-awesome\.bower.json" />
     <Content Include="Reference\font\font-awesome\.npmignore" />
