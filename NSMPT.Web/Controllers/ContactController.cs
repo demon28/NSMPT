@@ -74,6 +74,42 @@ namespace NSMPT.Web.Controllers
             return SuccessResult();
         }
 
+
+        [HttpPost]
+        public ActionResult DeleteAllContact(int[] ContactId)
+        {
+            if (ContactId.Length<=0)
+            {
+                return FailResult("请选择联系人");
+            }
+
+            DataAccess.Tnsmtp_Contact tnsmtp_Contact = new DataAccess.Tnsmtp_Contact();
+            if (!tnsmtp_Contact.DeleteAllByUserId(SysUser.UserId, ContactId))
+            {
+                return FailResult();
+            }
+            return SuccessResult();
+        }
+
+
+        [HttpPost]
+        public ActionResult UpdateGroupAllContact(int gid,int[] ContactId)
+        {
+            if (ContactId.Length <= 0)
+            {
+                return FailResult("请选择联系人");
+            }
+
+            DataAccess.Tnsmtp_Contact tnsmtp_Contact = new DataAccess.Tnsmtp_Contact();
+            if (!tnsmtp_Contact.UpdateGroupAllByUserId(SysUser.UserId, gid, ContactId))
+            {
+                return FailResult();
+            }
+            return SuccessResult();
+        }
+
+
+
         [HttpPost]
         public ActionResult UpdateContact(Tnsmtp_ContactMap model)
         {

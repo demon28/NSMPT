@@ -68,8 +68,6 @@
                 <!-- /.box-body -->
             </div>
             <!--/添加联系人-->
-
-
             <!--添加分组-->
             <div class="box box-info" id="app">
 
@@ -142,7 +140,7 @@
                     <table class="table table-hover" id="tab_contact">
                         <tbody>
                             <tr>
-                                <th><input type="checkbox"  id="checkAll"/></th>
+                                <th><input type="checkbox" id="checkAll" /></th>
                                 <th>ID</th>
                                 <th>Name</th>
                                 <th>Email</th>
@@ -152,7 +150,7 @@
                                 <th>operation</th>
                             </tr>
                             <tr v-for="(item,index) in Data">
-                                <td><input type="checkbox" id="box_check" value="{{item.ContactId}}" /> </td>
+                                <td><input type="checkbox" id="box_check" :value="item.ContactId" /> </td>
                                 <td>{{item.ContactId}}</td>
                                 <td>{{item.ContactName}}</td>
                                 <td>{{item.Email}}</td>
@@ -180,7 +178,7 @@
 
                         <button type="button" class="btn btn-sm m-4 btn-success pull-left" id="btn_alldeltemp" style="margin-left:20px;margin-top:15px">批量删除</button>
 
-                        <button type="button" class="btn btn-sm m-4 btn-success pull-left" id="btn_alluploadtemp" style="margin-left:20px;margin-top:15px">批量修改</button>
+                        <button type="button" class="btn btn-sm m-4 btn-success pull-left" id="btn_allupdatetemp" style="margin-left:20px;margin-top:15px">批量修改</button>
                     </form>
 
                 </div>
@@ -366,28 +364,121 @@
                 window.location = "/File/ContactTemp.xls";
 
             })
-            $("#btn_uploadtemp").click(function () {
 
-            });
 
             $("#checkAll").click(function () {
                 $("input[id^='box_']").attr("checked", this.checked);
+                
             });
+
+            $("input[id^='box_']").click(function () {
+
+                var boxs = $("input[id^='box_']"); 
+                $("#checkAll").attr("checked", boxs.length == boxs.filter(":checked").length);
+
+            }); 
+
+
+
             $("#btn_alldeltemp").click(function () {
 
-                var list =new Array();
+                var list = new Array();
                 var checkedbox = $("input[id^='box_']:checked");
                 if (checkedbox.length == 0) {
                     alert_danger("请选择要删除的联系人");
                 } else {
 
                     checkedbox.each(function () {
-                        console.log(this);
-                            list.push(this.value);
-                        });
+                        list.push(this.value);
+                    });
 
-                 
+                    $.ajax({
+                        url: "/Contact/DeleteAllContact",
+                        type: "POST",
+                        data: {
+                            ContactId: list,
+
+                        },
+                        success: function (result) {
+                            if (result.Success) {
+
+                                alert_success("删除成功！");
+                                contact_vm.reload();
+
+                            } else {
+                                alert_danger(result.Message);
+                            }
+                        }
+                    })
+
+
+
+
+
                 }
+
+
+            });
+            $("#btn_allupdatetemp").click(function () {
+
+                var list = new Array();
+                var checkedbox = $("input[id^='box_']:checked");
+                if (checkedbox.length == 0) {
+                    alert_danger("请选择要删除的联系人");
+                } else {
+
+                    checkedbox.each(function () {
+                        list.push(this.value);
+                    });
+
+                    var boxchecklist = [];
+                    boxchecklist.push({ "text": "请选择", "value": "" });
+
+                    for (var i = 0; i < group_vm.groupitems.length; i++) {
+
+                        var text = group_vm.groupitems[i].Groupname;
+                        var value = group_vm.groupitems[i].Gid;
+                        var boxitem = { "text": text, "value": value };
+
+                        boxchecklist.push(boxitem);
+                    }
+
+
+                    bootbox.prompt({
+                        title: "This is a prompt with select!",
+                        inputType: 'select',
+                        inputOptions: boxchecklist,
+                        callback: function (res) {
+                           
+                            $.ajax({
+                                url: "/Contact/UpdateGroupAllContact",
+                                type: "POST",
+                                data: {
+                                    ContactId: list,
+                                    gid: res
+                                },
+                                success: function (result) {
+                                    if (result.Success) {
+
+                                        alert_success("修改成功！");
+                                        contact_vm.reload();
+
+                                    } else {
+                                        alert_danger(result.Message);
+                                    }
+                                }
+                            })
+                           
+                        }
+                    });
+
+
+
+
+
+
+                }
+
 
 
             });

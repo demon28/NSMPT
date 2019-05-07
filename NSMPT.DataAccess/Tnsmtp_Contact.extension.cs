@@ -29,6 +29,46 @@ namespace NSMPT.DataAccess
     {
         //Custom Extension Class
 
+        public bool DeleteAllByUserId(int userid, int[] contactid)
+        {
+
+            string sql = " update tnsmtp_contact t set t.status=1 where user_id=:userid and t.contact_id in (";
+
+            foreach (var item in contactid)
+            {
+                sql += item + ",";
+            }
+            sql = sql.Substring(0, sql.LastIndexOf(','));
+
+            sql +=")";
+          
+            AddParameter("userid", userid);
+          
+            return ExecuteNonQuery(sql)>0;
+
+        }
+
+        public bool UpdateGroupAllByUserId(int userid, int groupid,int[] contactid)
+        {
+
+            string sql = " update tnsmtp_contact t set t.gid=:gid where user_id=:userid and t.contact_id in (";
+
+            foreach (var item in contactid)
+            {
+                sql += item + ",";
+            }
+            sql = sql.Substring(0, sql.LastIndexOf(','));
+
+            sql += ")";
+
+            AddParameter("userid", userid);
+            AddParameter("gid", groupid);
+            return ExecuteNonQuery(sql) > 0;
+
+        }
+
+
+
         public bool SelectByUserId(int userid,int contactid) {
             string where = " user_id=:userid  and CONTACT_ID=:contactid";
             AddParameter("userid", userid);
