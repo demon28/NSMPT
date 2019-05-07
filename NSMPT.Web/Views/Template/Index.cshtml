@@ -152,11 +152,13 @@
 
     <script src="~/Reference/adminLTE/bower_components/ckeditor/ckeditor.js"></script>
 
+
     <script type="text/javascript">
         window.onload = function () {
             CKEDITOR.replace('description', {
                 height: 400,
-                filebrowserImageUploadUrl :"/Template/UploadImage?",
+                filebrowserImageUploadUrl :"/Template/UploadImage?type=Images",
+             
             });
         }
         var mark_vm;

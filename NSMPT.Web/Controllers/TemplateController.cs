@@ -2,6 +2,7 @@
 using NSMPT.Entites;
 using System;
 using System.IO;
+using System.Net.Mime;
 using System.Web;
 using System.Web.Mvc;
 using Winner.Framework.MVC;
@@ -122,7 +123,7 @@ namespace NSMPT.Web.Controllers
 
                     if (Path.GetExtension(uploadFile.FileName) != ".png" && Path.GetExtension(uploadFile.FileName) != ".jpg")
                     {
-                        return Content("请上传png,jpg文件！");
+                        return Json(new{ error = "{请上传png,jpg文件！"});
                     }
 
                     if (Directory.Exists(Server.MapPath(filepath)) == false)
@@ -137,10 +138,12 @@ namespace NSMPT.Web.Controllers
             }
 
 
-
             string url = GetSiteUrl() + filepath ;
-            // return Content(url);
-            return  Content(url);
+           
+            return Json(new { fileName = filename, uploaded = 1, url = url });
+
+
+
 
 
         }
