@@ -1,0 +1,205 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+
+@section Pageheader{
+
+
+    <h1>
+        <small>  Template</small>
+
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Send History</li>
+    </ol>
+
+}
+
+
+<div class="box">
+    <div class="box-header">
+        <h3 class="box-title">Send History List</h3>
+
+
+
+
+        <div class="box-tools">
+
+            <div class="input-group input-group-sm" style="width: 150px;float:left">
+
+                <input type="text" name="btnSearch" id="txt_keyword" class="form-control pull-right" placeholder="Search">
+
+                <div class="input-group-btn">
+                    <button type="button" id="btn_Search" class="btn btn-default"><i class="fa fa-search"></i></button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body table-responsive no-padding" id="App_Email">
+        <table class="table table-hover" id="tab_contact">
+            <tbody>
+                <tr>
+                    <th>ID</th>
+                    <th>发件人人</th>
+                    <th>收件人</th>
+                    <th>主题</th>
+                    <th>密送</th>
+                    <th>创建时间</th>
+                    <th>operation</th>
+                </tr>
+                <tr v-for="(item,index) in Data">
+                    <td>{{item.MailId}}</td>
+                    <td>{{item.Tomail}}</td>
+                    <td>{{item.Inmail}}</td>
+                    <td>{{item.Subject}}</td>
+                    <td>{{item.Bcc}}</td>
+                    <td>{{item.Createtime}}</td>
+
+                    <td>
+                        <button type="button" class="btn bg-purple  btn-xs" v-on:click="viewitem(item)" data-toggle="modal" data-target="#modal-default">浏览</button>
+                 
+                        <button type="button" class="btn bg-maroon  btn-xs" v-on:click="deleteitem(item)">删除</button> &nbsp;
+
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+    <div class="box-footer">
+
+    </div>
+    <!-- /.box-body -->
+</div>
+
+
+<div class="modal fade " id="modal-default">
+    <div class="modal-dialog ">
+        <div class="modal-content" style="width:850px">
+
+            <div class="modal-body  ">
+
+                <div class="box box-info ">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">View Draft</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <!-- form start -->
+                    <form class="form-horizontal">
+                        <div class="box-body">
+
+                            <textarea name="description" id="description"></textarea>
+
+                        </div>
+
+
+                        <div class="box-footer">
+                            <span class="label label-success" id="span_result"></span>
+
+                        </div>
+
+                        <!-- /.box-footer -->
+                    </form>
+                </div>
+
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="btn_model_close">Close</button>
+            
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+@section scripts{
+    <script src="~/Reference/scripts/vue-pager.js"></script>
+    <script src="~/Reference/adminLTE/bower_components/ckeditor/ckeditor.js"></script>
+    <script type="text/javascript">
+
+        window.onload = function () {
+            CKEDITOR.replace('description', {
+                height: 400,
+
+                filebrowserImageUploadUrl :"/Template/UploadImage?type=Images",
+
+            });
+        }
+        var email_vm;
+        $(document).ready(function () {
+
+            bindEmialView();
+            SetEvent();
+        });
+        function SetEvent() {
+            $("#btn_Update").click(function () {
+
+
+            });
+
+              $("#btn_Search").click(function () {
+
+                email_vm.reload();
+            });
+
+        }
+
+        function bindEmialView() {
+
+            email_vm = wui.pagination({
+                el: "#App_Email",
+                url: "/SendEmail/List",
+                query: function () {
+
+                    var keywords = $("#txt_keyword").val();
+
+                    var data = {
+                        keywords: keywords,
+                    };
+                    return data;
+                },
+                methods: {
+
+                    deleteitem: function (item) {
+
+                        $.ajax({
+                            url: "/Draft/Delete",
+                            type: "POST",
+                            data: {
+                                mailid: item.MailId
+                            },
+                            success: function (result) {
+                                if (result.Success) {
+                                    alert_success("删除成功！");
+                                    email_vm.reload();
+
+                                } else {
+                                    alert_danger(result.Message);
+                                }
+                            }
+                        })
+                    },
+                    viewitem: function (item) {
+                          CKEDITOR.instances['description'].setData(item.Content);
+                    }
+                },
+                showTips: alert_danger
+            });
+
+        }
+
+
+    </script>
+
+
+
+}

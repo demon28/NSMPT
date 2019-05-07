@@ -61,12 +61,15 @@
     <Compile Include="Model\AccountListModel.cs" />
     <Compile Include="Model\AccountModel.cs" />
     <Compile Include="Model\MailtypeModel.cs" />
+    <Compile Include="Model\Tnsmtp_AttachmentMap.generate.cs" />
     <Compile Include="Model\Tnsmtp_ContactgroupMap.generate.cs" />
     <Compile Include="Model\Tnsmtp_ContactMap.generate.cs" />
     <Compile Include="Model\Tnsmtp_DynamictableMap.generate.cs" />
     <Compile Include="Model\Tnsmtp_DynamicvalueMap.generate.cs" />
+    <Compile Include="Model\Tnsmtp_EmailMap.generate.cs" />
     <Compile Include="Model\Tnsmtp_MailtemplateMap.generate.cs" />
     <Compile Include="Model\Tnsmtp_RaplcemarkMap.generate.cs" />
+    <Compile Include="Model\Tnsmtp_RecmailMap.generate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tool\ImportExcel.cs" />
   </ItemGroup>

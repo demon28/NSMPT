@@ -172,7 +172,9 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ContactController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
+    <Compile Include="Controllers\DraftController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\SendEmailController.cs" />
     <Compile Include="Controllers\TemplateController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -6556,6 +6558,7 @@
     <Content Include="Reference\font\font-awesome\fonts\fontawesome-webfont.svg" />
     <Content Include="Reference\font\font-awesome\HELP-US-OUT.txt" />
     <Content Include="Reference\scripts\alertsjavascrtpt.js" />
+    <Content Include="Reference\scripts\CommonScript.js" />
     <Content Include="Reference\scripts\jquery-3.3.1.js" />
     <Content Include="Reference\scripts\jquery-3.3.1.min.js" />
     <Content Include="Reference\scripts\jquery.bootstrap-growl.js" />
@@ -7118,6 +7121,8 @@
     <Content Include="Reference\adminLTE\plugins\input-mask\phone-codes\phone-be.json" />
     <Content Include="Reference\adminLTE\plugins\input-mask\phone-codes\phone-codes.json" />
     <Content Include="Views\Template\Index.cshtml" />
+    <Content Include="Views\Draft\Index.cshtml" />
+    <Content Include="Views\SendEmail\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Reference\adminLTE\bower_components\moment\moment.d.ts" />
