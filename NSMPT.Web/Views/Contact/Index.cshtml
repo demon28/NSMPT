@@ -142,6 +142,7 @@
                     <table class="table table-hover" id="tab_contact">
                         <tbody>
                             <tr>
+                                <th><input type="checkbox"  id="checkAll"/></th>
                                 <th>ID</th>
                                 <th>Name</th>
                                 <th>Email</th>
@@ -151,6 +152,7 @@
                                 <th>operation</th>
                             </tr>
                             <tr v-for="(item,index) in Data">
+                                <td><input type="checkbox" id="box_check" value="{{item.ContactId}}" /> </td>
                                 <td>{{item.ContactId}}</td>
                                 <td>{{item.ContactName}}</td>
                                 <td>{{item.Email}}</td>
@@ -174,9 +176,11 @@
 
                         <input type="file" id="file_excel" class="btn btn-xs btn-success pull-left" data-upload-url="/Contact/ExpExcelContact" style="margin-left:20px;margin-top:15px;" />
 
-                        @*<button type="button" class="btn btn-sm m-4 btn-success pull-left" id="btn_uploadtemp" style="margin-left:20px;margin-top:15px">导入联系人</button>*@
-
                         <button type="button" class="btn btn-sm m-4 btn-success pull-left" id="btn_downloadtemp" style="margin-left:20px;margin-top:15px">下载模板</button>
+
+                        <button type="button" class="btn btn-sm m-4 btn-success pull-left" id="btn_alldeltemp" style="margin-left:20px;margin-top:15px">批量删除</button>
+
+                        <button type="button" class="btn btn-sm m-4 btn-success pull-left" id="btn_alluploadtemp" style="margin-left:20px;margin-top:15px">批量修改</button>
                     </form>
 
                 </div>
@@ -366,7 +370,27 @@
 
             });
 
+            $("#checkAll").click(function () {
+                $("input[id^='box_']").attr("checked", this.checked);
+            });
+            $("#btn_alldeltemp").click(function () {
 
+                var list =new Array();
+                var checkedbox = $("input[id^='box_']:checked");
+                if (checkedbox.length == 0) {
+                    alert_danger("请选择要删除的联系人");
+                } else {
+
+                    checkedbox.each(function () {
+                        console.log(this);
+                            list.push(this.value);
+                        });
+
+                 
+                }
+
+
+            });
 
             $("#file_excel").xhrUpload({
                 completed: function (response) {
