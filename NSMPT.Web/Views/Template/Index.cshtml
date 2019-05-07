@@ -79,8 +79,8 @@
                     <ul class="list-group">
                         <li class="list-group-item" v-for="item in items">
 
-                            <a  v-on:click="SetMark(item)">{{item.MarkName}}</a>&nbsp;&nbsp;
-                            <a v-on:click="SetMark(item)" class="pull-right">{{item.MarkValue}}</a>&nbsp;&nbsp;
+                            <a  v-on:click="SetMark(item)" style="cursor:pointer;">{{item.MarkName}}</a>&nbsp;&nbsp;
+                            <a v-on:click="SetMark(item)" class="pull-right" style="cursor:pointer;">{{item.MarkValue}}</a>&nbsp;&nbsp;
 
                         </li>
 

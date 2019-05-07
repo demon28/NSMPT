@@ -52,9 +52,9 @@
                 </tr>
                 <tr v-for="(item,index) in Data">
                     <td>{{item.MailId}}</td>
-                    <td>{{item.Tomail}}</td>
+                    <td>{{item.Tomail}}/td>
                     <td>{{item.Inmail}}</td>
-                    <td>{{item.Subject}}</td>
+                    <td><a v-on:click="viewitem(item)" style="cursor:pointer;">{{item.Subject}}</a></td>
                     <td>{{item.Bcc}}</td>
                     <td>{{item.Createtime}}</td>
 
