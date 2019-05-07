@@ -69,13 +69,16 @@
                     <table class="table table-hover" id="tab_contact">
                         <tbody>
                             <tr>
-                                <th>ID</th>
+                          
                                 <th>Name</th>
                                 <th class="text-right"></th>
                             </tr>
                             <tr v-for="(item,index) in Data">
-                                <td>{{item.MtId}}</td>
-                                <td>{{item.TempName}}</td>
+                               
+                                <td>
+                             
+                                    <a v-on:click="useitem(item)" style="cursor:pointer;" > {{item.TempName}}</a>
+                                </td>
                                 <td class="text-right">
                                     <button type="button" class="btn bg-purple  btn-xs " v-on:click="useitem(item)">Use</button>  &nbsp; &nbsp;
                                 </td>
@@ -94,55 +97,103 @@
         </div>
         <!-- /.col -->
         <div class="col-md-9">
-            <div class="box box-success">
-                <div class="box-header">
 
-                    <div class="form-inline">
-                        <button type="button" id="btn_send" class="btn   btn-success pull-left" style="margin-left:20px;">发 送</button>  &nbsp;&nbsp;
-                        <button type="button" id="btn_savedraft" class="btn  btn-success pull-left" style="margin-left:20px;">存草稿</button>  &nbsp;&nbsp;
-                        <span id="span_draftId" style="display:block"></span>
+
+
+            <!-- Custom Tabs -->
+            <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs pull-right">
+                    <li ><a href="#tab_3" data-toggle="tab">定 时</a></li>
+                    <li><a href="#tab_2" data-toggle="tab">群 发</a></li>
+                    <li class="active"><a href="#tab_1" data-toggle="tab">普 通</a></li>
+                 
+                    <li class="pull-left header"><i class="fa fa-envelope "></i>Let's Get It</li>
+                </ul>
+                <div class="tab-content">
+
+                    <div class="tab-pane active" id="tab_1">
+
+
+
+                        <div class="form-inline" style="margin-top:10px">
+                            <button type="button" id="btn_send" class="btn   btn-success pull-left" style="margin-left:20px;">    <i class="fa fa-send"></i> &nbsp;&nbsp; 发 送</button>  &nbsp;&nbsp;
+                            <button type="button" id="btn_savedraft" class="btn  btn-success pull-left" style="margin-left:20px;">存草稿</button>  &nbsp;&nbsp;
+
+                            <span id="span_draftId" style="display:block"></span>
+                        </div>
+
+
+                        <form class="form-horizontal" style="margin-top:30px">
+
+                            <div class="form-group">
+                                <label for="inputEmail3" class="col-sm-1 control-label">寄件人</label>
+                                <label id="lb_aid" style="display:block"></label>
+                                <div class="col-sm-10">
+                                    <span id="span_aid" style="display:block"></span>
+                                    <input type="email" class="form-control input-sm" id="txt_sendermail" placeholder="Select Email" readonly="readonly">
+
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="inputEmail3" class="col-sm-1 control-label">收件人</label>
+
+                                <div class="col-sm-10">
+                                    <input type="email" class="form-control input-sm" id="txt_recivermail" placeholder="Reciver Email">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputEmail3" class="col-sm-1 control-label">主 &nbsp;&nbsp; 题</label>
+
+                                <div class="col-sm-10">
+                                    <input type="email" class="form-control input-sm" id="txt_mailtitle" placeholder="Subject">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputEmail3" class="col-sm-1 control-label">附 &nbsp;&nbsp; 件</label>
+                                <div class="btn btn-default btn-file " style="margin-left:15px">
+                                    <i class="fa fa-paperclip"></i> Attachment
+                                    <input type="file" name="attachment">
+                                </div>
+                            </div>
+                       
+
+                            <!-- /.box-body -->
+                            <!-- /.box-footer -->
+
+
+                            <div class="form-horizontal">
+                                <textarea name="description" id="description"></textarea>
+                            </div>
+
+                        </form>
+
+
                     </div>
+                    <!-- /.tab-pane -->
+                    <div class="tab-pane" id="tab_2">
+                        The European languages are members of the same family. Their separate existence is a myth.
+                        For science, music, sport, etc, Europe uses the same vocabulary. The languages only differ
+                        in their grammar, their pronunciation and their most common words. Everyone realizes why a
+                        new common language would be desirable: one could refuse to pay expensive translators. To
+                        achieve this, it would be necessary to have uniform grammar, pronunciation and more common
+                        words. If several languages coalesce, the grammar of the resulting language is more simple
+                        and regular than that of the individual languages.
+                    </div>
+                    <!-- /.tab-pane -->
+                    <div class="tab-pane" id="tab_3">
+                        Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
+                        when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+                        It has survived not only five centuries, but also the leap into electronic typesetting,
+                        remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset
+                        sheets containing Lorem Ipsum passages, and more recently with desktop publishing software
+                        like Aldus PageMaker including versions of Lorem Ipsum.
+                    </div>
+                    <!-- /.tab-pane -->
                 </div>
-                <!-- /.box-header -->
-                <!-- form start -->
-                <form class="form-horizontal">
-                    <div class="box-body">
-                        <div class="form-group">
-                            <label for="inputEmail3" class="col-sm-1 control-label">寄件人</label>
-                            <label id="lb_aid" style="display:block"></label>
-                            <div class="col-sm-10">
-                                <span id="span_aid" style="display:block"></span>
-                                <input type="email" class="form-control" id="txt_sendermail" placeholder="Select Email" readonly="readonly">
-
-                            </div>
-                        </div>
-
-
-                        <div class="form-group">
-                            <label for="inputEmail3" class="col-sm-1 control-label">收件人</label>
-
-                            <div class="col-sm-10">
-                                <input type="email" class="form-control" id="txt_recivermail" placeholder="Reciver Email">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="inputEmail3" class="col-sm-1 control-label">主 题</label>
-
-                            <div class="col-sm-10">
-                                <input type="email" class="form-control" id="txt_mailtitle" placeholder="Subject">
-                            </div>
-                        </div>
-
-                    </div>
-                    <!-- /.box-body -->
-                    <!-- /.box-footer -->
-
-                    <div class="box-footer">
-                        <div>
-                            <textarea name="description" id="description"></textarea>
-                        </div>
-                    </div>
-                </form>
+                <!-- /.tab-content -->
             </div>
             <!-- /.nav-tabs-custom -->
         </div>
@@ -162,6 +213,7 @@
 
         window.onload = function () {
             CKEDITOR.replace('description', {
+                  filebrowserImageUploadUrl :"/Template/UploadImage?type=Images",
                 height: 400
             });
         }

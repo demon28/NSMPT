@@ -42,20 +42,20 @@
         <table class="table table-hover" id="tab_contact">
             <tbody>
                 <tr>
-                    <th>ID</th>
-                    <th>发件人人</th>
-                    <th>收件人</th>
-                    <th>主题</th>
-                    <th>密送</th>
-                    <th>创建时间</th>
-                    <th>operation</th>
+
+                    <th>Subject</th>
+                    <th>Sender</th>
+                    <th>Receiver</th>
+
+                    <th>Date</th>
+                    <th>Operation</th>
                 </tr>
                 <tr v-for="(item,index) in Data">
-                    <td>{{item.MailId}}</td>
-                    <td>{{item.Tomail}}/td>
-                    <td>{{item.Inmail}}</td>
                     <td><a v-on:click="viewitem(item)" style="cursor:pointer;">{{item.Subject}}</a></td>
-                    <td>{{item.Bcc}}</td>
+                    <td>{{item.Tomail}}</td>
+                    <td>{{item.Inmail}}</td>
+
+           
                     <td>{{item.Createtime}}</td>
 
                     <td>
