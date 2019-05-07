@@ -1,0 +1,347 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+@section Pageheader{
+
+
+    <h1>
+        <small>  Template</small>
+
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Template</li>
+    </ol>
+
+}
+
+
+
+
+<section class="content">
+
+    <div class="row">
+        <div class="col-md-3">
+
+
+
+            <div class="box box-warning">
+                <div class="box-header">
+                    <h3 class="box-title">Template List</h3>
+
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+
+                    </div>
+
+
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body table-responsive no-padding" id="App_Temp">
+                    <table class="table table-hover" id="tab_contact">
+                        <tbody>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th class="text-right">operation</th>
+                            </tr>
+                            <tr v-for="(item,index) in Data">
+                                <td>{{item.MtId}}</td>
+                                <td>{{item.TempName}}</td>
+                                <td class="text-right">
+                                    <button type="button" class="btn bg-purple  btn-xs" v-on:click="updateitem(item)">编辑</button>  &nbsp; &nbsp;
+                                    <button type="button" class="btn bg-maroon  btn-xs" v-on:click="deleteitem(item)">删除</button> &nbsp;
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="box-footer">
+
+                </div>
+                <!-- /.box-body -->
+            </div>
+
+
+            <!--标签列表-->
+            <div class="box box-info" id="app_mark">
+
+                <div class="box-header with-border">
+                    <h3 class="box-title">System Tags</h3>
+
+                </div>
+
+                <div class="box-body">
+
+                    <ul class="list-group">
+                        <li class="list-group-item" v-for="item in items">
+
+                            <a v-on:click="SetMark(item)">{{item.MarkName}}</a>&nbsp;&nbsp;
+                            <a v-on:click="SetMark(item)" class="pull-right">{{item.MarkValue}}</a>&nbsp;&nbsp;
+
+                        </li>
+
+                    </ul>
+
+
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!--/标签列表-->
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+
+        <div class="col-md-9">
+
+            <div class="box box-success">
+                <div class="box-header">
+
+                    <h3 class="box-title">Template Content</h3>
+
+                </div>
+                <!-- /.box-header -->
+                <!-- form start -->
+                <form class="form-horizontal">
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-1 control-label">模板名称</label>
+                            <label id="lb_aid" style="display:block"></label>
+                            <div class="col-sm-8">
+                                <span id="span_aid" style="display:block"></span>
+                                <input type="text" class="form-control" id="txt_tempname" placeholder="Set Template Name">
+
+                            </div>
+                            <div class="col-sm-3">
+                                <button type="button" class="btn btn-default " id="btn_addtemp" style="margin-left:20px">添加模板</button>
+
+                                <button type="button" class="btn btn-default" id="btn_updatetemp" style="margin-left:20px">修改模板</button>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <!-- /.box-body -->
+                    <!-- /.box-footer -->
+
+                    <div class="box-footer">
+                        <div>
+
+                            <textarea name="description" id="description"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+
+        </div>
+
+    </div>
+    <!-- /.row -->
+
+</section>
+
+
+
+
+@section scripts{
+
+    <script src="~/Reference/scripts/vue-pager.js"></script>
+
+    <script src="~/Reference/ckeditor/ckeditor.js"></script>
+
+    <script type="text/javascript">
+        window.onload = function () {
+            CKEDITOR.replace('description', {
+                height: 400,
+                filebrowserImageUploadUrl: "/Template/UploadImage?type=image",
+
+
+
+            });
+
+        }
+        var mark_vm;
+        var temp_vm;
+        var dialog;
+        $(document).ready(function () {
+
+            bindMarkView();
+            bindTempView();
+            SetEvent();
+
+        });
+
+
+        function bindMarkView() {
+
+            mark_vm = new Vue({
+                el: "#app_mark",
+                data: { items: {} },
+                created: function () {
+                    this.Init();
+                },
+                methods: {
+                    Init: function () {
+
+                        var self = this;
+                        $.ajax({
+                            url: "/Template/ListMark",
+                            type: "POST",
+                            success: function (result) {
+
+                                if (result.Success) {
+                                    self.items = result.Content.Data;
+
+                                } else {
+                                    alert_danger("加载数据失败！");
+                                }
+                            }
+
+                        })
+
+                    },
+                    SetMark: function (item) {
+
+                        CKEDITOR.instances['description'].insertText(item.MarkValue);
+                    }
+                }
+
+
+            });
+
+
+        }
+        function bindTempView() {
+            temp_vm = wui.pagination({
+                el: "#App_Temp",
+                url: "/Template/ListTemp",
+                query: function () {
+
+                },
+                methods: {
+                    updateitem: function (item) {
+
+                        $("#txt_tempname").val(item.TempName);
+                        CKEDITOR.instances['description'].setData(item.TempContent);
+                        $("#lb_aid").val(item.MtId);
+                    },
+                    deleteitem: function (item) {
+
+                        bootbox.confirm("您确定删除该模板吗？", function (res) {
+                            if (res) {
+
+                                $.ajax({
+                                    url: "/Template/DelTemp",
+                                    type: "POST",
+                                    data: {
+                                        mtid: item.MtId
+                                    },
+                                    success: function (result) {
+                                        if (result.Success) {
+                                            alert_success("删除成功！");
+                                            temp_vm.reload();
+
+                                        } else {
+                                            alert_danger(result.Message);
+                                        }
+                                    }
+                                })
+                            }
+
+                        });
+
+
+                    },
+
+                },
+                showTips: alert_danger
+            });
+
+        }
+        function SetEvent() {
+
+            $("#btn_addtemp").click(function () {
+                var temp_name = $("#txt_tempname").val();
+                var temp_content = CKEDITOR.instances['description'].getData();
+
+
+                if (temp_name == "" || temp_name == null) {
+                    alert_danger("请添加模板名称！")
+                    return
+                }
+                if (temp_content == "" || temp_content == null) {
+                    alert_danger("当前模板内容为空，请添加内容");
+                    return
+                }
+
+                $.ajax({
+                    url: "/Template/AddTemp",
+                    type: "POST",
+                    data: {
+                        TempName: temp_name,
+                        TempContent: temp_content
+                    },
+                    success: function (result) {
+                        if (result.Success) {
+                            alert_success("添加成功！");
+                            temp_vm.reload();
+
+                        } else {
+                            alert_danger(result.Message);
+                        }
+                    }
+                })
+
+            });
+
+            $("#btn_updatetemp").click(function () {
+
+                var mtid = $("#lb_aid").val();
+                var temp_name = $("#txt_tempname").val();
+                var temp_content = CKEDITOR.instances['description'].getData();
+
+                if (mtid == "" || mtid == null) {
+                    alert_danger("请选择您要修改的模板！")
+                    return
+                }
+                if (temp_name == "" || temp_name == null) {
+                    alert_danger("请添加模板名称！")
+                    return
+                }
+                if (temp_content == "" || temp_content == null) {
+                    alert_danger("当前模板内容为空，请添加内容");
+                    return
+                }
+
+
+                $.ajax({
+                    url: "/Template/UpdateTemp",
+                    type: "POST",
+                    data: {
+                        Mtid: mtid,
+                        TempName: temp_name,
+                        TempContent: temp_content
+                    },
+                    success: function (result) {
+                        if (result.Success) {
+                            alert_success("修改成功！");
+                            temp_vm.reload();
+
+                        } else {
+                            alert_danger(result.Message);
+                        }
+                    }
+                })
+            });
+        }
+
+    </script>
+
+
+
+
+}

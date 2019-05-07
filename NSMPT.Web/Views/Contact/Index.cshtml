@@ -140,7 +140,7 @@
                     <table class="table table-hover" id="tab_contact">
                         <tbody>
                             <tr>
-                                <th><input type="checkbox" id="checkAll" /></th>
+                                <th><input type="checkbox" id="checkAll"   name="all" /></th>
                                 <th>ID</th>
                                 <th>Name</th>
                                 <th>Email</th>
@@ -150,7 +150,7 @@
                                 <th>operation</th>
                             </tr>
                             <tr v-for="(item,index) in Data">
-                                <td><input type="checkbox" id="box_check" :value="item.ContactId" /> </td>
+                                <td><input type="checkbox" id="box_check" :value="item.ContactId" onclick="userCheck(this)" /> </td>
                                 <td>{{item.ContactId}}</td>
                                 <td>{{item.ContactName}}</td>
                                 <td>{{item.Email}}</td>
@@ -281,7 +281,17 @@
 
 
         });
-
+    function userCheck(ths) {
+    if (ths.checked == false) {
+        $("input[name=all]:checkbox").prop('checked', false);
+    }
+    else {
+        var count = $("input[name='id']:checkbox:checked").length;
+        if (count == $("input[name='id']:checkbox").length) {
+            $("input[name=all]:checkbox").prop("checked", true);
+        }
+    }
+}
         function setEvent() {
             $("#btn_addContact").click(function () {
 
@@ -365,19 +375,15 @@
 
             })
 
+   
 
-            $("#checkAll").click(function () {
-                $("input[id^='box_']").attr("checked", this.checked);
-                
-            });
-
-            $("input[id^='box_']").click(function () {
-
-                var boxs = $("input[id^='box_']"); 
-                $("#checkAll").attr("checked", boxs.length == boxs.filter(":checked").length);
-
-            }); 
-
+             $("input[name=all]").click(function () {
+        if (this.checked) {
+            $("#tab_contact :checkbox").prop("checked", true);
+        } else {
+            $("#tab_contact :checkbox").prop("checked", false);
+        }
+    });
 
 
             $("#btn_alldeltemp").click(function () {
@@ -392,6 +398,8 @@
                         list.push(this.value);
                     });
 
+
+
                     $.ajax({
                         url: "/Contact/DeleteAllContact",
                         type: "POST",
@@ -404,6 +412,7 @@
 
                                 alert_success("删除成功！");
                                 contact_vm.reload();
+                                   $("#tab_contact :checkbox").prop("checked", false);
 
                             } else {
                                 alert_danger(result.Message);
@@ -424,12 +433,13 @@
                 var list = new Array();
                 var checkedbox = $("input[id^='box_']:checked");
                 if (checkedbox.length == 0) {
-                    alert_danger("请选择要删除的联系人");
+                    alert_danger("请选择要修改的联系人");
                 } else {
 
                     checkedbox.each(function () {
                         list.push(this.value);
                     });
+                    console.log(list);
 
                     var boxchecklist = [];
                     boxchecklist.push({ "text": "请选择", "value": "" });
@@ -462,6 +472,7 @@
 
                                         alert_success("修改成功！");
                                         contact_vm.reload();
+                                           $("#tab_contact :checkbox").prop("checked", false);
 
                                     } else {
                                         alert_danger(result.Message);

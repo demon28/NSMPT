@@ -7,7 +7,7 @@
 
 @section HtmlHead{
 
-    <script src="~/Reference/adminLTE/bower_components/ckeditor/ckeditor.js"></script>
+
     <link href="~/Reference/css/nsmpt.css" rel="stylesheet" />
 }
 
@@ -33,7 +33,7 @@
 
                 <div class="box-header with-border">
                     <h3 class="box-title">User Account</h3>
-                 
+
                 </div>
 
                 <div class="box-body table-responsive ">
@@ -42,7 +42,7 @@
                         <li class="list-group-item" v-for="item in AccountItems">
 
                             <b>{{item.Account}}</b>&nbsp;&nbsp;
-                          
+
                             <button type="button" class="btn bg-primary  btn-xs pull-right " v-on:click="AccountUse(item)">Use</button>
                         </li>
 
@@ -155,6 +155,7 @@
 
 
 @section scripts{
+    <script src="~/Reference/adminLTE/bower_components/ckeditor/ckeditor.js"></script>
     <script src="~/Reference/scripts/CommonScript.js"></script>
     <script src="~/Reference/scripts/vue-pager.js"></script>
     <script type="text/javascript">
@@ -183,7 +184,7 @@
             if (draftid == null || draftid == "") {
                 return;
             }
-          
+            var content;
             $.ajax({
                 url: "/Draft/Select",
                 type: "POST",
@@ -195,7 +196,11 @@
                         var res = result.Content;
                         $("#txt_sendermail").val(res.Tomail);
                         $("#txt_recivermail").val(res.Inmail);
-                        CKEDITOR.instances['description'].setData(res.Content);
+                        $("#txt_mailtitle").val(res.Subject);
+                        content = res.Content;
+                        CKEDITOR.instances['description'].setData(content);
+                     
+                     
                     } else {
                         alert_danger("未发现该草稿！");
                     }
@@ -275,21 +280,36 @@
 
             $("#btn_savedraft").click(function () {
 
+                var action = "/Draft/Update";
+                draftid = getQueryString("draftid");
+                console.log(draftid);
+
+                if (draftid == null || draftid == "") {
+                    action = "/Draft/Add";
+                }
+
                 var Tomail = $("#txt_sendermail").val();
                 var Inmail = $("#txt_recivermail").val();
                 var Content = CKEDITOR.instances['description'].getData();
                 var Subject = $("#txt_mailtitle").val();
                 var AccountId = $("#span_aid").val();
 
+                if (Content == "" || Content == null) {
+
+                    alert_danger("草稿内容不能为空！");
+                    return;
+                }
+
                 $.ajax({
-                    url: "/Draft/Add",
+                    url: action,
                     type: "POST",
                     data: {
+                        MailId: draftid,
                         Tomail: Tomail,
                         Inmail: Inmail,
                         Content: Content,
                         Subject: Subject,
-                        AccountId:AccountId
+                        AccountId: AccountId
                     },
                     success: function (result) {
                         if (result.Success) {
@@ -321,4 +341,4 @@
         }
 
     </script>
-    }
+}

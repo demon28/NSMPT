@@ -95,7 +95,7 @@ namespace NSMPT.Web.Controllers
             tnsmtp_Email.Wcc = model.Wcc;
             tnsmtp_Email.Status = 2;
 
-            if (!tnsmtp_Email.Insert())
+            if (!tnsmtp_Email.Update())
             {
                 return FailResult("保存草稿失败！");
             }

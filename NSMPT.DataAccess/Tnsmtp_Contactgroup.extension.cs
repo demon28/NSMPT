@@ -49,7 +49,7 @@ namespace NSMPT.DataAccess
 
         public bool ListByUserid(int userid) {
 
-            string where = " userid=:userid and status=0 ";
+            string where = " userid=:userid and status=0 order by createtime asc";
 
             AddParameter("userid", userid);
             return ListByCondition(where);
