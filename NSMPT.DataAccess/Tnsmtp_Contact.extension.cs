@@ -67,7 +67,13 @@ namespace NSMPT.DataAccess
 
         }
 
+        public bool SelectByEmail(int userid, string name) {
 
+            string where = " user_id=:userid  and contact_name=:name";
+            AddParameter("userid", userid);
+            AddParameter("name", name);
+            return SelectByCondition(where);
+        }
 
         public bool SelectByUserId(int userid,int contactid) {
             string where = " user_id=:userid  and CONTACT_ID=:contactid";
@@ -99,7 +105,7 @@ namespace NSMPT.DataAccess
 
         public bool ListByUserid(int userid,string keyword,int? gid)
         {
-            string sql = "select t.*,tc.groupname from tnsmtp_contact t left join tnsmtp_contactgroup tc on t.gid=tc.gid where t.user_id=:userid  and t.status=0";
+            string sql = "select t.*,tc.groupname from tnsmtp_contact t left join tnsmtp_contactgroup tc on t.gid=tc.gid where t.user_id=:userid  and t.status=0 ";
             AddParameter("userid", userid);
 
             if (!string.IsNullOrEmpty( keyword))

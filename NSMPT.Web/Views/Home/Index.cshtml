@@ -129,7 +129,7 @@
                                 <label for="inputEmail3" class="col-sm-1 control-label">寄件人</label>
                                 <label id="lb_aid" style="display:block"></label>
                                 <div class="col-sm-10">
-                                    <span id="span_aid" style="display:block"></span>
+                                  
                                     <input type="email" class="form-control input-sm" id="txt_sendermail" placeholder="Select Email" readonly="readonly">
 
                                 </div>
@@ -300,14 +300,18 @@
                 var Inmail = $("#txt_recivermail").val();
                 var Content = CKEDITOR.instances['description'].getData();
                 var Subject = $("#txt_mailtitle").val();
-                var AccountId = $("#span_aid").val();
+                var AccountId = $("#lb_aid").val();
 
                  if (Inmail == "" || Inmail == null) {
 
                     alert_danger("请填写收件人！");
                     return;
                 }
+                   if (Subject == "" || Subject == null) {
 
+                    alert_danger("主题内容不能为空！");
+                    return;
+                }
                 if (Content == "" || Content == null) {
 
                     alert_danger("邮件内容不能为空！");
@@ -329,7 +333,7 @@
                         if (result.Success) {
                             alert_success("邮件发送成功！");
                         } else {
-                            alert_danger(result.message);
+                            alert_danger(result.Message);
                         }
                     }
                 });
@@ -352,8 +356,14 @@
                 var Inmail = $("#txt_recivermail").val();
                 var Content = CKEDITOR.instances['description'].getData();
                 var Subject = $("#txt_mailtitle").val();
-                var AccountId = $("#span_aid").val();
+                var AccountId = $("#lb_aid").val();
 
+
+                  if (Subject == "" || Subject == null) {
+
+                    alert_danger("主题内容不能为空！");
+                    return;
+                }
                 if (Content == "" || Content == null) {
 
                     alert_danger("草稿内容不能为空！");

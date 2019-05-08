@@ -18,6 +18,7 @@ namespace NSMPT.Web.Controllers
         }
 
 
+        [HttpPost]
         public ActionResult List(string keywords)
         {
             DataAccess.Tnsmtp_EmailCollection tnsmtp_EmailCollection = new DataAccess.Tnsmtp_EmailCollection();

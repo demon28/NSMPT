@@ -26,9 +26,11 @@ namespace NSMPT.Web.Controllers
         [HttpPost]
         public ActionResult SendMail(Entites.Tnsmtp_EmailMap model)
         {
+            model.Userid = SysUser.UserId;
+
             SendFacade sendFacade = new SendFacade();
 
-            if (!sendFacade.SingleSend(model,SysUser.UserId))
+            if (!sendFacade.SingleSend(model))
             {
                 return FailResult(sendFacade.PromptInfo.Message);
             }

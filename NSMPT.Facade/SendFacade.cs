@@ -15,54 +15,124 @@ namespace NSMPT.Facade
         /// <summary>
         /// 向用户发送普通邮件
         /// </summary>
-        public bool SingleSend(Tnsmtp_EmailMap model, int userid)
+        public bool SingleSend(Tnsmtp_EmailMap model)
         {
             try
             {
-                //获取发件账户信息
+                string content = string.Empty;
+
+                #region 获取发件账户信息
                 DataAccess.Tnsmtp_Account tnsmtp_Account = new DataAccess.Tnsmtp_Account();
                 if (!tnsmtp_Account.SelectByPK(model.AccountId))
                 {
                     Alert("获取发件账户失败");
                     return false;
                 }
-                //获取企业邮箱信息
+                #endregion
+
+                #region 获取企业邮箱信息
                 DataAccess.Tnsmtp_Mailtype tnsmtp_Mailtype = new DataAccess.Tnsmtp_Mailtype();
                 if (!tnsmtp_Mailtype.SelectByPK(tnsmtp_Account.MailType.Value))
                 {
                     Alert("获取企业邮箱失败");
                     return false;
                 }
-                //判断收件人是否存在，不存在则添加
+                #endregion
+
+                #region 判断收件人是否存在常用联系人，不存在则添加
                 DataAccess.Tnsmtp_Contact tnsmtp_Contact = new DataAccess.Tnsmtp_Contact();
-                if (!tnsmtp_Contact.SelectByUserId(userid,model.RecId.Value))
+                tnsmtp_Contact.ReferenceTransactionFrom(this.Transaction);
+                if (tnsmtp_Contact.SelectByEmail(model.Userid,model.Inmail))
                 {
-                    //TODO:添加收件人为联系人
-                    tnsmtp_Contact.Status = 0;
+                    model.RecId = tnsmtp_Contact.ContactId;
                 }
 
+                BeginTransaction();
+                if (!model.RecId.HasValue)
+                {
+                    //TODO:添加收件人为联系人
+                    #region 如果用户没有 "常用联系人" 这个组则添加这个组
 
 
+                    DataAccess.Tnsmtp_Contactgroup tnsmtp_Contactgroup = new DataAccess.Tnsmtp_Contactgroup();
+                    tnsmtp_Contactgroup.ReferenceTransactionFrom(this.Transaction);
+                    if (!tnsmtp_Contactgroup.SelectByGroupName(model.Userid, "常用联系人")) 
+                    {
+                
+                        tnsmtp_Contactgroup.Groupname = "常用联系人";
+                        tnsmtp_Contactgroup.Userid = model.Userid;
+                        tnsmtp_Contactgroup.Status = 0;
+                        if (!tnsmtp_Contactgroup.Insert())
+                        {
+                            Rollback();
+                            Alert("添加常用联系人分组失败");
+                            return false;
+                        }
+
+                    }
+
+
+                    #endregion
+
+
+                    #region 添加联系人
+                   
+                    tnsmtp_Contact.ContactName = model.Inmail;
+                    tnsmtp_Contact.Email= model.Inmail;
+                    tnsmtp_Contact.Gid = tnsmtp_Contactgroup.Gid;
+                    tnsmtp_Contact.Status = 0;
+                    tnsmtp_Contact.UserId = model.Userid;
+                    tnsmtp_Contact.CateId = 1;
+                    if (!tnsmtp_Contact.Insert())
+                    {
+                        Rollback();
+                        Alert("添加常用联系人失败");
+                        return false;
+                    }
+                    #endregion
+
+                }
+                #endregion
+
+                #region 如果存在模板标签则替换模板标签
+                if (!ReplaceMark(model, model.Userid, out content))
+                {
+                    Rollback();
+                    Alert("替换模板标签失败！");
+                    return false;
+                }
+                #endregion
+
+              
+
+                #region 添加数据库 邮件表
                 DataAccess.Tnsmtp_Email tnsmtp_Email = new DataAccess.Tnsmtp_Email();
+                tnsmtp_Email.ReferenceTransactionFrom(this.Transaction);
+
                 tnsmtp_Email.Bcc = model.Bcc;
                 tnsmtp_Email.AccountId = model.AccountId;
-                tnsmtp_Email.Userid = userid;
-                tnsmtp_Email.Content = model.Content;
+                tnsmtp_Email.Userid = model.Userid;
+                tnsmtp_Email.Content = content;
                 tnsmtp_Email.Tomail = model.Tomail;
                 tnsmtp_Email.Inmail = model.Inmail;
                 tnsmtp_Email.Subject = model.Subject;
                 tnsmtp_Email.Wcc = model.Wcc;
                 tnsmtp_Email.Status = 1;
+                tnsmtp_Email.Senddate = DateTime.Now;
 
 
                 if (!tnsmtp_Email.Insert())
                 {
+                    Rollback();
                     Alert("添加邮件失败");
                     return false;
                 }
 
+                #endregion
 
-                ISmtpMail smtp = new SmtpMail();
+
+                #region 调用SMTP 发送邮件
+                SmtpMail smtp = new SmtpMail();
                 smtp.AddRecipient(model.Inmail);
 
                 smtp.MailDomain = tnsmtp_Mailtype.SmtpUrl;
@@ -70,20 +140,25 @@ namespace NSMPT.Facade
                 smtp.From = model.Tomail;
                 smtp.FromName = model.Tomail;
                 smtp.RecipientName = model.Inmail;
-                smtp.MailDomainPort = tnsmtp_Mailtype.SmtpPort.Value;
+                smtp.MailDomainPort = tnsmtp_Mailtype.SmtpSsl.Value;
                 smtp.Subject = model.Subject;
                 smtp.Body = model.Content;
 
                 smtp.MailServerUserName = tnsmtp_Account.Account;
                 smtp.MailServerPassWord = tnsmtp_Account.Password;
 
+                string message = string.Empty;
 
                 if (!smtp.Send())
                 {
-                    Alert("发送邮件失败！");
+                    Rollback();
+                    Alert(smtp.PromptInfo.Message);
                     return false;
                 }
 
+                #endregion
+
+                Commit();
                 return true;
             }
             catch (Exception e)
@@ -114,17 +189,19 @@ namespace NSMPT.Facade
 
             for (int i = 0; i < tnsmtp_Raplcemark.DataTable.Rows.Count; i++)
             {
-                MarkKey markKey = (MarkKey)tnsmtp_Raplcemark.DataTable.Rows[i]["rid"];
-                string markvalue = tnsmtp_Raplcemark.DataTable.Rows[i]["rid"].ToString();
+                MarkKey markKey = (MarkKey) int.Parse(tnsmtp_Raplcemark.DataTable.Rows[i]["rid"].ToString());
+                string markvalue = tnsmtp_Raplcemark.DataTable.Rows[i]["mark_value"].ToString();
 
                 switch (markKey)
                 {
                     case MarkKey.收件人名称:
 
                         ReplacceContactName(model, markvalue, out value);
-
+                        model.Content = value;
                         break;
                     case MarkKey.收件人邮箱:
+                        ReplacceContactEmailSingle(model, markvalue, out value);
+                        model.Content = value;
                         break;
                     case MarkKey.收件人电话:
                         break;
@@ -133,7 +210,6 @@ namespace NSMPT.Facade
 
             }
             replace = value;
-
 
             return true;
 
@@ -146,7 +222,7 @@ namespace NSMPT.Facade
         /// <param name="mark"></param>
         /// <param name="replace"></param>
         /// <returns></returns>
-        public bool ReplacceContactName(Tnsmtp_EmailMap model,string mark,out string replace) {
+        private bool ReplacceContactName(Tnsmtp_EmailMap model,string mark,out string replace) {
 
            
             if (!model.Content.Contains(mark))
@@ -161,13 +237,13 @@ namespace NSMPT.Facade
         }
 
         /// <summary>
-        /// 系统标签替换收件人邮箱
+        /// 系统标签替换收件人邮箱(普通邮件)，没有收件人名字
         /// </summary>
         /// <param name="model"></param>
         /// <param name="mark"></param>
         /// <param name="replace"></param>
         /// <returns></returns>
-        public bool ReplacceContactEmail(Tnsmtp_EmailMap model, string mark, out string replace)
+        private bool ReplacceContactEmailSingle(Tnsmtp_EmailMap model, string mark, out string replace)
         {
 
             if (!model.Content.Contains(mark))

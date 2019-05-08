@@ -42,7 +42,7 @@ namespace NSMPT.DataAccess
         public bool SelectSendByUserid(int userid, int mailid)
         {
 
-            string where = " status=1 and userid=:userid and mail_id=:mailid";
+            string where = " status=1 and userid=:userid and mail_id=:mailid ";
             AddParameter("userid", userid);
             AddParameter("mailid", mailid);
 
@@ -63,9 +63,11 @@ namespace NSMPT.DataAccess
 
             if (!string.IsNullOrEmpty(keywords))
             {
-                where += "  and subject like '%'|| :keyword  ||'%'";
+                where += "  and subject like '%'|| :keyword  ||'%' ";
                 AddParameter("keyword", keywords);
             }
+
+            where += " order by mail_id desc";
             AddParameter("userid", userid);
             return ListByCondition(where);
         }
@@ -78,10 +80,13 @@ namespace NSMPT.DataAccess
 
             if (!string.IsNullOrEmpty(keywords))
             {
-                where += "  and subject like '%'|| :keyword  ||'%'";
+                where += "  and subject like '%'|| :keyword  ||'%' ";
                 AddParameter("keyword", keywords);
             }
             AddParameter("userid", userid);
+
+            where += " order by mail_id desc";
+
             return ListByCondition(where);
         }
     }

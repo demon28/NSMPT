@@ -37,6 +37,17 @@ namespace NSMPT.DataAccess
             return SelectByCondition(where);
 
         }
+
+        public bool SelectByGroupName(int userid, string name)
+        {
+
+            string where = " userid=:userid  and groupname=:name";
+            AddParameter("userid", userid);
+            AddParameter("name", name);
+
+            return SelectByCondition(where);
+
+        }
     }
 
 

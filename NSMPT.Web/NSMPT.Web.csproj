@@ -6563,6 +6563,7 @@
     <Content Include="Reference\scripts\jquery-3.3.1.min.js" />
     <Content Include="Reference\scripts\jquery.bootstrap-growl.js" />
     <Content Include="Reference\scripts\jquery.form.min.js" />
+    <Content Include="Reference\scripts\jquery.timeago.js" />
     <Content Include="Reference\scripts\knockout-3.1.0.js" />
     <Content Include="Reference\scripts\vue-pager.js" />
     <Content Include="Reference\scripts\xhrUpload.js" />

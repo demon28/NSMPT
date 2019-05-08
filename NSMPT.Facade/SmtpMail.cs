@@ -7,10 +7,11 @@ using System.Net.Mail;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using Winner.Framework.Core.Facade;
 
 namespace NSMPT.Facade
 {
-    class SmtpMail : ISmtpMail
+    class SmtpMail : FacadeBase, ISmtpMail 
     {
         #region private fields
         private const string enter = "\r\n";
@@ -487,6 +488,8 @@ namespace NSMPT.Facade
         {
             using (SmtpClient smtp = new SmtpClient(mailserver))
             {
+                //smtp.EnableSsl = true;
+                //smtp.UseDefaultCredentials = false;
                 smtp.Credentials = new NetworkCredential(username, password);//身份认证
 
                 MailMessage mail = new MailMessage();//建立邮件
@@ -499,6 +502,7 @@ namespace NSMPT.Facade
 
                 if ((Recipient == null) || (Recipient.Count == 0)) //未填写收件人地址
                 {
+                    Alert("收件人地址错误！");
                     return false;
                 }
                 else
@@ -529,7 +533,16 @@ namespace NSMPT.Facade
                         smtp.Dispose();
                         return true;
                     }
-                    catch (Exception ex) { 
+                    catch (Exception ex) {
+
+                        if (ex.Message.Contains("AUTH"))
+                        {
+                            Alert("发件人账户或密码错误！");
+                        }
+                        else {
+                            Alert(ex.Message);
+                        }
+                       
                         return false;
                     }
                 }
