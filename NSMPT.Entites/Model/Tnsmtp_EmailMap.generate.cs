@@ -9,7 +9,7 @@
 * Blog : http://www.cnblogs.com/fineblog/
 * Company ：深圳市乾海盛世移动支付有限公司
 * Copyright (C) Winner研发中心
-* CreateTime : 2019-05-07 18:25:48  
+* CreateTime : 2019-05-08 18:43:55  
 * 
 ***************************************************/
 using System;
@@ -81,21 +81,21 @@ namespace NSMPT.Entites
 
 		/// <summary>
 		/// 邮箱状态 1，已发送 2，草稿，3，已删除
-		/// [default:DBNull.Value]
+		/// [default:0]
 		/// </summary>
-		public int? Status { get; set; }
+		public int Status { get; set; }
 
 		/// <summary>
 		/// 邮件发送状态：0：已发送；1：发送中，2:发送失败
-		/// [default:DBNull.Value]
+		/// [default:0]
 		/// </summary>
-		public int? FlagStatus { get; set; }
+		public int FlagStatus { get; set; }
 
 		/// <summary>
 		/// 外键账户表
-		/// [default:DBNull.Value]
+		/// [default:0]
 		/// </summary>
-		public int? AccountId { get; set; }
+		public int AccountId { get; set; }
 
 		/// <summary>
 		/// 创建时间
@@ -111,9 +111,15 @@ namespace NSMPT.Entites
 
 		/// <summary>
 		/// 用户id
+		/// [default:0]
+		/// </summary>
+		public int Userid { get; set; }
+
+		/// <summary>
+		/// 联系人id
 		/// [default:DBNull.Value]
 		/// </summary>
-		public int? Userid { get; set; }
+		public int? RecId { get; set; }
 
 
 

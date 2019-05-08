@@ -24,22 +24,15 @@ namespace NSMPT.Web.Controllers
 
         [ValidateInput(false)]
         [HttpPost]
-        public ActionResult SendMail()
+        public ActionResult SendMail(Entites.Tnsmtp_EmailMap model)
         {
             SendFacade sendFacade = new SendFacade();
 
-            string sendermail= Request.Form["sendermail"];
-            string senderpwd = Request.Form["senderpwd"];
-            string recivermail = Request.Form["recivermail"];
-            string content = Request.Form["content"];
-            string mailtitile = Request.Form["mailtitile"];
-
-            if (!sendFacade.SingleSend(recivermail, recivermail, sendermail, sendermail, sendermail, senderpwd, mailtitile, content, "smtp.exmail.qq.com"))
+            if (!sendFacade.SingleSend(model,SysUser.UserId))
             {
-                return SuccessResult();
-            } 
-
-            return FailResult();
+                return FailResult(sendFacade.PromptInfo.Message);
+            }
+            return SuccessResult("发送成功");
 
         }
 
