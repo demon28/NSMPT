@@ -9,6 +9,7 @@ using Winner.Framework.MVC.Controllers;
 using Winner.Framework.Utils;
 namespace NSMPT.Web.Controllers
 {
+    [AuthLogin]
     public class SendEmailController : TopControllerBase
     {
         // GET: SendEmail

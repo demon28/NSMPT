@@ -20,7 +20,7 @@ function VueChangePage(options) {
         _loadData();
         return self;
     },
-        this.reload = function (cachecontrol) {
+    this.reload = function (cachecontrol) {
             _loadData(undefined, cachecontrol);
             return self;
         };

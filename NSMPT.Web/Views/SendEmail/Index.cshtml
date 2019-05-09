@@ -53,12 +53,11 @@
                     <th>operation</th>
                 </tr>
                 <tr v-for="(item,index) in Data">
-                    <td> <a v-on:click="viewitem(item)"  data-toggle="modal" data-target="#modal-default" style="cursor:pointer;">{{item.Subject}}</a></td>
+                    <td> <a v-on:click="viewitem(item)" data-toggle="modal" data-target="#modal-default" style="cursor:pointer;">{{item.Subject}}</a></td>
                     <td>{{item.Tomail}}</td>
                     <td>{{item.Inmail}}</td>
 
-                    <td > {{item.Createtime}}</td>
-
+                    <td>{{ diaplayTime(item.Createtime)}}</td>
                     <td>
                         <button type="button" class="btn bg-purple  btn-xs" v-on:click="viewitem(item)" data-toggle="modal" data-target="#modal-default">浏览</button>
 
@@ -111,7 +110,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal" id="btn_model_close">Close</button>
-            
+
             </div>
         </div>
         <!-- /.modal-content -->
@@ -123,13 +122,15 @@
 @section scripts{
     <script src="~/Reference/scripts/vue-pager.js"></script>
     <script src="~/Reference/adminLTE/bower_components/ckeditor/ckeditor.js"></script>
+
+    <script src="~/Reference/scripts/CommonScript.js"></script>
     <script type="text/javascript">
 
         window.onload = function () {
             CKEDITOR.replace('description', {
                 height: 400,
 
-                filebrowserImageUploadUrl :"/Template/UploadImage?type=Images",
+                filebrowserImageUploadUrl: "/Template/UploadImage?type=Images",
 
             });
         }
@@ -138,20 +139,17 @@
 
             bindEmialView();
             SetEvent();
-            AgoDate();
+
         });
 
-        function AgoDate() {
-          
-             $("time.timeago").timeago();
-        }
+
         function SetEvent() {
             $("#btn_Update").click(function () {
 
 
             });
 
-              $("#btn_Search").click(function () {
+            $("#btn_Search").click(function () {
 
                 email_vm.reload();
             });
@@ -194,10 +192,14 @@
                         })
                     },
                     viewitem: function (item) {
-                          CKEDITOR.instances['description'].setData(item.Content);
-                    }
-                  
+                        CKEDITOR.instances['description'].setData(item.Content);
+                    },
+
                 },
+
+
+
+
                 showTips: alert_danger
             });
 

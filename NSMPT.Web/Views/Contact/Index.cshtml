@@ -141,7 +141,7 @@
                         <tbody>
                             <tr>
                                 <th><input type="checkbox" id="checkAll"   name="all" /></th>
-                                <th>ID</th>
+                           
                                 <th>Name</th>
                                 <th>Email</th>
                                 <th>Gid</th>
@@ -150,8 +150,13 @@
                                 <th>operation</th>
                             </tr>
                             <tr v-for="(item,index) in Data">
-                                <td><input type="checkbox" id="box_check" :value="item.ContactId" onclick="userCheck(this)" /> </td>
-                                <td>{{item.ContactId}}</td>
+                                <td>
+                                
+                                    <input type="checkbox" id="box_check" :value="item.ContactId" onclick="userCheck(this)"  />
+                                 
+                                
+                              </td>
+                           
                                 <td>{{item.ContactName}}</td>
                                 <td>{{item.Email}}</td>
                                 <td>{{item.Gid}}</td>
