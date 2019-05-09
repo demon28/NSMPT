@@ -23,8 +23,6 @@
     </ol>
 
 }
-
-
 <section class="content">
 
     <div class="row">
@@ -69,15 +67,15 @@
                     <table class="table table-hover" id="tab_contact">
                         <tbody>
                             <tr>
-                          
+
                                 <th>Name</th>
                                 <th class="text-right"></th>
                             </tr>
                             <tr v-for="(item,index) in Data">
-                               
+
                                 <td>
-                             
-                                    <a v-on:click="useitem(item)" style="cursor:pointer;" > {{item.TempName}}</a>
+
+                                    <a v-on:click="useitem(item)" style="cursor:pointer;"> {{item.TempName}}</a>
                                 </td>
                                 <td class="text-right">
                                     <button type="button" class="btn bg-purple  btn-xs " v-on:click="useitem(item)">Use</button>  &nbsp; &nbsp;
@@ -103,10 +101,10 @@
             <!-- Custom Tabs -->
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs pull-right">
-                    <li ><a href="#tab_3" data-toggle="tab">定 时</a></li>
+                    <li><a href="#tab_3" data-toggle="tab">定 时</a></li>
                     <li><a href="#tab_2" data-toggle="tab">群 发</a></li>
                     <li class="active"><a href="#tab_1" data-toggle="tab">普 通</a></li>
-                 
+
                     <li class="pull-left header"><i class="fa fa-envelope "></i>Let's Get It</li>
                 </ul>
                 <div class="tab-content">
@@ -129,7 +127,7 @@
                                 <label for="inputEmail3" class="col-sm-1 control-label">寄件人</label>
                                 <label id="lb_aid" style="display:block"></label>
                                 <div class="col-sm-10">
-                                  
+
                                     <input type="email" class="form-control input-sm" id="txt_sendermail" placeholder="Select Email" readonly="readonly">
 
                                 </div>
@@ -154,10 +152,11 @@
                                 <label for="inputEmail3" class="col-sm-1 control-label">附 &nbsp;&nbsp; 件</label>
                                 <div class="btn btn-default btn-file " style="margin-left:15px">
                                     <i class="fa fa-paperclip"></i> Attachment
-                                    <input type="file" name="attachment">
+                                    <input type="file" name="attachment" id="file_attachment">
                                 </div>
+                                <ul class="list-group col-xs-6" style="margin-left:15px" id="ul_attachment"></ul>
+
                             </div>
-                       
 
                             <!-- /.box-body -->
                             <!-- /.box-footer -->
@@ -173,11 +172,11 @@
                     </div>
                     <!-- /.tab-pane -->
                     <div class="tab-pane" id="tab_2">
-                        
+
                     </div>
                     <!-- /.tab-pane -->
                     <div class="tab-pane" id="tab_3">
-                     
+
                     </div>
                     <!-- /.tab-pane -->
                 </div>
@@ -201,7 +200,7 @@
 
         window.onload = function () {
             CKEDITOR.replace('description', {
-                  filebrowserImageUploadUrl :"/Template/UploadImage?type=Images",
+                filebrowserImageUploadUrl: "/Template/UploadImage?type=Images",
                 height: 400
             });
         }
@@ -239,8 +238,8 @@
                         $("#txt_mailtitle").val(res.Subject);
                         content = res.Content;
                         CKEDITOR.instances['description'].setData(content);
-                     
-                     
+
+
                     } else {
                         alert_danger("未发现该草稿！");
                     }
@@ -302,12 +301,12 @@
                 var Subject = $("#txt_mailtitle").val();
                 var AccountId = $("#lb_aid").val();
 
-                 if (Inmail == "" || Inmail == null) {
+                if (Inmail == "" || Inmail == null) {
 
                     alert_danger("请填写收件人！");
                     return;
                 }
-                   if (Subject == "" || Subject == null) {
+                if (Subject == "" || Subject == null) {
 
                     alert_danger("主题内容不能为空！");
                     return;
@@ -359,7 +358,7 @@
                 var AccountId = $("#lb_aid").val();
 
 
-                  if (Subject == "" || Subject == null) {
+                if (Subject == "" || Subject == null) {
 
                     alert_danger("主题内容不能为空！");
                     return;
@@ -389,6 +388,60 @@
                         }
                     }
                 });
+
+            });
+
+
+            $("#file_attachment").change(function () {
+
+                var uploadFile = $('#file_attachment').get(0).file[0];
+                var element = "<li class=\"list-group-item\" style=\"padding:5px 10px\">";
+                element += "      <span>";
+                element += "      <i class=\"fa fa-paperclip\"></i>";
+                element += "                   <small>  " + uploadFile.val + "</small>";
+                element += "                 <a style=\"margin-left:20px; cursor:default\"><small>删除</small></a>";
+                element += "                   <a style=\"margin-left:20px; cursor:default\"><small>插入正文</small></a>";
+                element += "                   <small class=\"pull-right\" style=\"display:block\">60%</small>";
+                element += "                </span>";
+                element += "                 <div class=\"progress xxs \" style=\"margin-bottom:0px;display:block\">";
+                element += "                    <div class=\"progress-bar progress-bar-green\" style=\"width: 0%\" role=\"progressbar\"  aria-valuenow=\"20\" aria-valuemin=\"0\" aria-valuemax=\"100\">";
+                element += "                     <span class=\"sr-only\">60% Complete</span>";
+                element += "             </div>";
+                element += "             </div>";
+                element += "     </li>";
+
+
+                $("#ul_attachment").append(element);
+
+
+
+                var formdata = new FormData();
+
+                formdata.append('fileInfo', uploadFile);
+
+                $.ajax({
+                    url: 'Home/UploadAttachment',
+                    type: 'post',
+                    dataType: 'json',
+                    processData: false,
+                    contentType: false,
+                    xhr: function () {
+                        var xhr = new XMLHttpRequest();
+                        //使用XMLHttpRequest.upload监听上传过程，注册progress事件，打印回调函数中的event事件
+                        xhr.upload.addEventListener('progress', function (e) {
+                            console.log(e);
+                            //loaded代表上传了多少
+                            //total代表总数为多少
+                            var progressRate = (e.loaded / e.total) * 100 + '%';
+
+                            //通过设置进度条的宽度达到效果
+                            $('.progress > div').css('width', progressRate);
+                        })
+
+                        return xhr;
+                    }
+                })
+
 
             });
         }

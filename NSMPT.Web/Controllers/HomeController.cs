@@ -8,6 +8,7 @@ using NSMPT.Facade;
 using Winner.Framework.MVC;
 using Winner.Framework.Utils;
 using NSMPT.Entites;
+using System.IO;
 
 namespace NSMPT.Web.Controllers
 {
@@ -53,8 +54,34 @@ namespace NSMPT.Web.Controllers
         }
 
 
+        [HttpPost]
+        public ActionResult UploadAttachment() {
+
+            string filename = SysUser.UserId + "_" + Guid.NewGuid().ToString();
+            string filepath = "/File/UserFile/" + SysUser.UserId + "/Attachment/";
+
+            if (Request.Files.Count > 0)
+            {
+
+                HttpPostedFileBase uploadFile = Request.Files[0] as HttpPostedFileBase;
+                
+                if (uploadFile != null && uploadFile.ContentLength > 0)
+                {
 
 
+                    if (Directory.Exists(Server.MapPath(filepath)) == false)
+                    {
+                        Directory.CreateDirectory(Server.MapPath(filepath));
+                    }
+                    filename += Path.GetExtension(uploadFile.FileName);
+                    filepath = Path.Combine(filepath, filename);
+                    uploadFile.SaveAs(Server.MapPath(filepath));
+                }
+
+            }
+
+            return SuccessResult();
+        }
 
     }
 }
