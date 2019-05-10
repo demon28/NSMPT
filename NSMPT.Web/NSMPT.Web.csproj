@@ -7124,6 +7124,7 @@
     <Content Include="Views\Template\Index.cshtml" />
     <Content Include="Views\Draft\Index.cshtml" />
     <Content Include="Views\SendEmail\Index.cshtml" />
+    <Content Include="Reference\scripts\jquery.form.min.js.map" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Reference\adminLTE\bower_components\moment\moment.d.ts" />

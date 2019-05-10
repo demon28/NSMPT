@@ -71,6 +71,7 @@
     <Compile Include="Model\Tnsmtp_RaplcemarkMap.generate.cs" />
     <Compile Include="Model\Tnsmtp_RecmailMap.generate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tool\GetUrl.cs" />
     <Compile Include="Tool\ImportExcel.cs" />
   </ItemGroup>
   <ItemGroup>

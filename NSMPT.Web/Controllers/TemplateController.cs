@@ -109,7 +109,7 @@ namespace NSMPT.Web.Controllers
         public ActionResult UploadImage()
         {
 
-            string CKEditorFuncNum = Request.Form[0];
+        
             string filename = SysUser.UserId + "_" + Guid.NewGuid().ToString();
             string filepath = "/File/UserFile/" + SysUser.UserId + "/Image/";
 
@@ -130,6 +130,7 @@ namespace NSMPT.Web.Controllers
                     {
                         Directory.CreateDirectory(Server.MapPath(filepath));
                     }
+
                     filename += Path.GetExtension(uploadFile.FileName);
                     filepath = Path.Combine(filepath, filename);
                     uploadFile.SaveAs(Server.MapPath(filepath));
@@ -144,9 +145,8 @@ namespace NSMPT.Web.Controllers
 
 
 
-
-
         }
+
 
         public string GetSiteUrl()
         {
@@ -155,7 +155,6 @@ namespace NSMPT.Web.Controllers
             string url = fullUrl.Replace(querystring, "");
             return url;
         }
-
 
 
     }

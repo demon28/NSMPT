@@ -146,21 +146,26 @@
 
                                 <div class="col-sm-10">
                                     <input type="email" class="form-control input-sm" id="txt_mailtitle" placeholder="Subject">
+
+
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="inputEmail3" class="col-sm-1 control-label">附 &nbsp;&nbsp; 件</label>
-                                <div class="btn btn-default btn-file " style="margin-left:15px">
-                                    <i class="fa fa-paperclip"></i> Attachment
-                                    <input type="file" name="attachment" id="file_attachment">
-                                </div>
-                                <ul class="list-group col-xs-6" style="margin-left:15px" id="ul_attachment"></ul>
+                                <div id="from_fileupload">
+                                    <div class="btn btn-default btn-file  pull-left" style="margin-left:15px">
+                                        <i class="fa fa-paperclip"></i> Attachment
+                                        <input type="file" name="attachment" id="file_attachment">
+                                    </div>
 
+
+                                    <ul class="list-group col-xs-6" style="margin-left:15px" id="ul_attachment"></ul>
+                                </div>
                             </div>
 
                             <!-- /.box-body -->
                             <!-- /.box-footer -->
-
+                           
 
                             <div class="form-horizontal">
                                 <textarea name="description" id="description"></textarea>
@@ -196,6 +201,9 @@
     <script src="~/Reference/adminLTE/bower_components/ckeditor/ckeditor.js"></script>
     <script src="~/Reference/scripts/CommonScript.js"></script>
     <script src="~/Reference/scripts/vue-pager.js"></script>
+
+
+    <script src="~/Reference/scripts/jquery.form.min.js"></script>
     <script type="text/javascript">
 
         window.onload = function () {
@@ -207,6 +215,9 @@
 
         var account_vm;
         var draftid;
+        var filelist = new Array();
+        var fileuploaded = new Array()
+
         $(document).ready(function () {
 
 
@@ -394,18 +405,50 @@
 
             $("#file_attachment").change(function () {
 
-                var uploadFile = $('#file_attachment').get(0).file[0];
-                var element = "<li class=\"list-group-item\" style=\"padding:5px 10px\">";
+                var lengli = $("#ul_attachment li").length;
+                var uploadFile = $('#file_attachment')[0].files[0];
+              
+
+                if (lengli >= 5) {
+                    alert_danger("单次仅能发送5个附件");
+                    return;
+                }
+
+                if (uploadFile.size >= 19653562) {
+                    alert_danger("单个文件请不要超过15M");
+                    return;
+                }
+
+                if (filelist.indexOf(uploadFile.name) > -1) {
+                    alert_danger("附件已存在,请重新选择附件");
+                    return;
+                }
+
+
+                //添加到上传数组
+                filelist.push(uploadFile.name);
+             
+
+                var index1 = uploadFile.name.lastIndexOf(".");
+                var index2 = uploadFile.name.length;
+                var suffix = uploadFile.name.substring(index1 + 1, index2);
+                var filename = uploadFile.name.substring(0, index1);
+
+                var element = "<li id='li_file_" + filename + "' class=\"list-group-item\" style=\"padding:5px 10px\">";
                 element += "      <span>";
                 element += "      <i class=\"fa fa-paperclip\"></i>";
-                element += "                   <small>  " + uploadFile.val + "</small>";
-                element += "                 <a style=\"margin-left:20px; cursor:default\"><small>删除</small></a>";
-                element += "                   <a style=\"margin-left:20px; cursor:default\"><small>插入正文</small></a>";
-                element += "                   <small class=\"pull-right\" style=\"display:block\">60%</small>";
+                element += "                   <small>  " + uploadFile.name + "</small>";
+                element += "                 <a style=\"margin-left:20px; cursor:default\" onclick=\"removefile('li_file_" + filename + "','" + uploadFile.name + "')\"><small>删除</small></a>";
+
+                if (suffix == "png" || suffix == "jpg") {
+                    element += "                   <a id='a_insert_contnet_"+filename+"' style=\"margin-left:20px; cursor:default\" onclick='insert2contnet(this.name)'><small>添加到正文</small></a>";
+                }
+
+                element += "                   <small id='small_progress_" + filename + "' class=\"pull-right\" style=\"display:block\">0%</small>";
                 element += "                </span>";
-                element += "                 <div class=\"progress xxs \" style=\"margin-bottom:0px;display:block\">";
-                element += "                    <div class=\"progress-bar progress-bar-green\" style=\"width: 0%\" role=\"progressbar\"  aria-valuenow=\"20\" aria-valuemin=\"0\" aria-valuemax=\"100\">";
-                element += "                     <span class=\"sr-only\">60% Complete</span>";
+                element += "                 <div id='div_progress_" + filename + "' class=\"progress xxs \" style=\"margin-bottom:0px;display:block\">";
+                element += "                    <div id='green_div_progress_" + filename + "' class=\"progress-bar progress-bar-green\" style=\"width: 0%\" role=\"progressbar\"  aria-valuenow=\"20\" aria-valuemin=\"0\" aria-valuemax=\"100\">";
+                element += "                     <span id='span_progress_" + filename + "' class=\"sr-only\">0% Complete</span>";
                 element += "             </div>";
                 element += "             </div>";
                 element += "     </li>";
@@ -414,28 +457,53 @@
                 $("#ul_attachment").append(element);
 
 
-
-                var formdata = new FormData();
-
-                formdata.append('fileInfo', uploadFile);
-
-                $.ajax({
-                    url: 'Home/UploadAttachment',
+                
+                $("#from_fileupload").ajaxSubmit({
+                    url: '/Home/UploadAttachment',
                     type: 'post',
                     dataType: 'json',
                     processData: false,
                     contentType: false,
+                    success: function (result) {
+                        document.getElementById("a_insert_contnet_" + filename).name = result.Content;
+                     
+                        
+                    },
                     xhr: function () {
                         var xhr = new XMLHttpRequest();
                         //使用XMLHttpRequest.upload监听上传过程，注册progress事件，打印回调函数中的event事件
                         xhr.upload.addEventListener('progress', function (e) {
-                            console.log(e);
+
                             //loaded代表上传了多少
                             //total代表总数为多少
-                            var progressRate = (e.loaded / e.total) * 100 + '%';
+
+                            var baserate = (e.loaded / e.total).toFixed(2);
+
+
+
+                            var progressRate = baserate * 100 + '%';
+
+
+                            var progress_node = document.getElementById("div_progress_" + filename);   //进度条父节点
+                            var progress_node_div = document.getElementById("green_div_progress_" + filename);
+
+
+                            var progress_node_span = document.getElementById("span_progress_" + filename);
+                            var progress_value = document.getElementById("small_progress_" + filename);
 
                             //通过设置进度条的宽度达到效果
-                            $('.progress > div').css('width', progressRate);
+                            progress_node_div.style.width = progressRate;
+
+                            progress_node_span.innerHTML = progressRate;
+                            progress_value.innerHTML = progressRate;
+
+
+                            //上传完成
+                            if (e.loaded == e.total) {
+                                progress_node.style.display = "none";
+                                progress_value.style.display = "none";
+
+                            }
                         })
 
                         return xhr;
@@ -445,6 +513,30 @@
 
             });
         }
+
+        //移除附件
+        function removefile(el, filename) {
+
+            var _element = document.getElementById(el);
+            var _parentElement = _element.parentNode;
+            if (_parentElement) {
+                _parentElement.removeChild(_element);
+            }
+
+            var index = filelist.indexOf(filename);
+            if (index > -1) {
+                filelist.splice(index, 1);
+            }
+            
+        }
+
+        //添加图片到正文
+        function insert2contnet(imgurl) {
+
+            var element = " <img src='" + imgurl + "' />";
+             CKEDITOR.instances['description'].insertHtml(element);
+        }
+
 
         function BindTemplate() {
 

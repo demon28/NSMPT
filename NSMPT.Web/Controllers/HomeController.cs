@@ -55,32 +55,39 @@ namespace NSMPT.Web.Controllers
 
 
         [HttpPost]
-        public ActionResult UploadAttachment() {
+        public ActionResult UploadAttachment()
+        {
 
-            string filename = SysUser.UserId + "_" + Guid.NewGuid().ToString();
+           
             string filepath = "/File/UserFile/" + SysUser.UserId + "/Attachment/";
 
-            if (Request.Files.Count > 0)
+            if (Request.Files.Count <= 0)
             {
-
-                HttpPostedFileBase uploadFile = Request.Files[0] as HttpPostedFileBase;
-                
-                if (uploadFile != null && uploadFile.ContentLength > 0)
-                {
-
-
-                    if (Directory.Exists(Server.MapPath(filepath)) == false)
-                    {
-                        Directory.CreateDirectory(Server.MapPath(filepath));
-                    }
-                    filename += Path.GetExtension(uploadFile.FileName);
-                    filepath = Path.Combine(filepath, filename);
-                    uploadFile.SaveAs(Server.MapPath(filepath));
-                }
-
+                return FailResult("请选择要上传的文件");
             }
+            HttpPostedFileBase uploadFile = Request.Files[0] as HttpPostedFileBase;
+            string filename = uploadFile.FileName.Remove(uploadFile.FileName.LastIndexOf('.')) +"("+DateTime.Now.ToString("yyyyMMddHHmmss")+")"+Path.GetExtension(uploadFile.FileName);
+            if (uploadFile != null && uploadFile.ContentLength > 0)
+            {
+                if (Directory.Exists(Server.MapPath(filepath)) == false)
+                {
+                    Directory.CreateDirectory(Server.MapPath(filepath));
+                }
+              
+                filepath = Path.Combine(filepath, filename);
+                uploadFile.SaveAs(Server.MapPath(filepath));
+            }
+            string url = GetSiteUrl() + filepath;
 
-            return SuccessResult();
+            return SuccessResult(url);
+        }
+
+        public string GetSiteUrl()
+        {
+            string fullUrl = Request.Url.AbsoluteUri;
+            string querystring = Request.Url.PathAndQuery;
+            string url = fullUrl.Replace(querystring, "");
+            return url;
         }
 
     }
