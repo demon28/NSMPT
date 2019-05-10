@@ -44,7 +44,7 @@
         <table class="table table-hover" id="tab_contact">
             <tbody>
                 <tr>
-                    <th>Subject</th>
+                    <th >Subject</th>
                     <th>Sender</th>
                     <th>Receiver</th>
 
@@ -53,7 +53,7 @@
                     <th>operation</th>
                 </tr>
                 <tr v-for="(item,index) in Data">
-                    <td> <a v-on:click="viewitem(item)" data-toggle="modal" data-target="#modal-default" style="cursor:pointer;">{{item.Subject}}</a></td>
+                    <td >  <a v-on:click="viewitem(item)" data-toggle="modal" data-target="#modal-default" style="cursor:pointer;">{{item.Subject}}</a></td>
                     <td>{{item.Tomail}}</td>
                     <td>{{item.Inmail}}</td>
 
