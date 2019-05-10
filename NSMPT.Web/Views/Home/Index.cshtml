@@ -216,7 +216,7 @@
         var account_vm;
         var draftid;
         var filelist = new Array();
-        var fileuploaded = new Array()
+       
 
         $(document).ready(function () {
 
@@ -342,7 +342,8 @@
                         Inmail: Inmail,
                         Content: Content,
                         Subject: Subject,
-                        AccountId: AccountId
+                        AccountId: AccountId,
+                        Atthachment: filelist
                     },
                     success: function (result) {
 
@@ -432,8 +433,7 @@
                 }
 
 
-                //添加到上传数组
-                filelist.push(uploadFile.name);
+
              
 
                 var index1 = uploadFile.name.lastIndexOf(".");
@@ -477,6 +477,10 @@
                         {
                                   document.getElementById("a_insert_contnet_" + filename).name = result.Content;
                         }
+
+                        //添加到上传数组
+                        filelist.push(result.Content);
+                        console.log(filelist);
                         
                     },
                     xhr: function () {

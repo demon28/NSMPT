@@ -7,6 +7,7 @@ using System.Net.Mail;
 using System.Net;
 using NSMPT.Entites;
 using Winner.Framework.Core.Facade;
+using System.IO;
 
 namespace NSMPT.Facade
 {
@@ -17,14 +18,16 @@ namespace NSMPT.Facade
         /// </summary>
         public bool SingleSend(Tnsmtp_EmailMap model)
         {
-            try
-            {
+           
                 string content = string.Empty;
+
+                BeginTransaction();
 
                 #region 获取发件账户信息
                 DataAccess.Tnsmtp_Account tnsmtp_Account = new DataAccess.Tnsmtp_Account();
                 if (!tnsmtp_Account.SelectByPK(model.AccountId))
                 {
+                    Rollback();
                     Alert("获取发件账户失败");
                     return false;
                 }
@@ -34,6 +37,7 @@ namespace NSMPT.Facade
                 DataAccess.Tnsmtp_Mailtype tnsmtp_Mailtype = new DataAccess.Tnsmtp_Mailtype();
                 if (!tnsmtp_Mailtype.SelectByPK(tnsmtp_Account.MailType.Value))
                 {
+                    Rollback();
                     Alert("获取企业邮箱失败");
                     return false;
                 }
@@ -47,7 +51,7 @@ namespace NSMPT.Facade
                     model.RecId = tnsmtp_Contact.ContactId;
                 }
 
-                BeginTransaction();
+               
                 if (!model.RecId.HasValue)
                 {
                     //TODO:添加收件人为联系人
@@ -103,7 +107,6 @@ namespace NSMPT.Facade
                 }
                 #endregion
 
-              
 
                 #region 添加数据库 邮件表
                 DataAccess.Tnsmtp_Email tnsmtp_Email = new DataAccess.Tnsmtp_Email();
@@ -130,6 +133,40 @@ namespace NSMPT.Facade
 
                 #endregion
 
+                #region 如果有附件，则添加附件到数据库
+
+                Dictionary<string, string> dic = new Dictionary<string, string>();
+
+                if (model.Atthachment.Length > 0)
+                {
+                    foreach (var file in model.Atthachment)
+                    {
+                        DataAccess.Tnsmtp_Attachment tnsmtp_Attachment = new DataAccess.Tnsmtp_Attachment();
+                        tnsmtp_Attachment.ReferenceTransactionFrom(this.Transaction);
+
+                        tnsmtp_Attachment.AccountId = tnsmtp_Account.Aid;
+                        tnsmtp_Attachment.FileUrl = file;
+                        tnsmtp_Attachment.FileName = Path.GetFileName(file);
+                        tnsmtp_Attachment.MailId = tnsmtp_Email.MailId;
+                        tnsmtp_Attachment.Status = 0;
+                        tnsmtp_Attachment.UserId = model.Userid;
+
+                        if (!tnsmtp_Attachment.Insert())
+                        {
+                            Rollback();
+                            Alert("添加附件失败！");
+                            return false;
+                        }
+                        dic.Add(tnsmtp_Attachment.FileName, tnsmtp_Attachment.FileUrl);
+                    }
+
+                }
+
+
+            #endregion
+
+            try
+            {
 
                 #region 调用SMTP 发送邮件
                 SmtpMail smtp = new SmtpMail();
@@ -143,7 +180,7 @@ namespace NSMPT.Facade
                 smtp.MailDomainPort = tnsmtp_Mailtype.SmtpSsl.Value;
                 smtp.Subject = model.Subject;
                 smtp.Body = model.Content;
-               
+                smtp.AttachmentFile = dic;
 
                 smtp.MailServerUserName = tnsmtp_Account.Account;
                 smtp.MailServerPassWord = tnsmtp_Account.Password;
@@ -159,17 +196,17 @@ namespace NSMPT.Facade
 
                 #endregion
 
-                Commit();
-                return true;
+           
             }
             catch (Exception e)
             {
+                Rollback();
                 Alert(e.Message);
                 return false;
             }
 
-
-
+            Commit();
+            return true;
         }
 
 

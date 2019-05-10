@@ -21,8 +21,8 @@ namespace NSMPT.Entites
     /// <summary>
     /// Data Access Layer Object Of Tnsmtp_Email
     /// </summary>
-    public partial class Tnsmtp_EmailMap:Entites.Tnsmtp_EmailMap
+    public partial class Tnsmtp_EmailMap
     {
-        
+        public string[] Atthachment { get; set; }
     } 
 }
