@@ -28,7 +28,7 @@ namespace NSMPT.Web.Controllers
         public ActionResult SendMail(Entites.Tnsmtp_EmailMap model)
         {
             model.Userid = SysUser.UserId;
-           
+          
 
             SendFacade sendFacade = new SendFacade();
 

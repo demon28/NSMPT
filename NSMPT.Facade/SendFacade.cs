@@ -8,6 +8,7 @@ using System.Net;
 using NSMPT.Entites;
 using Winner.Framework.Core.Facade;
 using System.IO;
+using System.Web;
 
 namespace NSMPT.Facade
 {
@@ -157,7 +158,10 @@ namespace NSMPT.Facade
                             Alert("添加附件失败！");
                             return false;
                         }
-                        dic.Add(tnsmtp_Attachment.FileName, tnsmtp_Attachment.FileUrl);
+                    
+                       string path = HttpContext.Current.Server.MapPath("~/File/UserFile/" + model.Userid + "/Attachment/" + tnsmtp_Attachment.FileName);
+
+                        dic.Add(tnsmtp_Attachment.FileName, path);
                     }
 
                 }
