@@ -143,6 +143,7 @@ namespace NSMPT.Facade
                 smtp.MailDomainPort = tnsmtp_Mailtype.SmtpSsl.Value;
                 smtp.Subject = model.Subject;
                 smtp.Body = model.Content;
+               
 
                 smtp.MailServerUserName = tnsmtp_Account.Account;
                 smtp.MailServerPassWord = tnsmtp_Account.Password;

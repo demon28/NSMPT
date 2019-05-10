@@ -9,7 +9,7 @@
 * Blog : http://www.cnblogs.com/fineblog/
 * Company ：深圳市乾海盛世移动支付有限公司
 * Copyright (C) Winner研发中心
-* CreateTime : 2019-05-07 15:41:55  
+* CreateTime : 2019-05-10 16:49:03  
 * 
 ***************************************************/
 using System;
@@ -45,9 +45,9 @@ namespace NSMPT.Entites
 
 		/// <summary>
 		/// 邮件id，外键邮件表
-		/// [default:DBNull.Value]
+		/// [default:0]
 		/// </summary>
-		public int? MailId { get; set; }
+		public int MailId { get; set; }
 
 		/// <summary>
 		/// 临时的保存标识
@@ -57,15 +57,15 @@ namespace NSMPT.Entites
 
 		/// <summary>
 		/// 邮件账户id，外键邮箱账户表
-		/// [default:DBNull.Value]
+		/// [default:0]
 		/// </summary>
-		public int? AccountId { get; set; }
+		public int AccountId { get; set; }
 
 		/// <summary>
 		/// 用户id，外键系统用户表
-		/// [default:DBNull.Value]
+		/// [default:0]
 		/// </summary>
-		public int? UserId { get; set; }
+		public int UserId { get; set; }
 
 		/// <summary>
 		/// 文件id，如有文件系统，外键文件系统表
@@ -75,15 +75,15 @@ namespace NSMPT.Entites
 
 		/// <summary>
 		/// 状态
-		/// [default:DBNull.Value]
+		/// [default:0]
 		/// </summary>
-		public int? Status { get; set; }
+		public int Status { get; set; }
 
 		/// <summary>
 		/// 创建时间
-		/// [default:DBNull.Value]
+		/// [default:new DateTime()]
 		/// </summary>
-		public DateTime? Createtime { get; set; }
+		public DateTime Createtime { get; set; }
 
 		/// <summary>
 		/// 备注

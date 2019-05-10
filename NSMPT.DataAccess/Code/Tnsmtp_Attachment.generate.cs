@@ -9,7 +9,7 @@
 * Blog : http://www.cnblogs.com/fineblog/
 * Company ：深圳市乾海盛世移动支付有限公司
 * Copyright (C) Winner研发中心
-* CreateTime : 2019-05-07 15:39:30  
+* CreateTime : 2019-05-10 16:49:03  
 * 
 ***************************************************/
 using System;
@@ -20,6 +20,7 @@ using Winner.Framework.Core;
 using Winner.Framework.Core.DataAccess;
 using Winner.Framework.Core.DataAccess.Oracle;
 using Winner.Framework.Utils;
+
 namespace NSMPT.DataAccess
 {
     /// <summary>
@@ -86,12 +87,12 @@ namespace NSMPT.DataAccess
 		}
 		/// <summary>
 		/// 邮件id，外键邮件表
-		/// [default:DBNull.Value]
+		/// [default:0]
 		/// </summary>
-		public int? MailId
+		public int MailId
 		{
-			get { return Helper.ToInt32(DataRow[_MAIL_ID]); }
-			set { setProperty(_MAIL_ID,Helper.FromInt32(value)); }
+			get { return Convert.ToInt32(DataRow[_MAIL_ID]); }
+			set { setProperty(_MAIL_ID,value); }
 		}
 		/// <summary>
 		/// 临时的保存标识
@@ -104,21 +105,21 @@ namespace NSMPT.DataAccess
 		}
 		/// <summary>
 		/// 邮件账户id，外键邮箱账户表
-		/// [default:DBNull.Value]
+		/// [default:0]
 		/// </summary>
-		public int? AccountId
+		public int AccountId
 		{
-			get { return Helper.ToInt32(DataRow[_ACCOUNT_ID]); }
-			set { setProperty(_ACCOUNT_ID,Helper.FromInt32(value)); }
+			get { return Convert.ToInt32(DataRow[_ACCOUNT_ID]); }
+			set { setProperty(_ACCOUNT_ID,value); }
 		}
 		/// <summary>
 		/// 用户id，外键系统用户表
-		/// [default:DBNull.Value]
+		/// [default:0]
 		/// </summary>
-		public int? UserId
+		public int UserId
 		{
-			get { return Helper.ToInt32(DataRow[_USER_ID]); }
-			set { setProperty(_USER_ID,Helper.FromInt32(value)); }
+			get { return Convert.ToInt32(DataRow[_USER_ID]); }
+			set { setProperty(_USER_ID,value); }
 		}
 		/// <summary>
 		/// 文件id，如有文件系统，外键文件系统表
@@ -131,18 +132,18 @@ namespace NSMPT.DataAccess
 		}
 		/// <summary>
 		/// 状态
-		/// [default:DBNull.Value]
+		/// [default:0]
 		/// </summary>
-		public int? Status
+		public int Status
 		{
-			get { return Helper.ToInt32(DataRow[_STATUS]); }
-			set { setProperty(_STATUS,Helper.FromInt32(value)); }
+			get { return Convert.ToInt32(DataRow[_STATUS]); }
+			set { setProperty(_STATUS,value); }
 		}
 		/// <summary>
 		/// 创建时间
-		/// [default:DBNull.Value]
+		/// [default:new DateTime()]
 		/// </summary>
-		public DateTime? Createtime
+		public DateTime Createtime
 		{
 			get { return Convert.ToDateTime(DataRow[_CREATETIME].ToString()); }
 		}
@@ -180,13 +181,13 @@ namespace NSMPT.DataAccess
 			dt.Columns.Add(_AT_ID, typeof(int)).DefaultValue = 0;
 			dt.Columns.Add(_FILE_URL, typeof(string)).DefaultValue = string.Empty;
 			dt.Columns.Add(_FILE_NAME, typeof(string)).DefaultValue = string.Empty;
-			dt.Columns.Add(_MAIL_ID, typeof(int)).DefaultValue = DBNull.Value;
+			dt.Columns.Add(_MAIL_ID, typeof(int)).DefaultValue = 0;
 			dt.Columns.Add(_TEMP_ID, typeof(int)).DefaultValue = DBNull.Value;
-			dt.Columns.Add(_ACCOUNT_ID, typeof(int)).DefaultValue = DBNull.Value;
-			dt.Columns.Add(_USER_ID, typeof(int)).DefaultValue = DBNull.Value;
+			dt.Columns.Add(_ACCOUNT_ID, typeof(int)).DefaultValue = 0;
+			dt.Columns.Add(_USER_ID, typeof(int)).DefaultValue = 0;
 			dt.Columns.Add(_FILE_ID, typeof(int)).DefaultValue = DBNull.Value;
-			dt.Columns.Add(_STATUS, typeof(int)).DefaultValue = DBNull.Value;
-			dt.Columns.Add(_CREATETIME, typeof(DateTime)).DefaultValue = DBNull.Value;
+			dt.Columns.Add(_STATUS, typeof(int)).DefaultValue = 0;
+			dt.Columns.Add(_CREATETIME, typeof(DateTime)).DefaultValue = new DateTime();
 			dt.Columns.Add(_REMARKS, typeof(string)).DefaultValue = string.Empty;
 			dt.Columns.Add(_FILE_SIZE, typeof(string)).DefaultValue = string.Empty;
 
@@ -321,13 +322,13 @@ WHERE " + condition;
 		public Tnsmtp_Account Get_Tnsmtp_Account_ByAccountId()
 		{
 			Tnsmtp_Account da=new Tnsmtp_Account();
-			da.SelectByPK(AccountId.Value);
+			da.SelectByPK(AccountId);
 			return da;
 		}
 		public Tnsmtp_Email Get_Tnsmtp_Email_ByMailId()
 		{
 			Tnsmtp_Email da=new Tnsmtp_Email();
-			da.SelectByPK(MailId.Value);
+			da.SelectByPK(MailId);
 			return da;
 		}
 

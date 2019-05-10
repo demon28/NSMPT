@@ -328,6 +328,11 @@
                     return;
                 }
 
+                  var dialog = bootbox.dialog({
+                                    title: '邮件发送中...',
+                                    message: '<p><i class="fa fa-spin fa-spinner"></i> Loading...</p>'
+                                });
+
                 $.ajax({
                     url: "/Home/SendMail",
                     type: "POST",
@@ -340,6 +345,8 @@
                         AccountId: AccountId
                     },
                     success: function (result) {
+
+                        dialog.modal('hide');
                         if (result.Success) {
                             alert_success("邮件发送成功！");
                         } else {
@@ -465,8 +472,11 @@
                     processData: false,
                     contentType: false,
                     success: function (result) {
-                        document.getElementById("a_insert_contnet_" + filename).name = result.Content;
-                     
+
+                        if (suffix == "png" || suffix == "jpg")
+                        {
+                                  document.getElementById("a_insert_contnet_" + filename).name = result.Content;
+                        }
                         
                     },
                     xhr: function () {
