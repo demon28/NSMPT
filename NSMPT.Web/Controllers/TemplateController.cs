@@ -140,7 +140,7 @@ namespace NSMPT.Web.Controllers
 
 
             string url = GetSiteUrl() + filepath ;
-           
+           // url= System.Web.HttpUtility.UrlEncode(url);
             return Json(new { fileName = filename, uploaded = 1, url = url });
 
 

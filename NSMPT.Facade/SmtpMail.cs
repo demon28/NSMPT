@@ -99,7 +99,12 @@ namespace NSMPT.Facade
         /// <summary>
         /// 密送收件人列表
         /// </summary>
-        ///private Hashtable RecipientBCC=new Hashtable();
+        private List<string> _RecipientBCC ;
+
+        /// <summary>
+        /// 密送收件人列表
+        /// </summary>
+        private List<string> _RecipientWCC;
 
         /// <summary>
         /// 收件人数量
@@ -114,7 +119,7 @@ namespace NSMPT.Facade
         /// <summary>
         /// 密件收件人数量
         /// </summary>
-        ///private int RecipientBCCNum=0;
+        private int RecipientBCCNum=0;
 
         /// <summary>
         /// 错误消息反馈
@@ -420,6 +425,14 @@ namespace NSMPT.Facade
                 recipientmaxnum = value;
             }
         }
+       /// <summary>
+       /// 抄送
+       /// </summary>
+        public List<string> RecipientWCC1 { get => _RecipientWCC; set => _RecipientWCC = value; }
+        /// <summary>
+        /// 密送
+        /// </summary>
+        public List<string> RecipientBCC1 { get => _RecipientBCC; set => _RecipientBCC = value; }
 
         #endregion
 
@@ -491,13 +504,13 @@ namespace NSMPT.Facade
                 //smtp.EnableSsl = true;
                 //smtp.UseDefaultCredentials = false;
                 smtp.Credentials = new NetworkCredential(username, password);//身份认证
-
+               
                 MailMessage mail = new MailMessage();//建立邮件
                 mail.SubjectEncoding = Encoding.GetEncoding(Charset);//主题编码
                 mail.BodyEncoding = Encoding.GetEncoding(Charset);//正文编码
                 mail.Priority = MailPriority.Normal;//邮件的优先级为中等
                 mail.IsBodyHtml = Html;//正文为纯文本，如果需要用HTML则为true
-               
+              
                 mail.From = new MailAddress(From);//发件人
 
                 if ((Recipient == null) || (Recipient.Count == 0)) //未填写收件人地址
@@ -526,6 +539,28 @@ namespace NSMPT.Facade
                             mail.Attachments.Add(file);
                         }
                     }
+                    //添加抄送
+                    if (RecipientBCC1!=null && RecipientBCC1.Count>0)
+                    {
+
+                        foreach (var item in RecipientBCC1)
+                        {
+                            mail.Bcc.Add(item);
+                        }
+                    
+
+                    }
+                    //添加密送
+                    if (RecipientWCC1 != null && RecipientWCC1.Count > 0)
+                    {
+                        foreach (var item in RecipientWCC1)
+                        {
+                            mail.Bcc.Add(item);
+                        }
+
+                    }
+
+
                     try
                     {
                         smtp.Send(mail);//正式发邮件

@@ -126,7 +126,7 @@
                             <div class="form-group">
                                 <label for="inputEmail3" class="col-sm-1 control-label">寄件人</label>
                                 <label id="lb_aid" style="display:block"></label>
-                                <div class="col-sm-10">
+                                <div class="col-sm-9">
 
                                     <input type="email" class="form-control input-sm" id="txt_sendermail" placeholder="Select Email" readonly="readonly">
 
@@ -137,14 +137,55 @@
                             <div class="form-group">
                                 <label for="inputEmail3" class="col-sm-1 control-label">收件人</label>
 
-                                <div class="col-sm-10">
+                                <div class="col-sm-9">
                                     <input type="email" class="form-control input-sm" id="txt_recivermail" placeholder="Reciver Email">
                                 </div>
+
+                                <div class="col-sm-2">
+                                    <a class="pull-left" style="cursor:pointer" onclick="Song('div_chaosong')"> 抄送</a> <a class="pull-left" style="margin-left:10px; cursor:pointer" onclick="Song('div_misong')"> 密送</a>
+                                </div>
+
                             </div>
+
+
+
+                            <div class="form-group" id="div_chaosong" style="display:none">
+                                <label for="inputEmail3" class="col-sm-1 control-label">抄  送</label>
+
+                                <div class="col-sm-9">
+                                    <input type="email" class="form-control input-sm" id="txt_WCCrecivermail" placeholder="Carbon Copy">
+                                </div>
+
+                                <div class="col-sm-2">
+                                    <a class="pull-left" style="cursor:pointer" onclick="NoSong('div_chaosong','txt_WCCrecivermail')"> 删除抄送</a> 
+                                </div>
+                            </div>
+
+
+
+
+                            <div class="form-group" id="div_misong" style="display:none">
+                                <label for="inputEmail3" class="col-sm-1 control-label">密  送</label>
+
+                                <div class="col-sm-9">
+                                    <input type="email" class="form-control input-sm" id="txt_BCCrecivermail" placeholder="Blind Carbon Copy">
+                                </div>
+
+                                <div class="col-sm-2">
+                                    <a class="pull-left" style="cursor:pointer" onclick="NoSong('div_misong','txt_BCCrecivermail')"> 删除密送</a>
+                                </div>
+
+                            </div>
+
+
+
+
+
+
                             <div class="form-group">
                                 <label for="inputEmail3" class="col-sm-1 control-label">主 &nbsp;&nbsp; 题</label>
 
-                                <div class="col-sm-10">
+                                <div class="col-sm-9">
                                     <input type="email" class="form-control input-sm" id="txt_mailtitle" placeholder="Subject">
 
 
@@ -165,7 +206,7 @@
 
                             <!-- /.box-body -->
                             <!-- /.box-footer -->
-                           
+
 
                             <div class="form-horizontal">
                                 <textarea name="description" id="description"></textarea>
@@ -311,7 +352,8 @@
                 var Content = CKEDITOR.instances['description'].getData();
                 var Subject = $("#txt_mailtitle").val();
                 var AccountId = $("#lb_aid").val();
-
+                var RWcc=$("#txt_WCCrecivermail").val();
+                  var RBcc=$("#txt_BCCrecivermail").val();
                 if (Inmail == "" || Inmail == null) {
 
                     alert_danger("请填写收件人！");
@@ -343,7 +385,10 @@
                         Content: Content,
                         Subject: Subject,
                         AccountId: AccountId,
+                        WCC: RWcc,
+                        BCC:RBcc,
                         Atthachment: filelist
+
                     },
                     success: function (result) {
 
@@ -551,6 +596,19 @@
              CKEDITOR.instances['description'].insertHtml(element);
         }
 
+    //添加抄送或密送
+        function Song(ele) {
+
+            $("#" + ele).show();
+
+        }
+    //删除抄送或密送
+         function NoSong(ele,txtele) {
+             $("#" + txtele).val("");
+            
+             $("#" + ele).hide();
+      
+        }
 
         function BindTemplate() {
 

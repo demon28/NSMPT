@@ -79,7 +79,7 @@ namespace NSMPT.Web.Controllers
                 uploadFile.SaveAs(Server.MapPath(filepath));
             }
             string url = GetSiteUrl() + filepath;
-
+        
             return SuccessResult(url);
         }
 

@@ -9,6 +9,7 @@ using NSMPT.Entites;
 using Winner.Framework.Core.Facade;
 using System.IO;
 using System.Web;
+using System.Collections;
 
 namespace NSMPT.Facade
 {
@@ -88,6 +89,7 @@ namespace NSMPT.Facade
                     tnsmtp_Contact.Status = 0;
                     tnsmtp_Contact.UserId = model.Userid;
                     tnsmtp_Contact.CateId = 1;
+                    
                     if (!tnsmtp_Contact.Insert())
                     {
                         Rollback();
@@ -138,7 +140,7 @@ namespace NSMPT.Facade
 
                 Dictionary<string, string> dic = new Dictionary<string, string>();
 
-                if (model.Atthachment.Length > 0)
+                if (model.Atthachment!=null && model.Atthachment.Length > 0)
                 {
                     foreach (var file in model.Atthachment)
                     {
@@ -169,6 +171,33 @@ namespace NSMPT.Facade
 
             #endregion
 
+                #region 判断是否有抄送或者密送
+
+
+            List<string> Bcc = new List<string>();
+            List<string> Wcc = new List<string>();
+
+            if (!string.IsNullOrEmpty(model.Bcc))
+            {
+                if (!GetCCArray(model.Bcc, out Bcc))
+                {
+                    Alert("密送联系人地址有误");
+                    Rollback();
+                    return false;
+                }
+            }
+            if (!string.IsNullOrEmpty(model.Wcc))
+            {
+                if (!GetCCArray(model.Wcc, out Wcc)) {
+                    Alert("抄送联系人地址有误");
+                    Rollback();
+                    return false;
+                }
+            }
+
+            #endregion
+
+
             try
             {
 
@@ -185,10 +214,14 @@ namespace NSMPT.Facade
                 smtp.Subject = model.Subject;
                 smtp.Body = model.Content;
                 smtp.AttachmentFile = dic;
-
+               
                 smtp.MailServerUserName = tnsmtp_Account.Account;
                 smtp.MailServerPassWord = tnsmtp_Account.Password;
 
+          
+                smtp.RecipientBCC1 = Bcc;
+                smtp.RecipientWCC1 = Wcc;
+              
                 string message = string.Empty;
 
                 if (!smtp.Send())
@@ -299,6 +332,38 @@ namespace NSMPT.Facade
 
         }
 
+        /// <summary>
+        /// 以分号分割抄送人和密送人
+        /// </summary>
+        /// <param name="str"></param>
+        /// <param name="list"></param>
+        /// <returns></returns>
+        private bool GetCCArray(string str ,out List<string> list) {
+
+            list = new List<string>();
+            if (str.Contains(';'))
+            {
+                string[] CCList = str.Split(';');
+
+                foreach (var item in CCList)
+                {
+                    if (!item.Contains('@'))
+                    {
+                        return false;
+                    }
+                    list.Add(item);
+                }
+            }
+            else {
+                if (!str.Contains('@'))
+                {
+                    return false;
+                }
+                list.Add(str);
+            }
+
+            return true;
+        }
 
     }
 }
