@@ -101,7 +101,7 @@
             <!-- Custom Tabs -->
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs pull-right">
-                    <li><a href="#tab_3" data-toggle="tab">定 时</a></li>
+
                     <li><a href="#tab_2" data-toggle="tab">群 发</a></li>
                     <li class="active"><a href="#tab_1" data-toggle="tab">普 通</a></li>
 
@@ -115,6 +115,7 @@
 
                         <div class="form-inline" style="margin-top:10px">
                             <button type="button" id="btn_send" class="btn   btn-success pull-left" style="margin-left:20px;">    <i class="fa fa-send"></i> &nbsp;&nbsp; 发 送</button>  &nbsp;&nbsp;
+                            <button type="button" id="btn_timesend" class="btn   btn-success pull-left" style="margin-left:20px;" data-toggle="modal" data-target="#modal-default">    <i class="fa fa-clock-o"></i>  定时发送</button>  &nbsp;&nbsp;
                             <button type="button" id="btn_savedraft" class="btn  btn-success pull-left" style="margin-left:20px;">存草稿</button>  &nbsp;&nbsp;
 
                             <span id="span_draftId" style="display:block"></span>
@@ -157,7 +158,7 @@
                                 </div>
 
                                 <div class="col-sm-2">
-                                    <a class="pull-left" style="cursor:pointer" onclick="NoSong('div_chaosong','txt_WCCrecivermail')"> 删除抄送</a> 
+                                    <a class="pull-left" style="cursor:pointer" onclick="NoSong('div_chaosong','txt_WCCrecivermail')"> 删除抄送</a>
                                 </div>
                             </div>
 
@@ -179,14 +180,11 @@
 
 
 
-
-
-
                             <div class="form-group">
                                 <label for="inputEmail3" class="col-sm-1 control-label">主 &nbsp;&nbsp; 题</label>
 
                                 <div class="col-sm-9">
-                                    <input type="email" class="form-control input-sm" id="txt_mailtitle" placeholder="Subject">
+                                    <input type="text" class="form-control input-sm" id="txt_mailtitle" placeholder="Subject">
 
 
                                 </div>
@@ -219,11 +217,66 @@
                     <!-- /.tab-pane -->
                     <div class="tab-pane" id="tab_2">
 
-                    </div>
-                    <!-- /.tab-pane -->
-                    <div class="tab-pane" id="tab_3">
+
+                        <div class="form-inline" style="margin-top:10px">
+                            <button type="button" id="btn_group_send" class="btn btn-success pull-left" style="margin-left:20px;">    <i class="fa fa-send"></i> &nbsp;&nbsp; 发 送</button>  &nbsp;&nbsp;
+                            <button type="button" id="btn_group_timesend" class="btn   btn-success pull-left" style="margin-left:20px;" data-toggle="modal" data-target="#modal-default">    <i class="fa fa-clock-o"></i>  定时发送</button>  &nbsp;&nbsp;
+                        </div>
+
+                        <form class="form-horizontal" style="margin-top:30px">
+
+                            <div class="form-group">
+                                <label for="inputEmail3" class="col-sm-1 control-label">寄件人</label>
+                                <label id="lb__group_aid" style="display:block"></label>
+                                <div class="col-sm-9">
+                                    <input type="email" class="form-control input-sm" id="txt_group_sendermail" placeholder="Select Email" readonly="readonly">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="inputEmail3" class="col-sm-1 control-label">收件组</label>
+
+                                <div class="col-sm-9">
+                                    <select class="form-control input-sm" id="txt_group_recivermail">
+                                        <option value="0">---请选择联系人组---</option>
+                                    </select>
+                                </div>
+
+                            </div>
+
+                            <div class="form-group">
+                                <label for="inputEmail3" class="col-sm-1 control-label">主 &nbsp;&nbsp; 题</label>
+
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control input-sm" id="txt_group_mailtitle" placeholder="Subject">
+
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="inputEmail3" class="col-sm-1 control-label">附 &nbsp;&nbsp; 件</label>
+                                <div id="from_fileupload">
+                                    <div class="btn btn-default btn-file  pull-left" style="margin-left:15px">
+                                        <i class="fa fa-paperclip"></i> Attachment
+                                        <input type="file" name="attachment" id="file_group_attachment">
+                                    </div>
+
+
+                                    <ul class="list-group col-xs-6" style="margin-left:15px" id="ul_group_attachment"></ul>
+                                </div>
+                            </div>
+
+                            <div class="form-horizontal">
+                                <textarea name="group_description" id="group_description"></textarea>
+                            </div>
+
+
+                        </form>
+
+
 
                     </div>
+                    <!-- /.tab-pane -->
                     <!-- /.tab-pane -->
                 </div>
                 <!-- /.tab-content -->
@@ -238,17 +291,67 @@
 <!-- /.content -->
 
 
+
+<div class="modal fade" id="modal-default">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Set E-mail Send Time</h4>
+            </div>
+
+
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Date:</label>
+
+                    <div class="input-group date">
+                        <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                        <input type="text" class="form-control pull-right" id="datepicker">
+                    </div>
+                    <!-- /.input group -->
+                </div>
+
+            </div>
+
+            <script type="text/javascript">
+
+            </script>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success">Add Timer</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+
+
 @section scripts{
+
     <script src="~/Reference/adminLTE/bower_components/ckeditor/ckeditor.js"></script>
     <script src="~/Reference/scripts/CommonScript.js"></script>
     <script src="~/Reference/scripts/vue-pager.js"></script>
-
-
     <script src="~/Reference/scripts/jquery.form.min.js"></script>
+    <link href="~/Reference/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+    <script src="~/Reference/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
+
     <script type="text/javascript">
+
 
         window.onload = function () {
             CKEDITOR.replace('description', {
+                filebrowserImageUploadUrl: "/Template/UploadImage?type=Images",
+                height: 400
+            });
+            CKEDITOR.replace('group_description', {
                 filebrowserImageUploadUrl: "/Template/UploadImage?type=Images",
                 height: 400
             });
@@ -257,11 +360,9 @@
         var account_vm;
         var draftid;
         var filelist = new Array();
-       
+
 
         $(document).ready(function () {
-
-
 
             BindEditor();
             BindAccountView();
@@ -325,6 +426,7 @@
                                     if (result.Content.Data[i].Isdefault == 1) {
                                         $("#lb_aid").val(result.Content.Data[i].Aid);
                                         $("#txt_sendermail").val(result.Content.Data[i].Account);
+                                        $("#txt_group_sendermail").val(result.Content.Data[i].Account);
                                     }
                                 }
                             }
@@ -334,6 +436,7 @@
                     AccountUse: function (item) {
                         $("#lb_aid").val(item.Aid);
                         $("#txt_sendermail").val(item.Account);
+                        $("#txt_group_sendermail").val(item.Account);
 
                     }
 
@@ -352,8 +455,8 @@
                 var Content = CKEDITOR.instances['description'].getData();
                 var Subject = $("#txt_mailtitle").val();
                 var AccountId = $("#lb_aid").val();
-                var RWcc=$("#txt_WCCrecivermail").val();
-                  var RBcc=$("#txt_BCCrecivermail").val();
+                var RWcc = $("#txt_WCCrecivermail").val();
+                var RBcc = $("#txt_BCCrecivermail").val();
                 if (Inmail == "" || Inmail == null) {
 
                     alert_danger("请填写收件人！");
@@ -370,10 +473,10 @@
                     return;
                 }
 
-                  var dialog = bootbox.dialog({
-                                    title: '邮件发送中...',
-                                    message: '<p><i class="fa fa-spin fa-spinner"></i> Loading...</p>'
-                                });
+                var dialog = bootbox.dialog({
+                    title: '邮件发送中...',
+                    message: '<p><i class="fa fa-spin fa-spinner"></i> Loading...</p>'
+                });
 
                 $.ajax({
                     url: "/Home/SendMail",
@@ -386,7 +489,7 @@
                         Subject: Subject,
                         AccountId: AccountId,
                         WCC: RWcc,
-                        BCC:RBcc,
+                        BCC: RBcc,
                         Atthachment: filelist
 
                     },
@@ -460,7 +563,7 @@
 
                 var lengli = $("#ul_attachment li").length;
                 var uploadFile = $('#file_attachment')[0].files[0];
-              
+
 
                 if (lengli >= 5) {
                     alert_danger("单次仅能发送5个附件");
@@ -479,7 +582,7 @@
 
 
 
-             
+
 
                 var index1 = uploadFile.name.lastIndexOf(".");
                 var index2 = uploadFile.name.length;
@@ -493,7 +596,7 @@
                 element += "                 <a style=\"margin-left:20px; cursor:default\" onclick=\"removefile('li_file_" + filename + "','" + uploadFile.name + "')\"><small>删除</small></a>";
 
                 if (suffix == "png" || suffix == "jpg") {
-                    element += "                   <a id='a_insert_contnet_"+filename+"' style=\"margin-left:20px; cursor:default\" onclick='insert2contnet(this.name)'><small>添加到正文</small></a>";
+                    element += "                   <a id='a_insert_contnet_" + filename + "' style=\"margin-left:20px; cursor:default\" onclick='insert2contnet(this.name)'><small>添加到正文</small></a>";
                 }
 
                 element += "                   <small id='small_progress_" + filename + "' class=\"pull-right\" style=\"display:block\">0%</small>";
@@ -509,7 +612,7 @@
                 $("#ul_attachment").append(element);
 
 
-                
+
                 $("#from_fileupload").ajaxSubmit({
                     url: '/Home/UploadAttachment',
                     type: 'post',
@@ -518,15 +621,14 @@
                     contentType: false,
                     success: function (result) {
 
-                        if (suffix == "png" || suffix == "jpg")
-                        {
-                                  document.getElementById("a_insert_contnet_" + filename).name = result.Content;
+                        if (suffix == "png" || suffix == "jpg") {
+                            document.getElementById("a_insert_contnet_" + filename).name = result.Content;
                         }
 
                         //添加到上传数组
                         filelist.push(result.Content);
                         console.log(filelist);
-                        
+
                     },
                     xhr: function () {
                         var xhr = new XMLHttpRequest();
@@ -571,6 +673,13 @@
 
 
             });
+
+            $('#datepicker').datetimepicker({
+                format: 'yyyy-mm-dd hh:ii',
+                autoclose: true,
+
+            });
+
         }
 
         //移除附件
@@ -586,28 +695,28 @@
             if (index > -1) {
                 filelist.splice(index, 1);
             }
-            
+
         }
 
         //添加图片到正文
         function insert2contnet(imgurl) {
 
             var element = " <img src='" + imgurl + "' />";
-             CKEDITOR.instances['description'].insertHtml(element);
+            CKEDITOR.instances['description'].insertHtml(element);
         }
 
-    //添加抄送或密送
+        //添加抄送或密送
         function Song(ele) {
 
             $("#" + ele).show();
 
         }
-    //删除抄送或密送
-         function NoSong(ele,txtele) {
-             $("#" + txtele).val("");
-            
-             $("#" + ele).hide();
-      
+        //删除抄送或密送
+        function NoSong(ele, txtele) {
+            $("#" + txtele).val("");
+
+            $("#" + ele).hide();
+
         }
 
         function BindTemplate() {
@@ -627,5 +736,13 @@
             });
         }
 
+
+
+
+
+
+
     </script>
+
+
 }

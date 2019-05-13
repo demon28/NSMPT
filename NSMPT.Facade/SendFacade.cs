@@ -254,6 +254,13 @@ namespace NSMPT.Facade
         }
 
 
+        /// <summary>
+        /// 标签替换入口
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="userid"></param>
+        /// <param name="replace"></param>
+        /// <returns></returns>
         public bool ReplaceMark(Tnsmtp_EmailMap model,int userid ,out string replace) {
 
             string value = string.Empty;
@@ -372,7 +379,12 @@ namespace NSMPT.Facade
             return true;
         }
 
-
+        /// <summary>
+        /// 添加回执
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="mid"></param>
+        /// <returns></returns>
         private string SetReceipt(string context,int mid)
         {
 
