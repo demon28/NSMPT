@@ -108,11 +108,13 @@ namespace NSMPT.Facade
                     Alert("替换模板标签失败！");
                     return false;
                 }
-                #endregion
 
+            #endregion
 
-                #region 添加数据库 邮件表
-                DataAccess.Tnsmtp_Email tnsmtp_Email = new DataAccess.Tnsmtp_Email();
+         
+
+            #region 添加数据库 邮件表
+            DataAccess.Tnsmtp_Email tnsmtp_Email = new DataAccess.Tnsmtp_Email();
                 tnsmtp_Email.ReferenceTransactionFrom(this.Transaction);
 
                 tnsmtp_Email.Bcc = model.Bcc;
@@ -125,7 +127,8 @@ namespace NSMPT.Facade
                 tnsmtp_Email.Wcc = model.Wcc;
                 tnsmtp_Email.Status = 1;
                 tnsmtp_Email.Senddate = DateTime.Now;
-
+                tnsmtp_Email.FlagRead = 0;
+                tnsmtp_Email.FlagStatus = 0;
 
                 if (!tnsmtp_Email.Insert())
                 {
@@ -134,11 +137,15 @@ namespace NSMPT.Facade
                     return false;
                 }
 
-                #endregion
+            #endregion
 
-                #region 如果有附件，则添加附件到数据库
+            #region 加入回执功能
+            model.Content = SetReceipt(content, tnsmtp_Email.MailId);
+            #endregion
 
-                Dictionary<string, string> dic = new Dictionary<string, string>();
+            #region 如果有附件，则添加附件到数据库
+
+            Dictionary<string, string> dic = new Dictionary<string, string>();
 
                 if (model.Atthachment!=null && model.Atthachment.Length > 0)
                 {
@@ -171,7 +178,7 @@ namespace NSMPT.Facade
 
             #endregion
 
-                #region 判断是否有抄送或者密送
+           #region 判断是否有抄送或者密送
 
 
             List<string> Bcc = new List<string>();
@@ -365,5 +372,17 @@ namespace NSMPT.Facade
             return true;
         }
 
+
+        private string SetReceipt(string context,int mid)
+        {
+
+            string src = Entites.Tool.GetUrl.GetSiteUrl()+ "/SendEmail/Receipt?mid=" +mid;
+
+            string img = "<img src='" + src + "' alt='' style='display: inline - block; width: 0; height: 0' />";
+
+
+            return context+= "<br/><br/><br/>"+ img;
+
+        }
     }
 }

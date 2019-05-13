@@ -104,5 +104,29 @@ namespace NSMPT.Web.Controllers
 
 
         }
+
+       
+        public ActionResult Receipt() {
+
+            if (string.IsNullOrEmpty(Request.QueryString["mid"]))
+            {
+                return View();
+            }
+
+            int mid= Convert.ToInt32(Request.QueryString["mid"]);
+
+            DataAccess.Tnsmtp_Email  tnsmtp_Email= new DataAccess.Tnsmtp_Email();
+
+            if (!tnsmtp_Email.SelectByPK(mid))
+            {
+                return View();
+            }
+            tnsmtp_Email.FlagRead = 1;
+            tnsmtp_Email.Update();
+            
+            return View();
+
+        }
+
     }
 }

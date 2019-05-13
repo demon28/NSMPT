@@ -44,19 +44,28 @@
         <table class="table table-hover" id="tab_contact">
             <tbody>
                 <tr>
-                    <th >Subject</th>
+                    <th>Subject</th>
                     <th>Sender</th>
                     <th>Receiver</th>
-
-
+                    <th>Send Staus</th>
+                    <th>Read Staus</th>
                     <th>Date</th>
                     <th>operation</th>
                 </tr>
                 <tr v-for="(item,index) in Data">
-                    <td >  <a v-on:click="viewitem(item)" data-toggle="modal" data-target="#modal-default" style="cursor:pointer;">{{item.Subject}}</a></td>
+                    <td>  <a v-on:click="viewitem(item)" data-toggle="modal" data-target="#modal-default" style="cursor:pointer;">{{item.Subject}}</a></td>
                     <td>{{item.Tomail}}</td>
                     <td>{{item.Inmail}}</td>
+                    <td>
+                        <span class="label label-success" v-if="item.FlagStatus==0">已发送</span>
+                        <span class="label label-warning" v-if="item.FlagStatus==1">发送中</span>
+                        <span class="label label-danger" v-if="item.FlagStatus==2">发送中</span>
+                    </td>
+                    <td>
+                        <span class="label label-primary" v-if="item.FlagRead==0">未读</span>
+                        <span class="label label-success" v-if="item.FlagRead==1">已读</span>
 
+                    </td>
                     <td>{{ diaplayTime(item.Createtime)}}</td>
                     <td>
                         <button type="button" class="btn bg-purple  btn-xs" v-on:click="viewitem(item)" data-toggle="modal" data-target="#modal-default">浏览</button>
@@ -205,7 +214,7 @@
             });
 
         }
-
+ 
 
     </script>
 
