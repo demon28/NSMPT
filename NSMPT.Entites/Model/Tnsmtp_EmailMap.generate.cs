@@ -77,7 +77,7 @@ namespace NSMPT.Entites
 		/// 是否已读 0：未读，1：已读
 		/// [default:DBNull.Value]
 		/// </summary>
-		public int? FlagRead { get; set; }
+		public int FlagRead { get; set; }
 
 		/// <summary>
 		/// 邮箱状态 1，已发送 2，草稿，3，已删除

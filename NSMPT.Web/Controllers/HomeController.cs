@@ -40,6 +40,23 @@ namespace NSMPT.Web.Controllers
 
         }
 
+        [ValidateInput(false)]
+        [HttpPost]
+        public ActionResult TimerSendMail(Entites.Tnsmtp_EmailMap model)
+        {
+            model.Userid = SysUser.UserId;
+
+            SendFacade sendFacade = new SendFacade();
+
+            if (!sendFacade.TimerSend(model))
+            {
+                return FailResult(sendFacade.PromptInfo.Message);
+            }
+            return SuccessResult("添加成功");
+
+        }
+
+
 
         [HttpPost]
         public ActionResult LoadAccount() {
