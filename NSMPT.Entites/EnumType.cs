@@ -17,6 +17,17 @@ namespace NSMPT.Entites
         正常=0,
         删除=1
     }
+
+
+    public enum EmailFlagStatus
+    {
+        已发送 = 0,
+        发送中= 1,
+        发送失败=2,
+        定时邮件=3
+    }
+
+
     class EnumType
     {
     }

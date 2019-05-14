@@ -37,5 +37,18 @@ namespace NSMPT.DataAccess
     public partial class Tnsmtp_AttachmentCollection : DataAccessCollectionBase
     {
         //Custom Extension Class
+
+        public bool ListByMailId(int mailid,int userid) {
+
+            string where = " mail_id=:mailid and user_id=:userid";
+
+            AddParameter("mailid", mailid);
+            AddParameter("userid", userid);
+
+            return ListByCondition(where);
+
+
+        }
+
     }
 }

@@ -89,5 +89,19 @@ namespace NSMPT.DataAccess
 
             return ListByCondition(where);
         }
+
+
+        public bool ListSendByFlagStatus(int status)
+        {
+
+            string where = "  status=1 ";
+          
+            AddParameter("flag_status", status);
+
+            where += " order by mail_id desc";
+
+            return ListByCondition(where);
+        }
+
     }
 }

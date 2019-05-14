@@ -343,7 +343,7 @@ namespace NSMPT.Facade
         /// <param name="str"></param>
         /// <param name="list"></param>
         /// <returns></returns>
-        private bool GetCCArray(string str, out List<string> list)
+        public bool GetCCArray(string str, out List<string> list)
         {
             list = new List<string>();
 
@@ -383,7 +383,7 @@ namespace NSMPT.Facade
         /// <param name="context"></param>
         /// <param name="mid"></param>
         /// <returns></returns>
-        private string SetReceipt(string context, int mid)
+        public string SetReceipt(string context, int mid)
         {
 
             string src = Entites.Tool.GetUrl.GetSiteUrl() + "/SendEmail/Receipt?mid=" + mid;
