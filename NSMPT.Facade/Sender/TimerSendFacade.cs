@@ -13,7 +13,7 @@ namespace NSMPT.Facade
 {
     public class TimerSendFacade : FacadeBase
     {
-        public bool TimerSend()
+        public bool Send()
         {
 
 

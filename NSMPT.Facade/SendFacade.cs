@@ -11,6 +11,7 @@ using System.IO;
 using System.Web;
 using System.Collections;
 using NSMPT.DataAccess;
+using System.Data;
 
 namespace NSMPT.Facade
 {
@@ -55,7 +56,7 @@ namespace NSMPT.Facade
             #endregion
 
             #region 如果存在模板标签则替换模板标签
-            string content=string.Empty;
+            string content = string.Empty;
             if (!ReplaceMark(model, model.Userid, out content))
             {
                 Rollback();
@@ -66,7 +67,7 @@ namespace NSMPT.Facade
             #endregion
 
             #region 添加数据库 邮件表
-         
+
             model.Senddate = DateTime.Now;
             if (!AddEmailTable(model))
             {
@@ -74,7 +75,7 @@ namespace NSMPT.Facade
                 Alert("添加邮件失败");
                 return false;
             }
-         
+
             #endregion
 
             #region 如果有附件，则添加附件到数据库
@@ -139,7 +140,7 @@ namespace NSMPT.Facade
                 smtp.RecipientBCC1 = Bcc;
                 smtp.RecipientWCC1 = Wcc;
 
-               
+
 
                 if (!smtp.Send())
                 {
@@ -216,7 +217,7 @@ namespace NSMPT.Facade
 
             #region 添加数据库 邮件表
 
-            model.FlagStatus = 3;
+            model.FlagStatus = (int)Entites.EmailFlagStatus.定时邮件; ;
 
             if (!AddEmailTable(model))
             {
@@ -224,7 +225,7 @@ namespace NSMPT.Facade
                 Alert("添加邮件失败");
                 return false;
             }
-            
+
             #endregion
 
             #region 如果有附件，则添加附件到数据库
@@ -237,6 +238,88 @@ namespace NSMPT.Facade
             }
 
             #endregion
+
+
+            Commit();
+            return true;
+        }
+
+
+        /// <summary>
+        /// 群发邮件====让服务即时去跑
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="Gid"></param>
+        /// <returns></returns>
+        public bool GroupSend(Tnsmtp_EmailMap model,int Gid) {
+
+            BeginTransaction();
+
+            #region 获取发件账户信息
+            DataAccess.Tnsmtp_Account tnsmtp_Account = new DataAccess.Tnsmtp_Account();
+            if (!tnsmtp_Account.SelectByPK(model.AccountId))
+            {
+                Rollback();
+                Alert("获取发件账户失败");
+                return false;
+            }
+            #endregion
+
+            #region 获取企业邮箱信息
+            DataAccess.Tnsmtp_Mailtype tnsmtp_Mailtype = new DataAccess.Tnsmtp_Mailtype();
+            if (!tnsmtp_Mailtype.SelectByPK(tnsmtp_Account.MailType.Value))
+            {
+                Rollback();
+                Alert("获取企业邮箱失败");
+                return false;
+            }
+            #endregion
+
+            #region 如果存在模板标签则替换模板标签
+            string content = string.Empty;
+            if (!ReplaceMark(model, model.Userid, out content))
+            {
+                Rollback();
+                Alert("替换模板标签失败！");
+                return false;
+            }
+
+            #endregion
+
+
+            DataAccess.Tnsmtp_ContactCollection tnsmtp_ContactCollection = new Tnsmtp_ContactCollection();
+
+            if (!tnsmtp_ContactCollection.ListByUserid(model.Userid,string.Empty,Gid))
+            {
+                Rollback();
+                Alert("查找分组联系人失败");
+                return false;
+            }
+
+            foreach (DataRow dr in tnsmtp_ContactCollection.DataTable.Rows)
+            {
+                model.FlagStatus = (int)Entites.EmailFlagStatus.发送中;
+                model.Tomail = dr[Tnsmtp_Contact._EMAIL].ToString();
+
+                if (!AddEmailTable(model))
+                {
+                    Rollback();
+                    Alert("添加邮件失败");
+                    return false;
+                }
+
+            
+                Dictionary<string, string> filelist = new Dictionary<string, string>();
+                if (!AddAtthachmentTable(model, tnsmtp_Account, out filelist))
+                {
+                    Rollback();
+                    Alert("添加附件失败！");
+                    return false;
+                }
+
+            }
+
+
 
 
             Commit();
@@ -432,7 +515,6 @@ namespace NSMPT.Facade
             model.Content = SetReceipt(model.Content, tnsmtp_Email.MailId);  //加入回执功能
             return true;
         }
-
 
         /// <summary>
         /// 添加附件表数据

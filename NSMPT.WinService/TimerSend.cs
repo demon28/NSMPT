@@ -36,7 +36,7 @@ namespace NSMPT.WinService
         {
             TimerSendFacade timerSendFacade = new TimerSendFacade();
 
-            timerSendFacade.TimerSend();
+            timerSendFacade.Send();
 
         }
 

@@ -59,12 +59,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Sender\GroupSend.cs" />
     <Compile Include="ImportContactFacade.cs" />
     <Compile Include="ISmtpMail.cs" />
     <Compile Include="SendFacade.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SmtpMail.cs" />
-    <Compile Include="TimerSendFacade.cs" />
+    <Compile Include="Sender\TimerSendFacade.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="log4net.config" />
