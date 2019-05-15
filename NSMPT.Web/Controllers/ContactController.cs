@@ -204,7 +204,7 @@ namespace NSMPT.Web.Controllers
         [HttpPost]
         public ActionResult ListGroup() {
             DataAccess.Tnsmtp_ContactgroupCollection collection = new DataAccess.Tnsmtp_ContactgroupCollection();
-  
+            collection.ChangePage= this.ChangePage();
 
             if (!collection.ListByUserid(SysUser.UserId))
             {
@@ -212,7 +212,7 @@ namespace NSMPT.Web.Controllers
             }
          
             var list = MapProvider.Map<Tnsmtp_ContactgroupMap>(collection.DataTable);
-            return SuccessResultList(list);
+            return SuccessResultList(list, collection.ChangePage);
 
         }
 

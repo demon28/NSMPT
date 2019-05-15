@@ -5,7 +5,8 @@
 
 @section Pageheader{
 
-
+    <link href="~/Reference/adminLTE/plugins/iCheck/flat/green.css" rel="stylesheet" />
+    <script src="~/Reference/adminLTE/plugins/iCheck/icheck.js"></script>
     <h1>
         <small>  Contact</small>
 
@@ -140,8 +141,8 @@
                     <table class="table table-hover" id="tab_contact">
                         <tbody>
                             <tr>
-                                <th><input type="checkbox" id="checkAll"   name="all" /></th>
-                           
+                                <th><input type="checkbox" id="checkAll" name="all"  class="checkbox_all" /></th>
+
                                 <th>Name</th>
                                 <th>Email</th>
                                 <th>Gid</th>
@@ -151,12 +152,12 @@
                             </tr>
                             <tr v-for="(item,index) in Data">
                                 <td>
-                                
-                                    <input type="checkbox" id="box_check" :value="item.ContactId" onclick="userCheck(this)"  />
-                                 
-                                
-                              </td>
-                           
+
+                                    <input type="checkbox" id="box_check" :value="item.ContactId" onclick="userCheck(this)" />
+
+
+                                </td>
+
                                 <td>{{item.ContactName}}</td>
                                 <td>{{item.Email}}</td>
                                 <td>{{item.Gid}}</td>
@@ -286,17 +287,17 @@
 
 
         });
-    function userCheck(ths) {
-    if (ths.checked == false) {
-        $("input[name=all]:checkbox").prop('checked', false);
-    }
-    else {
-        var count = $("input[name='id']:checkbox:checked").length;
-        if (count == $("input[name='id']:checkbox").length) {
-            $("input[name=all]:checkbox").prop("checked", true);
+        function userCheck(ths) {
+            if (ths.checked == false) {
+                $("input[name=all]:checkbox").prop('checked', false);
+            }
+            else {
+                var count = $("input[name='id']:checkbox:checked").length;
+                if (count == $("input[name='id']:checkbox").length) {
+                    $("input[name=all]:checkbox").prop("checked", true);
+                }
+            }
         }
-    }
-}
         function setEvent() {
             $("#btn_addContact").click(function () {
 
@@ -380,15 +381,15 @@
 
             })
 
-   
 
-             $("input[name=all]").click(function () {
-        if (this.checked) {
-            $("#tab_contact :checkbox").prop("checked", true);
-        } else {
-            $("#tab_contact :checkbox").prop("checked", false);
-        }
-    });
+
+            $("input[name=all]").click(function () {
+                if (this.checked) {
+                    $("#tab_contact :checkbox").prop("checked", true);
+                } else {
+                    $("#tab_contact :checkbox").prop("checked", false);
+                }
+            });
 
 
             $("#btn_alldeltemp").click(function () {
@@ -403,7 +404,7 @@
                         list.push(this.value);
                     });
 
-                    
+
                     bootbox.confirm("您确定删除该联系人吗？", function (res) {
 
                         if (!res) {
@@ -469,7 +470,7 @@
                         inputType: 'select',
                         inputOptions: boxchecklist,
                         callback: function (res) {
-                           
+
                             $.ajax({
                                 url: "/Contact/UpdateGroupAllContact",
                                 type: "POST",
@@ -482,14 +483,14 @@
 
                                         alert_success("修改成功！");
                                         contact_vm.reload();
-                                           $("#tab_contact :checkbox").prop("checked", false);
+                                        $("#tab_contact :checkbox").prop("checked", false);
 
                                     } else {
                                         alert_danger(result.Message);
                                     }
                                 }
                             })
-                           
+
                         }
                     });
 
@@ -557,6 +558,9 @@
 
             });
 
+
+          
+
         }
 
 
@@ -594,7 +598,7 @@
                                     }
                                     else {
 
-                               
+
 
                                     }
 
@@ -735,26 +739,26 @@
                             if (!res) {
                                 return;
                             }
-                             $.ajax({
-                            url: "/Contact/DeleteContact",
-                            type: "POST",
-                            data: {
-                                ContactId: item.ContactId
-                            },
-                            success: function (result) {
-                                if (result.Success) {
-                                    alert_success("删除成功！");
-                                    contact_vm.reload();
+                            $.ajax({
+                                url: "/Contact/DeleteContact",
+                                type: "POST",
+                                data: {
+                                    ContactId: item.ContactId
+                                },
+                                success: function (result) {
+                                    if (result.Success) {
+                                        alert_success("删除成功！");
+                                        contact_vm.reload();
 
-                                } else {
-                                    alert_danger(result.Message);
+                                    } else {
+                                        alert_danger(result.Message);
+                                    }
                                 }
-                            }
-                        })
+                            })
 
                         })
 
-                       
+
                     },
 
                 },

@@ -24,7 +24,7 @@ namespace NSMPT.Web.Controllers
         public  ActionResult ListMark() {
 
             DataAccess.Tnsmtp_RaplcemarkCollection collection = new DataAccess.Tnsmtp_RaplcemarkCollection();
-
+            collection.ChangePage = this.ChangePage();
             if (!collection.ListByUser(SysUser.UserId))
             {
                 return FailResult("查询失败");
