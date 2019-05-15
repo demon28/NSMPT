@@ -166,7 +166,7 @@ namespace NSMPT.Facade
             foreach (DataRow dr in tnsmtp_ContactCollection.DataTable.Rows)
             {
                 model.FlagStatus = (int)Entites.EmailFlagStatus.发送中;
-                model.Tomail = dr[Tnsmtp_Contact._EMAIL].ToString();
+                model.Inmail = dr[Tnsmtp_Contact._EMAIL].ToString();
 
                 if (!AddEmailTable(model))
                 {
@@ -248,7 +248,7 @@ namespace NSMPT.Facade
             foreach (DataRow dr in tnsmtp_ContactCollection.DataTable.Rows)
             {
                 model.FlagStatus = (int)Entites.EmailFlagStatus.定时群发;
-                model.Tomail = dr[Tnsmtp_Contact._EMAIL].ToString();
+                model.Inmail = dr[Tnsmtp_Contact._EMAIL].ToString();
 
                 if (!AddEmailTable(model))
                 {

@@ -108,121 +108,121 @@
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body ">
-                 
 
-                        <div class="form-inline" style="margin-top:10px">
-                            <button type="button" id="btn_send" class="btn   btn-success pull-left" style="margin-left:20px;">    <i class="fa fa-send"></i> &nbsp;&nbsp; 发 送</button>  &nbsp;&nbsp;
-                            <button type="button" id="btn_timesend" class="btn   btn-success pull-left" style="margin-left:20px;" data-toggle="modal" data-target="#modal-default">    <i class="fa fa-clock-o"></i>  定时发送</button>  &nbsp;&nbsp;
-                            <button type="button" id="btn_savedraft" class="btn  btn-success pull-left" style="margin-left:20px;">存草稿</button>  &nbsp;&nbsp;
 
-                            <span id="span_draftId" style="display:block"></span>
+                    <div class="form-inline" style="margin-top:10px">
+                        <button type="button" id="btn_send" class="btn   btn-success pull-left" style="margin-left:20px;">    <i class="fa fa-send"></i> &nbsp;&nbsp; 发 送</button>  &nbsp;&nbsp;
+                        <button type="button" id="btn_timesend" class="btn   btn-success pull-left" style="margin-left:20px;" data-toggle="modal" data-target="#modal-default">    <i class="fa fa-clock-o"></i>  定时发送</button>  &nbsp;&nbsp;
+                        <button type="button" id="btn_savedraft" class="btn  btn-success pull-left" style="margin-left:20px;">存草稿</button>  &nbsp;&nbsp;
+
+                        <span id="span_draftId" style="display:block"></span>
+                    </div>
+
+
+                    <form class="form-horizontal" style="margin-top:30px">
+
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-1 control-label">寄件人</label>
+                            <label id="lb_aid" style="display:block"></label>
+                            <div class="col-sm-9">
+
+                                <input type="email" class="form-control input-sm" id="txt_sendermail" placeholder="Select Email" readonly="readonly">
+
+                            </div>
+
+                            <div class="col-sm-2">
+                                <a class="pull-left" style="cursor:pointer;margin-top:5px" id="GetGroupMode"> 群发模式</a> <a class="pull-left" style="margin-top:5px; cursor:pointer;display:none" id="GetSingleMode"> 普通模式</a>
+                            </div>
                         </div>
 
 
-                        <form class="form-horizontal" style="margin-top:30px">
+                        <div class="form-group" id="div_recmail">
+                            <label for="inputEmail3" class="col-sm-1 control-label">收件人</label>
 
-                            <div class="form-group">
-                                <label for="inputEmail3" class="col-sm-1 control-label">寄件人</label>
-                                <label id="lb_aid" style="display:block"></label>
-                                <div class="col-sm-9">
-
-                                    <input type="email" class="form-control input-sm" id="txt_sendermail" placeholder="Select Email" readonly="readonly">
-
-                                </div>
-
-                                <div class="col-sm-2">
-                                    <a class="pull-left" style="cursor:pointer;margin-top:5px" id="GetGroupMode"> 群发模式</a> <a class="pull-left" style="margin-left:10px;margin-top:5px; cursor:pointer;display:none" id="GetSingleMode"> 普通模式</a>
-                                </div>
+                            <div class="col-sm-9">
+                                <input type="email" class="form-control input-sm" id="txt_recivermail" placeholder="Reciver Email">
                             </div>
 
-
-                            <div class="form-group"  id="div_recmail" >
-                                <label for="inputEmail3" class="col-sm-1 control-label">收件人</label>
-
-                                <div class="col-sm-9">
-                                    <input type="email" class="form-control input-sm" id="txt_recivermail" placeholder="Reciver Email">
-                                </div>
-
-                                <div class="col-sm-2">
-                                    <a class="pull-left" style="cursor:pointer;margin-top:5px" onclick="Song('div_chaosong')"> 抄送</a> <a class="pull-left" style="margin-left:10px; cursor:pointer;margin-top:5px" onclick="Song('div_misong')"> 密送</a>
-                                </div>
-
+                            <div class="col-sm-2">
+                                <a class="pull-left" style="cursor:pointer;margin-top:5px" onclick="Song('div_chaosong')"> 抄送</a> <a class="pull-left" style="margin-left:10px; cursor:pointer;margin-top:5px" onclick="Song('div_misong')"> 密送</a>
                             </div>
 
+                        </div>
 
-                            <div class="form-group" id="div_group_recmail" style="display:none">
-                                <label for="inputEmail3" class="col-sm-1 control-label">收件组</label>
 
-                                <div class="col-sm-9">
-                                    <select class="form-control input-sm" id="txt_group_recivermail">
-                                        <option value="0">---请选择联系人组---</option>
-                                    </select>
-                                </div>
+                        <div class="form-group" id="div_group_recmail" style="display:none">
+                            <label for="inputEmail3" class="col-sm-1 control-label">收件组</label>
 
+                            <div class="col-sm-9">
+                                <select class="form-control input-sm" id="txt_group_recivermail">
+                                    <option value="0">---请选择联系人组---</option>
+                                </select>
                             </div>
 
+                        </div>
 
-                            <div class="form-group" id="div_chaosong" style="display:none">
-                                <label for="inputEmail3" class="col-sm-1 control-label">抄  送</label>
 
-                                <div class="col-sm-9">
-                                    <input type="email" class="form-control input-sm" id="txt_WCCrecivermail" placeholder="Carbon Copy">
-                                </div>
+                        <div class="form-group" id="div_chaosong" style="display:none">
+                            <label for="inputEmail3" class="col-sm-1 control-label">抄  送</label>
 
-                                <div class="col-sm-2">
-                                    <a class="pull-left" style="cursor:pointer" onclick="NoSong('div_chaosong','txt_WCCrecivermail')"> 删除抄送</a>
-                                </div>
+                            <div class="col-sm-9">
+                                <input type="email" class="form-control input-sm" id="txt_WCCrecivermail" placeholder="Carbon Copy">
                             </div>
 
+                            <div class="col-sm-2">
+                                <a class="pull-left" style="cursor:pointer" onclick="NoSong('div_chaosong','txt_WCCrecivermail')"> 删除抄送</a>
+                            </div>
+                        </div>
 
 
 
-                            <div class="form-group" id="div_misong" style="display:none">
-                                <label for="inputEmail3" class="col-sm-1 control-label">密  送</label>
 
-                                <div class="col-sm-9">
-                                    <input type="email" class="form-control input-sm" id="txt_BCCrecivermail" placeholder="Blind Carbon Copy">
-                                </div>
+                        <div class="form-group" id="div_misong" style="display:none">
+                            <label for="inputEmail3" class="col-sm-1 control-label">密  送</label>
 
-                                <div class="col-sm-2">
-                                    <a class="pull-left" style="cursor:pointer" onclick="NoSong('div_misong','txt_BCCrecivermail')"> 删除密送</a>
-                                </div>
-
+                            <div class="col-sm-9">
+                                <input type="email" class="form-control input-sm" id="txt_BCCrecivermail" placeholder="Blind Carbon Copy">
                             </div>
 
+                            <div class="col-sm-2">
+                                <a class="pull-left" style="cursor:pointer" onclick="NoSong('div_misong','txt_BCCrecivermail')"> 删除密送</a>
+                            </div>
+
+                        </div>
 
 
-                            <div class="form-group">
-                                <label for="inputEmail3" class="col-sm-1 control-label">主 &nbsp;&nbsp; 题</label>
 
-                                <div class="col-sm-9">
-                                    <input type="text" class="form-control input-sm" id="txt_mailtitle" placeholder="Subject">
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-1 control-label">主 &nbsp;&nbsp; 题</label>
+
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control input-sm" id="txt_mailtitle" placeholder="Subject">
 
 
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-1 control-label">附 &nbsp;&nbsp; 件</label>
+                            <div id="from_fileupload">
+                                <div class="btn btn-default btn-file  pull-left" style="margin-left:15px">
+                                    <i class="fa fa-paperclip"></i> Attachment
+                                    <input type="file" name="attachment" id="file_attachment">
                                 </div>
+
+
+                                <ul class="list-group col-xs-6" style="margin-left:15px" id="ul_attachment"></ul>
                             </div>
-                            <div class="form-group">
-                                <label for="inputEmail3" class="col-sm-1 control-label">附 &nbsp;&nbsp; 件</label>
-                                <div id="from_fileupload">
-                                    <div class="btn btn-default btn-file  pull-left" style="margin-left:15px">
-                                        <i class="fa fa-paperclip"></i> Attachment
-                                        <input type="file" name="attachment" id="file_attachment">
-                                    </div>
+                        </div>
+
+                        <!-- /.box-body -->
+                        <!-- /.box-footer -->
 
 
-                                    <ul class="list-group col-xs-6" style="margin-left:15px" id="ul_attachment"></ul>
-                                </div>
-                            </div>
+                        <div class="form-horizontal">
+                            <textarea name="description" id="description"></textarea>
+                        </div>
 
-                            <!-- /.box-body -->
-                            <!-- /.box-footer -->
-
-
-                            <div class="form-horizontal">
-                                <textarea name="description" id="description"></textarea>
-                            </div>
-
-                        </form>
+                    </form>
 
                 </div>
                 <div class="box-footer">
@@ -232,7 +232,6 @@
             </div>
 
             <!-- Custom Tabs -->
-      
             <!-- /.nav-tabs-custom -->
         </div>
         <!-- /.col -->
@@ -275,7 +274,7 @@
             </script>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-success"  data-dismiss="modal" id="btn_timersend">Add Timer</button>
+                <button type="button" class="btn btn-success" data-dismiss="modal" id="btn_timersend">Add Timer</button>
             </div>
         </div>
         <!-- /.modal-content -->
@@ -305,10 +304,10 @@
             });
         }
 
-        var account_vm;
+
         var draftid;
-    var filelist = new Array();
-    var fileitem = new Array();
+        var filelist = new Array();
+        var fileitem = new Array();
         var SendModel = "single";
 
         $(document).ready(function () {
@@ -318,7 +317,7 @@
             BindTemplate();
             bindGroupView();
             SetEvent();
-        } );
+        });
 
         function BindEditor() {
             draftid = getQueryString("draftid");
@@ -385,7 +384,7 @@
                     AccountUse: function (item) {
                         $("#lb_aid").val(item.Aid);
                         $("#lb_group_aid").val(item.Aid);
-                      
+
                         $("#txt_sendermail").val(item.Account);
                         $("#txt_group_sendermail").val(item.Account);
 
@@ -400,10 +399,11 @@
 
             $("#btn_send").click(function () {
 
+                var gid = $("#txt_group_recivermail").val();
                 var requestUrl = "/Home/SendMail";
                 if (SendModel == "group") {
-                    var gid = $("#txt_group_recivermail").val();
-                    requestUrl = "/Home/GroupSend?gid=" + gid;
+
+                    requestUrl = "/Home/GroupSendMail?gid=" + gid;
                 }
 
                 var Tomail = $("#txt_sendermail").val();
@@ -414,11 +414,20 @@
                 var AccountId = $("#lb_aid").val();
                 var RWcc = $("#txt_WCCrecivermail").val();
                 var RBcc = $("#txt_BCCrecivermail").val();
-                if (Inmail == "" || Inmail == null) {
 
-                    alert_danger("请填写收件人！");
-                    return;
+
+                if (SendModel == "group") {
+                    if (gid == "" || gid == null) {
+                        alert_danger("请选择收件组！");
+                        return;
+                    }
+                } else {
+                    if (Inmail == "" || Inmail == null) {
+                        alert_danger("请填写收件人！");
+                        return;
+                    }
                 }
+
                 if (Subject == "" || Subject == null) {
 
                     alert_danger("主题内容不能为空！");
@@ -466,9 +475,11 @@
 
             $("#btn_timersend").click(function () {
 
-                 var requestUrl = "/Home/TimerSendMail";
+                var requestUrl = "/Home/TimerSendMail";
+
+                var gid = $("#txt_group_recivermail").val();
                 if (SendModel == "group") {
-                    var gid = $("#txt_group_recivermail").val();
+
                     requestUrl = "/Home/TimerGroupSendMail?gid=" + gid;
                 }
 
@@ -480,10 +491,16 @@
                 var RWcc = $("#txt_WCCrecivermail").val();
                 var RBcc = $("#txt_BCCrecivermail").val();
                 var Senddate = $("#datepicker").val();;
-                if (Inmail == "" || Inmail == null) {
-
-                    alert_danger("请填写收件人！");
-                    return;
+                if (SendModel == "group") {
+                    if (gid == "" || gid == null) {
+                        alert_danger("请选择收件组！");
+                        return;
+                    }
+                } else {
+                    if (Inmail == "" || Inmail == null) {
+                        alert_danger("请填写收件人！");
+                        return;
+                    }
                 }
                 if (Subject == "" || Subject == null) {
 
@@ -495,13 +512,13 @@
                     alert_danger("邮件内容不能为空！");
                     return;
                 }
-                   if (Senddate == "" || Senddate == null) {
+                if (Senddate == "" || Senddate == null) {
 
                     alert_danger("设定发送时间不能为空！");
                     return;
                 }
 
-                
+
                 var dialog = bootbox.dialog({
                     title: '定时邮件添加中...',
                     message: '<p><i class="fa fa-spin fa-spinner"></i> Loading...</p>'
@@ -519,7 +536,7 @@
                         WCC: RWcc,
                         BCC: RBcc,
                         Atthachment: filelist,
-                        Senddate:Senddate
+                        Senddate: Senddate
                     },
                     success: function (result) {
 
@@ -635,7 +652,7 @@
 
 
                 $("#ul_attachment").append(element);
-                
+
                 $("#from_fileupload").ajaxSubmit({
                     url: '/Home/UploadAttachment',
                     type: 'post',
@@ -698,11 +715,11 @@
 
             });
 
-             $("#GetSingleMode").click(function () {
+            $("#GetSingleMode").click(function () {
                 $("#div_group_recmail").hide();
-                   $("#div_recmail").show();
+                $("#div_recmail").show();
 
-                    $("#GetSingleMode").hide();
+                $("#GetSingleMode").hide();
                 $("#GetGroupMode").show();
 
                 SendModel = "single";
@@ -724,7 +741,7 @@
             }
 
             var index2 = fileitem.indexOf(filename);
-             if (index2 > -1) {
+            if (index2 > -1) {
                 fileitem.splice(index2, 1);
             }
 
@@ -772,26 +789,26 @@
         function bindGroupView() {
 
             $.ajax({
-                            url: "/Contact/ListGroup",
-                            type: "POST",
-                            success: function (result) {
+                url: "/Contact/ListGroup",
+                type: "POST",
+                success: function (result) {
 
-                                if (result.Success) {
-                                    self.groupitems = result.Content.Data;
+                    if (result.Success) {
+                        self.groupitems = result.Content.Data;
 
-                                    if (0 < result.Content.Data.length) {
-                                        for (var i = 0; i < result.Content.Data.length; i++) {
-                                            $("#txt_group_recivermail").append("<option value='" + result.Content.Data[i].Gid + "'>" + result.Content.Data[i].Groupname + "</option>");
-                                        }
-                                    }
-
-
-                                } else {
-
-
-                                }
-
+                        if (0 < result.Content.Data.length) {
+                            for (var i = 0; i < result.Content.Data.length; i++) {
+                                $("#txt_group_recivermail").append("<option value='" + result.Content.Data[i].Gid + "'>" + result.Content.Data[i].Groupname + "</option>");
                             }
+                        }
+
+
+                    } else {
+
+
+                    }
+
+                }
             });
         }
 

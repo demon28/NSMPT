@@ -31,6 +31,16 @@ namespace NSMPT.Facade
                 tnsmtp_Contact.Email = dt.Rows[i]["email"].ToString();
                 int gid = 0;
                 int.TryParse(dt.Rows[i]["gid"].ToString(),out gid);
+
+                DataAccess.Tnsmtp_Contactgroup tnsmtp_Contactgroup = new DataAccess.Tnsmtp_Contactgroup();
+                if (!tnsmtp_Contactgroup.SelectByPK(gid))
+                {
+                    Rollback();
+                    Alert("联系人小组ID不正确小组ID："+ gid);
+                    return false;
+                }
+
+
                 tnsmtp_Contact.Gid= gid;
                 tnsmtp_Contact.Status = 0;
                 tnsmtp_Contact.UserId = userid;

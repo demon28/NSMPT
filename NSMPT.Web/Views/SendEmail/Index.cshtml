@@ -49,7 +49,8 @@
                     <th>Receiver</th>
                     <th>Send Staus</th>
                     <th>Read Staus</th>
-                    <th>Date</th>
+                    <th>SendDate</th>
+                    <th>CreateDate</th>
                     <th>operation</th>
                 </tr>
                 <tr v-for="(item,index) in Data">
@@ -61,12 +62,14 @@
                         <span class="label label-warning" v-if="item.FlagStatus==1">发送中</span>
                         <span class="label label-danger" v-if="item.FlagStatus==2">发送中</span>
                         <span class="label label-primary" v-if="item.FlagStatus==3">定时发送</span>
+                        <span class="label label-primary" v-if="item.FlagStatus==4">定时群发</span>
                     </td>
                     <td>
                         <span class="label label-primary" v-if="item.FlagRead==0">未读</span>
                         <span class="label label-success" v-if="item.FlagRead==1">已读</span>
 
                     </td>
+                    <td>{{ item.Senddate}}</td>
                     <td>{{ diaplayTime(item.Createtime)}}</td>
                     <td>
                         <button type="button" class="btn bg-purple  btn-xs" v-on:click="viewitem(item)" data-toggle="modal" data-target="#modal-default">浏览</button>

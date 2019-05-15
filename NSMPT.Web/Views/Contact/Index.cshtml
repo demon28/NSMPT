@@ -89,7 +89,7 @@
                     <ul class="list-group">
                         <li class="list-group-item" v-for="item in groupitems">
 
-                            <b>{{item.Groupname}}</b>&nbsp;&nbsp;
+                            <b v-on:click="SelectGroup(item)">{{item.Groupname}}</b>&nbsp;&nbsp;
 
 
                             <a class="pull-right" v-on:click="DeleteGroup(item)"> delete</a>
@@ -403,30 +403,35 @@
                         list.push(this.value);
                     });
 
+                    
+                    bootbox.confirm("您确定删除该联系人吗？", function (res) {
 
-
-                    $.ajax({
-                        url: "/Contact/DeleteAllContact",
-                        type: "POST",
-                        data: {
-                            ContactId: list,
-
-                        },
-                        success: function (result) {
-                            if (result.Success) {
-
-                                alert_success("删除成功！");
-                                contact_vm.reload();
-                                   $("#tab_contact :checkbox").prop("checked", false);
-
-                            } else {
-                                alert_danger(result.Message);
-                            }
+                        if (!res) {
+                            return;
                         }
-                    })
+
+                        $.ajax({
+                            url: "/Contact/DeleteAllContact",
+                            type: "POST",
+                            data: {
+                                ContactId: list,
+
+                            },
+                            success: function (result) {
+                                if (result.Success) {
+
+                                    alert_success("删除成功！");
+                                    contact_vm.reload();
+                                    $("#tab_contact :checkbox").prop("checked", false);
+
+                                } else {
+                                    alert_danger(result.Message);
+                                }
+                            }
+                        })
 
 
-
+                    });
 
 
                 }
@@ -589,9 +594,7 @@
                                     }
                                     else {
 
-                                        //$("#sl_add_Contact").append("<option value='0'>默认小组</option>");
-                                        //$("#dl_Search").append("<option value='0'>默认小组</option>");
-                                        //$("#sl_update_group").append("<option value='0'>默认小组</option>");
+                               
 
                                     }
 
@@ -687,8 +690,12 @@
 
                         })
 
-                    }
+                    },
+                    SelectGroup: function (item) {
 
+                        $("#dl_Search").val(item.Gid);
+                        $("#btn_Search").click();
+                    }
                 }
 
             });
@@ -723,7 +730,12 @@
                     },
                     deleteitem: function (item) {
 
-                        $.ajax({
+                        bootbox.confirm("您确定删除该联系人吗？", function (res) {
+
+                            if (!res) {
+                                return;
+                            }
+                             $.ajax({
                             url: "/Contact/DeleteContact",
                             type: "POST",
                             data: {
@@ -739,6 +751,10 @@
                                 }
                             }
                         })
+
+                        })
+
+                       
                     },
 
                 },

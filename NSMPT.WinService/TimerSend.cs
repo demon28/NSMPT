@@ -9,6 +9,7 @@ using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
+using Winner.Framework.Utils;
 
 namespace NSMPT.WinService
 {
@@ -21,7 +22,7 @@ namespace NSMPT.WinService
 
         protected override void OnStart(string[] args)
         {
-
+            Log.Info("==========NapEMail服务启动============");
              System.Timers.Timer  timer1 = new System.Timers.Timer();
 
             timer1.Interval = 1000;  //设置计时器事件间隔执行时间
@@ -47,6 +48,7 @@ namespace NSMPT.WinService
 
         protected override void OnStop()
         {
+            Log.Info(" ========== NapEMail服务终止 ============ ");
         }
     }
 }

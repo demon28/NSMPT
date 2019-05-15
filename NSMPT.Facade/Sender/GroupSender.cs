@@ -48,6 +48,14 @@ namespace NSMPT.Facade
                 SendFacade send = new SendFacade();
                 if (!send.SendEmail(dr))
                 {
+                    tnsmtp_Email.FlagStatus = (int)EmailFlagStatus.发送失败;
+                    tnsmtp_Email.Senddate = DateTime.Now;
+                    if (!tnsmtp_Email.Update())
+                    {
+                        Log.Info("修改发送状态失败");
+                        Alert("修改发送状态失败!");
+                        return false;
+                    }
                     continue;
                 }
 
@@ -59,7 +67,7 @@ namespace NSMPT.Facade
                 }
 
                 tnsmtp_Email.FlagStatus = (int)EmailFlagStatus.已发送;
-
+                tnsmtp_Email.Senddate = DateTime.Now;
                 if (!tnsmtp_Email.Update())
                 {
                     Log.Info("修改发送状态失败");
