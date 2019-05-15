@@ -92,7 +92,7 @@ namespace NSMPT.Web.Controllers
         {
 
             DataAccess.Tnsmtp_Email tnsmtp_Email = new DataAccess.Tnsmtp_Email();
-            if (!tnsmtp_Email.SelectDraftByUserid(SysUser.UserId, mailid))
+            if (!tnsmtp_Email.SelectSendByUserid(SysUser.UserId, mailid))
             {
                 return FailResult("删除失败！");
             }

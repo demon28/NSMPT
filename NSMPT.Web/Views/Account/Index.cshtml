@@ -255,22 +255,24 @@
 
                 },
                 deleteitem: function (item) {
+                    bootbox.confirm("Are you sure?", function (result) {
+                        if (!result) { return }
+                        $.ajax({
+                            url: "/Account/DeleteAccount",
+                            type: "POST",
+                            data: {
+                                aid: item.Aid
+                            },
+                            success: function (result) {
 
-                    $.ajax({
-                        url: "/Account/DeleteAccount",
-                        type: "POST",
-                        data: {
-                            aid: item.Aid
-                        },
-                        success: function (result) {
 
+                                if (result.Success) {
 
-                            if (result.Success) {
-                           
-                                vm.Init();
+                                    vm.Init();
+                                }
                             }
-                        }
-                    })
+                        })
+                    });
                 }
             }
         });

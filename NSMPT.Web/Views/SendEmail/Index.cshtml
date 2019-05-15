@@ -187,23 +187,25 @@
                 methods: {
 
                     deleteitem: function (item) {
+                        bootbox.confirm("Are you sure?", function (result) {
+                            if (!result) { return }
+                            $.ajax({
+                                url: "/SendEmail/Delete",
+                                type: "POST",
+                                data: {
+                                    mailid: item.MailId
+                                },
+                                success: function (result) {
+                                    if (result.Success) {
+                                        alert_success("删除成功！");
+                                        email_vm.reload();
 
-                        $.ajax({
-                            url: "/Draft/Delete",
-                            type: "POST",
-                            data: {
-                                mailid: item.MailId
-                            },
-                            success: function (result) {
-                                if (result.Success) {
-                                    alert_success("删除成功！");
-                                    email_vm.reload();
-
-                                } else {
-                                    alert_danger(result.Message);
+                                    } else {
+                                        alert_danger(result.Message);
+                                    }
                                 }
-                            }
-                        })
+                            })
+                        });
                     },
                     viewitem: function (item) {
                         CKEDITOR.instances['description'].setData(item.Content);
