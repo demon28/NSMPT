@@ -9,7 +9,7 @@
 * Blog : http://www.cnblogs.com/fineblog/
 * Company ：深圳市乾海盛世移动支付有限公司
 * Copyright (C) Winner研发中心
-* CreateTime : 2019-04-26 15:38:50  
+* CreateTime : 2019-05-15 19:18:19  
 * 
 ***************************************************/
 using System;
@@ -20,7 +20,6 @@ using Winner.Framework.Core;
 using Winner.Framework.Core.DataAccess;
 using Winner.Framework.Core.DataAccess.Oracle;
 using Winner.Framework.Utils;
-
 
 namespace NSMPT.DataAccess
 {
@@ -48,6 +47,8 @@ namespace NSMPT.DataAccess
 		public const string _STATUS="STATUS";
 		public const string _CREATETIME="CREATETIME";
 		public const string _REMARKS="REMARKS";
+		public const string _POP_URL="POP_URL";
+		public const string _POP_PORT="POP_PORT";
 
     
         public const string _TABLENAME="Tnsmtp_Mailtype";
@@ -126,6 +127,24 @@ namespace NSMPT.DataAccess
 			get { return DataRow[_REMARKS].ToString(); }
 			set { setProperty(_REMARKS,value); }
 		}
+		/// <summary>
+		/// POP3收件地址
+		/// [default:string.Empty]
+		/// </summary>
+		public string PopUrl
+		{
+			get { return DataRow[_POP_URL].ToString(); }
+			set { setProperty(_POP_URL,value); }
+		}
+		/// <summary>
+		/// POP3收件端口
+		/// [default:string.Empty]
+		/// </summary>
+		public string PopPort
+		{
+			get { return DataRow[_POP_PORT].ToString(); }
+			set { setProperty(_POP_PORT,value); }
+		}
 
         #endregion 公开属性
         
@@ -147,6 +166,8 @@ namespace NSMPT.DataAccess
 			dt.Columns.Add(_STATUS, typeof(int)).DefaultValue = DBNull.Value;
 			dt.Columns.Add(_CREATETIME, typeof(DateTime)).DefaultValue = DBNull.Value;
 			dt.Columns.Add(_REMARKS, typeof(string)).DefaultValue = string.Empty;
+			dt.Columns.Add(_POP_URL, typeof(string)).DefaultValue = string.Empty;
+			dt.Columns.Add(_POP_PORT, typeof(string)).DefaultValue = string.Empty;
 
             return dt.NewRow();
         }
@@ -186,7 +207,9 @@ TNSMTP_MAILTYPE(
   SMTP_PORT,
   SMTP_SSL,
   STATUS,
-  REMARKS)
+  REMARKS,
+  POP_URL,
+  POP_PORT)
 VALUES(
   :MTID,
   :MAILNAME,
@@ -194,7 +217,9 @@ VALUES(
   :SMTP_PORT,
   :SMTP_SSL,
   :STATUS,
-  :REMARKS)";
+  :REMARKS,
+  :POP_URL,
+  :POP_PORT)";
 			AddParameter(_MTID,DataRow[_MTID]);
 			AddParameter(_MAILNAME,DataRow[_MAILNAME]);
 			AddParameter(_SMTP_URL,DataRow[_SMTP_URL]);
@@ -202,6 +227,8 @@ VALUES(
 			AddParameter(_SMTP_SSL,DataRow[_SMTP_SSL]);
 			AddParameter(_STATUS,DataRow[_STATUS]);
 			AddParameter(_REMARKS,DataRow[_REMARKS]);
+			AddParameter(_POP_URL,DataRow[_POP_URL]);
+			AddParameter(_POP_PORT,DataRow[_POP_PORT]);
             return base.InsertBySql(sql);
         }
 		
@@ -248,7 +275,9 @@ SELECT
   SMTP_SSL,
   STATUS,
   CREATETIME,
-  REMARKS
+  REMARKS,
+  POP_URL,
+  POP_PORT
 FROM TNSMTP_MAILTYPE
 WHERE " + condition;
             return base.SelectBySql(sql);
@@ -309,7 +338,9 @@ SELECT
   SMTP_SSL,
   STATUS,
   CREATETIME,
-  REMARKS
+  REMARKS,
+  POP_URL,
+  POP_PORT
 FROM TNSMTP_MAILTYPE
 WHERE " + condition;
             return base.ListBySql(sql);

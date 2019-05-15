@@ -72,6 +72,7 @@
     <Compile Include="Model\Tnsmtp_DynamicvalueMap.generate.cs" />
     <Compile Include="Model\Tnsmtp_EmailMap.generate.cs" />
     <Compile Include="Model\Tnsmtp_MailtemplateMap.generate.cs" />
+    <Compile Include="Model\Tnsmtp_MailtypeMap.generate.cs" />
     <Compile Include="Model\Tnsmtp_RaplcemarkMap.generate.cs" />
     <Compile Include="Model\Tnsmtp_RecmailMap.generate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
