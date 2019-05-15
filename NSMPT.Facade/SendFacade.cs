@@ -12,155 +12,22 @@ using System.Web;
 using System.Collections;
 using NSMPT.DataAccess;
 using System.Data;
+using Winner.Framework.Utils;
 
 namespace NSMPT.Facade
 {
     public class SendFacade : FacadeBase
     {
         /// <summary>
-        /// 向用户发送普通邮件
+        /// 向用户发送普通邮件====即时发送
         /// </summary>
         public bool SingleSend(Tnsmtp_EmailMap model)
         {
-            BeginTransaction();
-
-            #region 前期准备工作
-
-            #region 获取发件账户信息
-            DataAccess.Tnsmtp_Account tnsmtp_Account = new DataAccess.Tnsmtp_Account();
-            if (!tnsmtp_Account.SelectByPK(model.AccountId))
+            if (!SendEmail(model))
             {
-                Rollback();
-                Alert("获取发件账户失败");
+                Log.Info("发送邮件失败");
                 return false;
             }
-            #endregion
-
-            #region 获取企业邮箱信息
-            DataAccess.Tnsmtp_Mailtype tnsmtp_Mailtype = new DataAccess.Tnsmtp_Mailtype();
-            if (!tnsmtp_Mailtype.SelectByPK(tnsmtp_Account.MailType.Value))
-            {
-                Rollback();
-                Alert("获取企业邮箱失败");
-                return false;
-            }
-            #endregion
-
-            #region 判断收件人是否存在常用联系人，不存在则添加
-            if (!AddContactTable(model))
-            {
-                Rollback();
-                return false;
-            }
-
-            #endregion
-
-            #region 如果存在模板标签则替换模板标签
-            string content = string.Empty;
-            if (!ReplaceMark(model, model.Userid, out content))
-            {
-                Rollback();
-                Alert("替换模板标签失败！");
-                return false;
-            }
-
-            #endregion
-
-            #region 添加数据库 邮件表
-
-            model.Senddate = DateTime.Now;
-            if (!AddEmailTable(model))
-            {
-                Rollback();
-                Alert("添加邮件失败");
-                return false;
-            }
-
-            #endregion
-
-            #region 如果有附件，则添加附件到数据库
-            Dictionary<string, string> filelist = new Dictionary<string, string>();
-            if (!AddAtthachmentTable(model, tnsmtp_Account, out filelist))
-            {
-                Rollback();
-                Alert("添加附件失败！");
-                return false;
-            }
-
-            #endregion
-
-            #region 判断是否有抄送或者密送
-
-
-            List<string> Bcc = new List<string>();
-            List<string> Wcc = new List<string>();
-
-
-            if (!GetCCArray(model.Bcc, out Bcc))
-            {
-                Alert("密送联系人地址有误");
-                Rollback();
-                return false;
-            }
-
-
-            if (!GetCCArray(model.Wcc, out Wcc))
-            {
-                Alert("抄送联系人地址有误");
-                Rollback();
-                return false;
-            }
-
-
-            #endregion
-
-
-            #endregion
-
-            try
-            {
-
-                #region 调用SMTP 发送邮件
-                SmtpMail smtp = new SmtpMail();
-                smtp.AddRecipient(model.Inmail);
-
-                smtp.MailDomain = tnsmtp_Mailtype.SmtpUrl;
-                smtp.Html = true;
-                smtp.From = model.Tomail;
-                smtp.FromName = model.Tomail;
-                smtp.RecipientName = model.Inmail;
-                smtp.MailDomainPort = tnsmtp_Mailtype.SmtpSsl.Value;
-                smtp.Subject = model.Subject;
-                smtp.Body = model.Content;
-                smtp.AttachmentFile = filelist;
-
-                smtp.MailServerUserName = tnsmtp_Account.Account;
-                smtp.MailServerPassWord = tnsmtp_Account.Password;
-
-                smtp.RecipientBCC1 = Bcc;
-                smtp.RecipientWCC1 = Wcc;
-
-
-
-                if (!smtp.Send())
-                {
-                    Rollback();
-                    Alert(smtp.PromptInfo.Message);
-                    return false;
-                }
-
-                #endregion
-
-
-            }
-            catch (Exception e)
-            {
-                Rollback();
-                Alert(e.Message);
-                return false;
-            }
-
-            Commit();
             return true;
         }
 
@@ -170,7 +37,7 @@ namespace NSMPT.Facade
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public bool TimerSend(Tnsmtp_EmailMap model)
+        public bool SingleTimerSend(Tnsmtp_EmailMap model)
         {
             BeginTransaction();
 
@@ -325,6 +192,94 @@ namespace NSMPT.Facade
             Commit();
             return true;
         }
+
+
+        /// <summary>
+        /// 定时群发邮件====等待服务去跑
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="Gid"></param>
+        /// <returns></returns>
+        public bool GroupTimerSend(Tnsmtp_EmailMap model, int Gid) {
+
+            BeginTransaction();
+
+            #region 获取发件账户信息
+            DataAccess.Tnsmtp_Account tnsmtp_Account = new DataAccess.Tnsmtp_Account();
+            if (!tnsmtp_Account.SelectByPK(model.AccountId))
+            {
+                Rollback();
+                Alert("获取发件账户失败");
+                return false;
+            }
+            #endregion
+
+            #region 获取企业邮箱信息
+            DataAccess.Tnsmtp_Mailtype tnsmtp_Mailtype = new DataAccess.Tnsmtp_Mailtype();
+            if (!tnsmtp_Mailtype.SelectByPK(tnsmtp_Account.MailType.Value))
+            {
+                Rollback();
+                Alert("获取企业邮箱失败");
+                return false;
+            }
+            #endregion
+
+            #region 如果存在模板标签则替换模板标签
+            string content = string.Empty;
+            if (!ReplaceMark(model, model.Userid, out content))
+            {
+                Rollback();
+                Alert("替换模板标签失败！");
+                return false;
+            }
+
+            #endregion
+
+
+            DataAccess.Tnsmtp_ContactCollection tnsmtp_ContactCollection = new Tnsmtp_ContactCollection();
+
+            if (!tnsmtp_ContactCollection.ListByUserid(model.Userid, string.Empty, Gid))
+            {
+                Rollback();
+                Alert("查找分组联系人失败");
+                return false;
+            }
+
+            foreach (DataRow dr in tnsmtp_ContactCollection.DataTable.Rows)
+            {
+                model.FlagStatus = (int)Entites.EmailFlagStatus.定时群发;
+                model.Tomail = dr[Tnsmtp_Contact._EMAIL].ToString();
+
+                if (!AddEmailTable(model))
+                {
+                    Rollback();
+                    Alert("添加邮件失败");
+                    return false;
+                }
+
+
+                Dictionary<string, string> filelist = new Dictionary<string, string>();
+                if (!AddAtthachmentTable(model, tnsmtp_Account, out filelist))
+                {
+                    Rollback();
+                    Alert("添加附件失败！");
+                    return false;
+                }
+
+            }
+
+
+
+            Commit();
+            return true;
+
+
+        }
+
+
+
+
+        #region 工具
 
 
         /// <summary>
@@ -620,5 +575,325 @@ namespace NSMPT.Facade
             return true;
 
         }
+
+
+
+        /// <summary>
+        /// 发送邮件By DataRow 由windows服务调取发送
+        /// </summary>
+        /// <param name="dr"></param>
+        /// <returns></returns>
+        public bool SendEmail(DataRow dr)
+        {
+
+            string inmail = dr[Tnsmtp_Email._INMAIL].ToString();
+            string tomail = dr[Tnsmtp_Email._TOMAIL].ToString();
+            string subject = dr[Tnsmtp_Email._SUBJECT].ToString();
+            string content = dr[Tnsmtp_Email._CONTENT].ToString();
+            int accountid = int.Parse(dr[Tnsmtp_Email._ACCOUNT_ID].ToString());
+            int mailid = int.Parse(dr[Tnsmtp_Email._MAIL_ID].ToString());
+            int userid = int.Parse(dr[Tnsmtp_Email._USERID].ToString());
+            string bccstr = dr[Tnsmtp_Email._BCC].ToString();
+            string wccstr = dr[Tnsmtp_Email._WCC].ToString();
+            #region 获取发件账户信息
+            DataAccess.Tnsmtp_Account tnsmtp_Account = new DataAccess.Tnsmtp_Account();
+            if (!tnsmtp_Account.SelectByPK(accountid))
+            {
+
+                Alert("获取发件账户失败");
+                return false;
+            }
+            #endregion
+
+            #region 获取企业邮箱信息
+            DataAccess.Tnsmtp_Mailtype tnsmtp_Mailtype = new DataAccess.Tnsmtp_Mailtype();
+            if (!tnsmtp_Mailtype.SelectByPK(mailid))
+            {
+
+                Alert("获取企业邮箱失败");
+                return false;
+            }
+            #endregion
+
+            #region 获取附件信息
+            Dictionary<string, string> filelist = new Dictionary<string, string>();
+
+            if (!GetAttchment(mailid, userid, out filelist))
+            {
+                Alert("获取附件失败");
+                return false;
+            }
+            #endregion
+
+            SendFacade sendFacade = new SendFacade();
+
+            #region 增加回执
+
+
+            content = sendFacade.SetReceipt(content, mailid);
+
+            #endregion
+
+            #region 判断是否有抄送或者密送
+
+
+            List<string> Bcc = new List<string>();
+            List<string> Wcc = new List<string>();
+
+
+            if (!sendFacade.GetCCArray(bccstr, out Bcc))
+            {
+                Log.Info("密送联系人地址有误！");
+                Alert("密送联系人地址有误");
+
+                return false;
+            }
+
+
+            if (!sendFacade.GetCCArray(wccstr, out Wcc))
+            {
+                Log.Info("抄送联系人地址有误！");
+                Alert("抄送联系人地址有误");
+                return false;
+            }
+
+
+            #endregion
+
+            try
+            {
+
+                SmtpMail smtp = new SmtpMail();
+                smtp.AddRecipient(inmail);
+
+                smtp.MailDomain = tnsmtp_Mailtype.SmtpUrl;
+                smtp.Html = true;
+                smtp.From = tomail;
+                smtp.FromName = tomail;
+                smtp.RecipientName = inmail;
+                smtp.MailDomainPort = tnsmtp_Mailtype.SmtpSsl.Value;
+                smtp.Subject = subject;
+                smtp.Body = content;
+                smtp.AttachmentFile = filelist;
+
+                smtp.MailServerUserName = tnsmtp_Account.Account;
+                smtp.MailServerPassWord = tnsmtp_Account.Password;
+
+                smtp.RecipientBCC1 = Bcc;
+                smtp.RecipientWCC1 = Wcc;
+
+
+
+                if (!smtp.Send())
+                {
+                    Rollback();
+                    Alert(smtp.PromptInfo.Message);
+                    return false;
+                }
+                return true;
+            }
+            catch (Exception e)
+            {
+
+                Alert(e.Message);
+                return false;
+            }
+
+
+
+        }
+        /// <summary>
+
+
+        /// <summary>
+        /// 发送邮件By Model 由Web调取直接发送
+        /// </summary>
+        /// <param name="dr"></param>
+        /// <returns></returns>
+        public bool SendEmail(Tnsmtp_EmailMap model) {
+
+            BeginTransaction();
+
+            #region 前期准备工作
+
+            #region 获取发件账户信息
+            DataAccess.Tnsmtp_Account tnsmtp_Account = new DataAccess.Tnsmtp_Account();
+            if (!tnsmtp_Account.SelectByPK(model.AccountId))
+            {
+                Rollback();
+                Alert("获取发件账户失败");
+                return false;
+            }
+            #endregion
+
+            #region 获取企业邮箱信息
+            DataAccess.Tnsmtp_Mailtype tnsmtp_Mailtype = new DataAccess.Tnsmtp_Mailtype();
+            if (!tnsmtp_Mailtype.SelectByPK(tnsmtp_Account.MailType.Value))
+            {
+                Rollback();
+                Alert("获取企业邮箱失败");
+                return false;
+            }
+            #endregion
+
+            #region 判断收件人是否存在常用联系人，不存在则添加
+            if (!AddContactTable(model))
+            {
+                Rollback();
+                return false;
+            }
+
+            #endregion
+
+            #region 如果存在模板标签则替换模板标签
+            string content = string.Empty;
+            if (!ReplaceMark(model, model.Userid, out content))
+            {
+                Rollback();
+                Alert("替换模板标签失败！");
+                return false;
+            }
+
+            #endregion
+
+            #region 添加数据库 邮件表
+
+            model.Senddate = DateTime.Now;
+            if (!AddEmailTable(model))
+            {
+                Rollback();
+                Alert("添加邮件失败");
+                return false;
+            }
+
+            #endregion
+
+            #region 如果有附件，则添加附件到数据库
+            Dictionary<string, string> filelist = new Dictionary<string, string>();
+            if (!AddAtthachmentTable(model, tnsmtp_Account, out filelist))
+            {
+                Rollback();
+                Alert("添加附件失败！");
+                return false;
+            }
+
+            #endregion
+
+            #region 判断是否有抄送或者密送
+
+
+            List<string> Bcc = new List<string>();
+            List<string> Wcc = new List<string>();
+
+
+            if (!GetCCArray(model.Bcc, out Bcc))
+            {
+                Alert("密送联系人地址有误");
+                Rollback();
+                return false;
+            }
+
+
+            if (!GetCCArray(model.Wcc, out Wcc))
+            {
+                Alert("抄送联系人地址有误");
+                Rollback();
+                return false;
+            }
+
+
+            #endregion
+
+
+            #endregion
+
+            try
+            {
+
+                #region 调用SMTP 发送邮件
+                SmtpMail smtp = new SmtpMail();
+                smtp.AddRecipient(model.Inmail);
+
+                smtp.MailDomain = tnsmtp_Mailtype.SmtpUrl;
+                smtp.Html = true;
+                smtp.From = model.Tomail;
+                smtp.FromName = model.Tomail;
+                smtp.RecipientName = model.Inmail;
+                smtp.MailDomainPort = tnsmtp_Mailtype.SmtpSsl.Value;
+                smtp.Subject = model.Subject;
+                smtp.Body = model.Content;
+                smtp.AttachmentFile = filelist;
+
+                smtp.MailServerUserName = tnsmtp_Account.Account;
+                smtp.MailServerPassWord = tnsmtp_Account.Password;
+
+                smtp.RecipientBCC1 = Bcc;
+                smtp.RecipientWCC1 = Wcc;
+
+
+
+                if (!smtp.Send())
+                {
+                    Rollback();
+                    Alert(smtp.PromptInfo.Message);
+                    return false;
+                }
+
+                #endregion
+
+
+            }
+            catch (Exception e)
+            {
+                Rollback();
+                Alert(e.Message);
+                return false;
+            }
+
+            Commit();
+            return true;
+
+
+        }
+
+
+
+        /// <summary>
+        /// 获取附件
+        /// </summary>
+        /// <param name="mailid"></param>
+        /// <param name="userid"></param>
+        /// <param name="filelist"></param>
+        /// <returns></returns>
+        public bool GetAttchment(int mailid, int userid, out Dictionary<string, string> filelist)
+        {
+            Dictionary<string, string> list = new Dictionary<string, string>();
+            DataAccess.Tnsmtp_AttachmentCollection tnsmtp_AttachmentCollection = new Tnsmtp_AttachmentCollection();
+            if (!tnsmtp_AttachmentCollection.ListByMailId(mailid, userid))
+            {
+                Log.Info("查询附件信息出错！");
+                Alert("查询附件信息错误");
+                filelist = list;
+                return false;
+            }
+
+            if (tnsmtp_AttachmentCollection.DataTable.Rows.Count <= 0)
+            {
+                filelist = list;
+                return true;
+            }
+
+            foreach (DataRow dr in tnsmtp_AttachmentCollection.DataTable.Rows)
+            {
+
+                list.Add(dr[Tnsmtp_Attachment._FILE_NAME].ToString(), dr[Tnsmtp_Attachment._FILE_URL].ToString());
+
+            }
+            filelist = list;
+            return true;
+
+        }
+
+        #endregion
     }
 }

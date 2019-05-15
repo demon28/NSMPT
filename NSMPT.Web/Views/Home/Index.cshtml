@@ -97,21 +97,18 @@
         <div class="col-md-9">
 
 
+            <div class="box box-info">
+                <div class="box-header">
+                    <h3 class="box-title"><i class="fa fa-envelope "></i> &nbsp;&nbsp;  Let's Get It</h3>
 
-            <!-- Custom Tabs -->
-            <div class="nav-tabs-custom">
-                <ul class="nav nav-tabs pull-right">
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    </div>
 
-                    <li><a href="#tab_2" data-toggle="tab">群 发</a></li>
-                    <li class="active"><a href="#tab_1" data-toggle="tab">普 通</a></li>
-
-                    <li class="pull-left header"><i class="fa fa-envelope "></i>Let's Get It</li>
-                </ul>
-                <div class="tab-content">
-
-                    <div class="tab-pane active" id="tab_1">
-
-
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body ">
+                 
 
                         <div class="form-inline" style="margin-top:10px">
                             <button type="button" id="btn_send" class="btn   btn-success pull-left" style="margin-left:20px;">    <i class="fa fa-send"></i> &nbsp;&nbsp; 发 送</button>  &nbsp;&nbsp;
@@ -132,10 +129,14 @@
                                     <input type="email" class="form-control input-sm" id="txt_sendermail" placeholder="Select Email" readonly="readonly">
 
                                 </div>
+
+                                <div class="col-sm-2">
+                                    <a class="pull-left" style="cursor:pointer;margin-top:5px" id="GetGroupMode"> 群发模式</a> <a class="pull-left" style="margin-left:10px;margin-top:5px; cursor:pointer;display:none" id="GetSingleMode"> 普通模式</a>
+                                </div>
                             </div>
 
 
-                            <div class="form-group">
+                            <div class="form-group"  id="div_recmail" >
                                 <label for="inputEmail3" class="col-sm-1 control-label">收件人</label>
 
                                 <div class="col-sm-9">
@@ -143,11 +144,22 @@
                                 </div>
 
                                 <div class="col-sm-2">
-                                    <a class="pull-left" style="cursor:pointer" onclick="Song('div_chaosong')"> 抄送</a> <a class="pull-left" style="margin-left:10px; cursor:pointer" onclick="Song('div_misong')"> 密送</a>
+                                    <a class="pull-left" style="cursor:pointer;margin-top:5px" onclick="Song('div_chaosong')"> 抄送</a> <a class="pull-left" style="margin-left:10px; cursor:pointer;margin-top:5px" onclick="Song('div_misong')"> 密送</a>
                                 </div>
 
                             </div>
 
+
+                            <div class="form-group" id="div_group_recmail" style="display:none">
+                                <label for="inputEmail3" class="col-sm-1 control-label">收件组</label>
+
+                                <div class="col-sm-9">
+                                    <select class="form-control input-sm" id="txt_group_recivermail">
+                                        <option value="0">---请选择联系人组---</option>
+                                    </select>
+                                </div>
+
+                            </div>
 
 
                             <div class="form-group" id="div_chaosong" style="display:none">
@@ -212,75 +224,15 @@
 
                         </form>
 
-
-                    </div>
-                    <!-- /.tab-pane -->
-                    <div class="tab-pane" id="tab_2">
-
-
-                        <div class="form-inline" style="margin-top:10px">
-                            <button type="button" id="btn_group_send" class="btn btn-success pull-left" style="margin-left:20px;">    <i class="fa fa-send"></i> &nbsp;&nbsp; 发 送</button>  &nbsp;&nbsp;
-                            <button type="button" id="btn_group_timesend" class="btn   btn-success pull-left" style="margin-left:20px;" data-toggle="modal" data-target="#modal-default">    <i class="fa fa-clock-o"></i>  定时发送</button>  &nbsp;&nbsp;
-                        </div>
-
-                        <form class="form-horizontal" style="margin-top:30px">
-
-                            <div class="form-group">
-                                <label for="inputEmail3" class="col-sm-1 control-label">寄件人</label>
-                                <label id="lb__group_aid" style="display:block"></label>
-                                <div class="col-sm-9">
-                                    <input type="email" class="form-control input-sm" id="txt_group_sendermail" placeholder="Select Email" readonly="readonly">
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="inputEmail3" class="col-sm-1 control-label">收件组</label>
-
-                                <div class="col-sm-9">
-                                    <select class="form-control input-sm" id="txt_group_recivermail">
-                                        <option value="0">---请选择联系人组---</option>
-                                    </select>
-                                </div>
-
-                            </div>
-
-                            <div class="form-group">
-                                <label for="inputEmail3" class="col-sm-1 control-label">主 &nbsp;&nbsp; 题</label>
-
-                                <div class="col-sm-9">
-                                    <input type="text" class="form-control input-sm" id="txt_group_mailtitle" placeholder="Subject">
-
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="inputEmail3" class="col-sm-1 control-label">附 &nbsp;&nbsp; 件</label>
-                                <div id="from_fileupload">
-                                    <div class="btn btn-default btn-file  pull-left" style="margin-left:15px">
-                                        <i class="fa fa-paperclip"></i> Attachment
-                                        <input type="file" name="attachment" id="file_group_attachment">
-                                    </div>
-
-
-                                    <ul class="list-group col-xs-6" style="margin-left:15px" id="ul_group_attachment"></ul>
-                                </div>
-                            </div>
-
-                            <div class="form-horizontal">
-                                <textarea name="group_description" id="group_description"></textarea>
-                            </div>
-
-
-                        </form>
-
-
-
-                    </div>
-                    <!-- /.tab-pane -->
-                    <!-- /.tab-pane -->
                 </div>
-                <!-- /.tab-content -->
+                <div class="box-footer">
+
+                </div>
+                <!-- /.box-body -->
             </div>
+
+            <!-- Custom Tabs -->
+      
             <!-- /.nav-tabs-custom -->
         </div>
         <!-- /.col -->
@@ -351,25 +303,22 @@
                 filebrowserImageUploadUrl: "/Template/UploadImage?type=Images",
                 height: 400
             });
-            CKEDITOR.replace('group_description', {
-                filebrowserImageUploadUrl: "/Template/UploadImage?type=Images",
-                height: 400
-            });
         }
 
         var account_vm;
         var draftid;
-        var filelist = new Array();
-
+    var filelist = new Array();
+    var fileitem = new Array();
+        var SendModel = "single";
 
         $(document).ready(function () {
 
             BindEditor();
             BindAccountView();
             BindTemplate();
+            bindGroupView();
             SetEvent();
-        }
-        );
+        } );
 
         function BindEditor() {
             draftid = getQueryString("draftid");
@@ -435,6 +384,8 @@
 
                     AccountUse: function (item) {
                         $("#lb_aid").val(item.Aid);
+                        $("#lb_group_aid").val(item.Aid);
+                      
                         $("#txt_sendermail").val(item.Account);
                         $("#txt_group_sendermail").val(item.Account);
 
@@ -449,9 +400,15 @@
 
             $("#btn_send").click(function () {
 
+                var requestUrl = "/Home/SendMail";
+                if (SendModel == "group") {
+                    var gid = $("#txt_group_recivermail").val();
+                    requestUrl = "/Home/GroupSend?gid=" + gid;
+                }
 
                 var Tomail = $("#txt_sendermail").val();
                 var Inmail = $("#txt_recivermail").val();
+
                 var Content = CKEDITOR.instances['description'].getData();
                 var Subject = $("#txt_mailtitle").val();
                 var AccountId = $("#lb_aid").val();
@@ -479,7 +436,7 @@
                 });
 
                 $.ajax({
-                    url: "/Home/SendMail",
+                    url: requestUrl,
                     type: "POST",
                     data: {
                         MailId: draftid,
@@ -503,6 +460,79 @@
                         }
                     }
                 });
+
+
+            });
+
+            $("#btn_timersend").click(function () {
+
+                 var requestUrl = "/Home/TimerSendMail";
+                if (SendModel == "group") {
+                    var gid = $("#txt_group_recivermail").val();
+                    requestUrl = "/Home/TimerGroupSendMail?gid=" + gid;
+                }
+
+                var Tomail = $("#txt_sendermail").val();
+                var Inmail = $("#txt_recivermail").val();
+                var Content = CKEDITOR.instances['description'].getData();
+                var Subject = $("#txt_mailtitle").val();
+                var AccountId = $("#lb_aid").val();
+                var RWcc = $("#txt_WCCrecivermail").val();
+                var RBcc = $("#txt_BCCrecivermail").val();
+                var Senddate = $("#datepicker").val();;
+                if (Inmail == "" || Inmail == null) {
+
+                    alert_danger("请填写收件人！");
+                    return;
+                }
+                if (Subject == "" || Subject == null) {
+
+                    alert_danger("主题内容不能为空！");
+                    return;
+                }
+                if (Content == "" || Content == null) {
+
+                    alert_danger("邮件内容不能为空！");
+                    return;
+                }
+                   if (Senddate == "" || Senddate == null) {
+
+                    alert_danger("设定发送时间不能为空！");
+                    return;
+                }
+
+                
+                var dialog = bootbox.dialog({
+                    title: '定时邮件添加中...',
+                    message: '<p><i class="fa fa-spin fa-spinner"></i> Loading...</p>'
+                });
+                $.ajax({
+                    url: requestUrl,
+                    type: "POST",
+                    data: {
+                        MailId: draftid,
+                        Tomail: Tomail,
+                        Inmail: Inmail,
+                        Content: Content,
+                        Subject: Subject,
+                        AccountId: AccountId,
+                        WCC: RWcc,
+                        BCC: RBcc,
+                        Atthachment: filelist,
+                        Senddate:Senddate
+                    },
+                    success: function (result) {
+
+                        dialog.modal('hide');
+                        if (result.Success) {
+                            alert_success("邮件发送成功！");
+                        } else {
+                            alert_danger(result.Message);
+                        }
+                    }
+                });
+
+
 
 
             });
@@ -558,12 +588,10 @@
 
             });
 
-
             $("#file_attachment").change(function () {
 
                 var lengli = $("#ul_attachment li").length;
                 var uploadFile = $('#file_attachment')[0].files[0];
-
 
                 if (lengli >= 5) {
                     alert_danger("单次仅能发送5个附件");
@@ -575,14 +603,11 @@
                     return;
                 }
 
-                if (filelist.indexOf(uploadFile.name) > -1) {
+                if (fileitem.indexOf(uploadFile.name) > -1) {
                     alert_danger("附件已存在,请重新选择附件");
                     return;
                 }
-
-
-
-
+                fileitem.push(uploadFile.name);
 
                 var index1 = uploadFile.name.lastIndexOf(".");
                 var index2 = uploadFile.name.length;
@@ -610,9 +635,7 @@
 
 
                 $("#ul_attachment").append(element);
-
-
-
+                
                 $("#from_fileupload").ajaxSubmit({
                     url: '/Home/UploadAttachment',
                     type: 'post',
@@ -627,43 +650,27 @@
 
                         //添加到上传数组
                         filelist.push(result.Content);
-                        console.log(filelist);
 
                     },
                     xhr: function () {
                         var xhr = new XMLHttpRequest();
-                        //使用XMLHttpRequest.upload监听上传过程，注册progress事件，打印回调函数中的event事件
                         xhr.upload.addEventListener('progress', function (e) {
-
-                            //loaded代表上传了多少
-                            //total代表总数为多少
-
                             var baserate = (e.loaded / e.total).toFixed(2);
-
-
-
                             var progressRate = baserate * 100 + '%';
-
-
                             var progress_node = document.getElementById("div_progress_" + filename);   //进度条父节点
                             var progress_node_div = document.getElementById("green_div_progress_" + filename);
-
-
                             var progress_node_span = document.getElementById("span_progress_" + filename);
                             var progress_value = document.getElementById("small_progress_" + filename);
 
                             //通过设置进度条的宽度达到效果
                             progress_node_div.style.width = progressRate;
-
                             progress_node_span.innerHTML = progressRate;
                             progress_value.innerHTML = progressRate;
-
 
                             //上传完成
                             if (e.loaded == e.total) {
                                 progress_node.style.display = "none";
                                 progress_value.style.display = "none";
-
                             }
                         })
 
@@ -680,70 +687,25 @@
 
             });
 
-            $("#btn_timersend").click(function () {
-                  var Tomail = $("#txt_sendermail").val();
-                var Inmail = $("#txt_recivermail").val();
-                var Content = CKEDITOR.instances['description'].getData();
-                var Subject = $("#txt_mailtitle").val();
-                var AccountId = $("#lb_aid").val();
-                var RWcc = $("#txt_WCCrecivermail").val();
-                var RBcc = $("#txt_BCCrecivermail").val();
-                var Senddate = $("#datepicker").val();;
-                if (Inmail == "" || Inmail == null) {
 
-                    alert_danger("请填写收件人！");
-                    return;
-                }
-                if (Subject == "" || Subject == null) {
+            $("#GetGroupMode").click(function () {
+                $("#div_recmail").hide();
+                $("#div_group_recmail").show();
+                $("#GetGroupMode").hide();
+                $("#GetSingleMode").show();
 
-                    alert_danger("主题内容不能为空！");
-                    return;
-                }
-                if (Content == "" || Content == null) {
+                SendModel = "group";
 
-                    alert_danger("邮件内容不能为空！");
-                    return;
-                }
-                   if (Senddate == "" || Senddate == null) {
+            });
 
-                    alert_danger("设定发送时间不能为空！");
-                    return;
-                }
+             $("#GetSingleMode").click(function () {
+                $("#div_group_recmail").hide();
+                   $("#div_recmail").show();
 
-                
-                var dialog = bootbox.dialog({
-                    title: '定时邮件添加中...',
-                    message: '<p><i class="fa fa-spin fa-spinner"></i> Loading...</p>'
-                });
-                $.ajax({
-                    url: "/Home/TimerSendMail",
-                    type: "POST",
-                    data: {
-                        MailId: draftid,
-                        Tomail: Tomail,
-                        Inmail: Inmail,
-                        Content: Content,
-                        Subject: Subject,
-                        AccountId: AccountId,
-                        WCC: RWcc,
-                        BCC: RBcc,
-                        Atthachment: filelist,
-                        Senddate:Senddate
-                    },
-                    success: function (result) {
+                    $("#GetSingleMode").hide();
+                $("#GetGroupMode").show();
 
-                        dialog.modal('hide');
-                        if (result.Success) {
-                            alert_success("邮件发送成功！");
-                        } else {
-                            alert_danger(result.Message);
-                        }
-                    }
-                });
-
-
-
-
+                SendModel = "single";
             });
         }
 
@@ -759,6 +721,11 @@
             var index = filelist.indexOf(filename);
             if (index > -1) {
                 filelist.splice(index, 1);
+            }
+
+            var index2 = fileitem.indexOf(filename);
+             if (index2 > -1) {
+                fileitem.splice(index2, 1);
             }
 
         }
@@ -802,7 +769,31 @@
         }
 
 
+        function bindGroupView() {
 
+            $.ajax({
+                            url: "/Contact/ListGroup",
+                            type: "POST",
+                            success: function (result) {
+
+                                if (result.Success) {
+                                    self.groupitems = result.Content.Data;
+
+                                    if (0 < result.Content.Data.length) {
+                                        for (var i = 0; i < result.Content.Data.length; i++) {
+                                            $("#txt_group_recivermail").append("<option value='" + result.Content.Data[i].Gid + "'>" + result.Content.Data[i].Groupname + "</option>");
+                                        }
+                                    }
+
+
+                                } else {
+
+
+                                }
+
+                            }
+            });
+        }
 
 
 

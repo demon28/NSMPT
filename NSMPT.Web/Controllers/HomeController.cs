@@ -48,7 +48,7 @@ namespace NSMPT.Web.Controllers
 
             SendFacade sendFacade = new SendFacade();
 
-            if (!sendFacade.TimerSend(model))
+            if (!sendFacade.SingleTimerSend(model))
             {
                 return FailResult(sendFacade.PromptInfo.Message);
             }
@@ -56,6 +56,40 @@ namespace NSMPT.Web.Controllers
 
         }
 
+
+        [ValidateInput(false)]
+        [HttpPost]
+        public ActionResult GroupSendMail(Entites.Tnsmtp_EmailMap model,int Gid)
+        {
+            model.Userid = SysUser.UserId;
+
+            SendFacade sendFacade = new SendFacade();
+
+            if (!sendFacade.GroupSend(model,Gid))
+            {
+                return FailResult(sendFacade.PromptInfo.Message);
+            }
+            return SuccessResult("添加成功");
+
+        }
+
+
+
+        [ValidateInput(false)]
+        [HttpPost]
+        public ActionResult TimerGroupSendMail(Entites.Tnsmtp_EmailMap model, int Gid)
+        {
+            model.Userid = SysUser.UserId;
+
+            SendFacade sendFacade = new SendFacade();
+
+            if (!sendFacade.GroupTimerSend(model, Gid))
+            {
+                return FailResult(sendFacade.PromptInfo.Message);
+            }
+            return SuccessResult("添加成功");
+
+        }
 
 
         [HttpPost]

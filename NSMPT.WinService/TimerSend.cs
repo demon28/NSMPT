@@ -34,9 +34,14 @@ namespace NSMPT.WinService
 
         private void timer1_Elapsed(object sender, ElapsedEventArgs e)
         {
-            TimerSendFacade timerSendFacade = new TimerSendFacade();
+            TimerSender timerSender = new TimerSender();
+            timerSender.Send();
 
-            timerSendFacade.Send();
+            GroupSender groupSender = new GroupSender();
+            groupSender.Send();
+
+            GroupTimeSender groupTimeSender = new GroupTimeSender();
+            groupTimeSender.Send();
 
         }
 
