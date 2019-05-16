@@ -9,7 +9,7 @@
 * Blog : http://www.cnblogs.com/fineblog/
 * Company ：深圳市乾海盛世移动支付有限公司
 * Copyright (C) Winner研发中心
-* CreateTime : 2019-05-07 15:41:55  
+* CreateTime : 2019-05-16 18:17:00  
 * 
 ***************************************************/
 using System;
@@ -68,46 +68,58 @@ namespace NSMPT.Entites
 		public string Content { get; set; }
 
 		/// <summary>
-		/// 是否已读
-		/// [default:DBNull.Value]
+		/// 是否已读，0：未读，1：已读
+		/// [default:0]
 		/// </summary>
-		public int? FlagRead { get; set; }
+		public int FlagRead { get; set; }
 
 		/// <summary>
-		/// 接收状态
-		/// [default:DBNull.Value]
+		/// 接收状态,0正常接收
+		/// [default:0]
 		/// </summary>
-		public int? FlagStatus { get; set; }
+		public int FlagStatus { get; set; }
 
 		/// <summary>
 		/// 邮件账户id
-		/// [default:DBNull.Value]
+		/// [default:0]
 		/// </summary>
-		public int? AccountId { get; set; }
+		public int AccountId { get; set; }
 
 		/// <summary>
 		/// 用户di
-		/// [default:DBNull.Value]
+		/// [default:0]
 		/// </summary>
-		public int? Userid { get; set; }
+		public int Userid { get; set; }
 
 		/// <summary>
 		/// 时间
-		/// [default:DBNull.Value]
+		/// [default:new DateTime()]
 		/// </summary>
-		public DateTime? Createtime { get; set; }
+		public DateTime Createtime { get; set; }
 
 		/// <summary>
 		/// 状态
-		/// [default:DBNull.Value]
+		/// [default:0]
 		/// </summary>
-		public int? Status { get; set; }
+		public int Status { get; set; }
 
 		/// <summary>
 		/// 备注
 		/// [default:string.Empty]
 		/// </summary>
 		public string Remarks { get; set; }
+
+		/// <summary>
+		/// 收件时间
+		/// [default:DBNull.Value]
+		/// </summary>
+		public DateTime? Rectimer { get; set; }
+
+		/// <summary>
+		/// 第三方id
+		/// [default:DBNull.Value]
+		/// </summary>
+		public int? Euid { get; set; }
 
 
 

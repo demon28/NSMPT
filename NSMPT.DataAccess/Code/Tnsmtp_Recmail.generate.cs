@@ -9,7 +9,7 @@
 * Blog : http://www.cnblogs.com/fineblog/
 * Company ：深圳市乾海盛世移动支付有限公司
 * Copyright (C) Winner研发中心
-* CreateTime : 2019-05-07 15:39:30  
+* CreateTime : 2019-05-16 18:17:00  
 * 
 ***************************************************/
 using System;
@@ -52,6 +52,8 @@ namespace NSMPT.DataAccess
 		public const string _CREATETIME="CREATETIME";
 		public const string _STATUS="STATUS";
 		public const string _REMARKS="REMARKS";
+		public const string _RECTIMER="RECTIMER";
+		public const string _EUID="EUID";
 
     
         public const string _TABLENAME="Tnsmtp_Recmail";
@@ -123,57 +125,57 @@ namespace NSMPT.DataAccess
 			set { setProperty(_CONTENT,value); }
 		}
 		/// <summary>
-		/// 是否已读
-		/// [default:DBNull.Value]
+		/// 是否已读，0：未读，1：已读
+		/// [default:0]
 		/// </summary>
-		public int? FlagRead
+		public int FlagRead
 		{
-			get { return Helper.ToInt32(DataRow[_FLAG_READ]); }
-			set { setProperty(_FLAG_READ,Helper.FromInt32(value)); }
+			get { return Convert.ToInt32(DataRow[_FLAG_READ]); }
+			set { setProperty(_FLAG_READ,value); }
 		}
 		/// <summary>
-		/// 接收状态
-		/// [default:DBNull.Value]
+		/// 接收状态,0正常接收
+		/// [default:0]
 		/// </summary>
-		public int? FlagStatus
+		public int FlagStatus
 		{
-			get { return Helper.ToInt32(DataRow[_FLAG_STATUS]); }
-			set { setProperty(_FLAG_STATUS,Helper.FromInt32(value)); }
+			get { return Convert.ToInt32(DataRow[_FLAG_STATUS]); }
+			set { setProperty(_FLAG_STATUS,value); }
 		}
 		/// <summary>
 		/// 邮件账户id
-		/// [default:DBNull.Value]
+		/// [default:0]
 		/// </summary>
-		public int? AccountId
+		public int AccountId
 		{
-			get { return Helper.ToInt32(DataRow[_ACCOUNT_ID]); }
-			set { setProperty(_ACCOUNT_ID,Helper.FromInt32(value)); }
+			get { return Convert.ToInt32(DataRow[_ACCOUNT_ID]); }
+			set { setProperty(_ACCOUNT_ID,value); }
 		}
 		/// <summary>
 		/// 用户di
-		/// [default:DBNull.Value]
+		/// [default:0]
 		/// </summary>
-		public int? Userid
+		public int Userid
 		{
-			get { return Helper.ToInt32(DataRow[_USERID]); }
-			set { setProperty(_USERID,Helper.FromInt32(value)); }
+			get { return Convert.ToInt32(DataRow[_USERID]); }
+			set { setProperty(_USERID,value); }
 		}
 		/// <summary>
 		/// 时间
-		/// [default:DBNull.Value]
+		/// [default:new DateTime()]
 		/// </summary>
-		public DateTime? Createtime
+		public DateTime Createtime
 		{
 			get { return Convert.ToDateTime(DataRow[_CREATETIME].ToString()); }
 		}
 		/// <summary>
 		/// 状态
-		/// [default:DBNull.Value]
+		/// [default:0]
 		/// </summary>
-		public int? Status
+		public int Status
 		{
-			get { return Helper.ToInt32(DataRow[_STATUS]); }
-			set { setProperty(_STATUS,Helper.FromInt32(value)); }
+			get { return Convert.ToInt32(DataRow[_STATUS]); }
+			set { setProperty(_STATUS,value); }
 		}
 		/// <summary>
 		/// 备注
@@ -183,6 +185,24 @@ namespace NSMPT.DataAccess
 		{
 			get { return DataRow[_REMARKS].ToString(); }
 			set { setProperty(_REMARKS,value); }
+		}
+		/// <summary>
+		/// 收件时间
+		/// [default:DBNull.Value]
+		/// </summary>
+		public DateTime? Rectimer
+		{
+			get { return Helper.ToDateTime(DataRow[_RECTIMER]); }
+			set { setProperty(_RECTIMER,Helper.FromDateTime(value)); }
+		}
+		/// <summary>
+		/// 第三方id
+		/// [default:DBNull.Value]
+		/// </summary>
+		public int? Euid
+		{
+			get { return Helper.ToInt32(DataRow[_EUID]); }
+			set { setProperty(_EUID,Helper.FromInt32(value)); }
 		}
 
         #endregion 公开属性
@@ -204,13 +224,15 @@ namespace NSMPT.DataAccess
 			dt.Columns.Add(_RECIVER_MAIL, typeof(string)).DefaultValue = string.Empty;
 			dt.Columns.Add(_SUBJECT, typeof(string)).DefaultValue = string.Empty;
 			dt.Columns.Add(_CONTENT, typeof(string)).DefaultValue = string.Empty;
-			dt.Columns.Add(_FLAG_READ, typeof(int)).DefaultValue = DBNull.Value;
-			dt.Columns.Add(_FLAG_STATUS, typeof(int)).DefaultValue = DBNull.Value;
-			dt.Columns.Add(_ACCOUNT_ID, typeof(int)).DefaultValue = DBNull.Value;
-			dt.Columns.Add(_USERID, typeof(int)).DefaultValue = DBNull.Value;
-			dt.Columns.Add(_CREATETIME, typeof(DateTime)).DefaultValue = DBNull.Value;
-			dt.Columns.Add(_STATUS, typeof(int)).DefaultValue = DBNull.Value;
+			dt.Columns.Add(_FLAG_READ, typeof(int)).DefaultValue = 0;
+			dt.Columns.Add(_FLAG_STATUS, typeof(int)).DefaultValue = 0;
+			dt.Columns.Add(_ACCOUNT_ID, typeof(int)).DefaultValue = 0;
+			dt.Columns.Add(_USERID, typeof(int)).DefaultValue = 0;
+			dt.Columns.Add(_CREATETIME, typeof(DateTime)).DefaultValue = new DateTime();
+			dt.Columns.Add(_STATUS, typeof(int)).DefaultValue = 0;
 			dt.Columns.Add(_REMARKS, typeof(string)).DefaultValue = string.Empty;
+			dt.Columns.Add(_RECTIMER, typeof(DateTime)).DefaultValue = DBNull.Value;
+			dt.Columns.Add(_EUID, typeof(int)).DefaultValue = DBNull.Value;
 
             return dt.NewRow();
         }
@@ -256,7 +278,9 @@ TNSMTP_RECMAIL(
   ACCOUNT_ID,
   USERID,
   STATUS,
-  REMARKS)
+  REMARKS,
+  RECTIMER,
+  EUID)
 VALUES(
   :RECID,
   :SENDER_MAIL,
@@ -270,7 +294,9 @@ VALUES(
   :ACCOUNT_ID,
   :USERID,
   :STATUS,
-  :REMARKS)";
+  :REMARKS,
+  :RECTIMER,
+  :EUID)";
 			AddParameter(_RECID,DataRow[_RECID]);
 			AddParameter(_SENDER_MAIL,DataRow[_SENDER_MAIL]);
 			AddParameter(_SENDER_NAME,DataRow[_SENDER_NAME]);
@@ -284,6 +310,8 @@ VALUES(
 			AddParameter(_USERID,DataRow[_USERID]);
 			AddParameter(_STATUS,DataRow[_STATUS]);
 			AddParameter(_REMARKS,DataRow[_REMARKS]);
+			AddParameter(_RECTIMER,DataRow[_RECTIMER]);
+			AddParameter(_EUID,DataRow[_EUID]);
             return base.InsertBySql(sql);
         }
 		
@@ -336,7 +364,9 @@ SELECT
   USERID,
   CREATETIME,
   STATUS,
-  REMARKS
+  REMARKS,
+  RECTIMER,
+  EUID
 FROM TNSMTP_RECMAIL
 WHERE " + condition;
             return base.SelectBySql(sql);
@@ -403,7 +433,9 @@ SELECT
   USERID,
   CREATETIME,
   STATUS,
-  REMARKS
+  REMARKS,
+  RECTIMER,
+  EUID
 FROM TNSMTP_RECMAIL
 WHERE " + condition;
             return base.ListBySql(sql);

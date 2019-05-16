@@ -64,6 +64,7 @@
     <Compile Include="Code\Tnsmtp_Mailtemplate.generate.cs" />
     <Compile Include="Code\Tnsmtp_Mailtype.generate.cs" />
     <Compile Include="Code\Tnsmtp_Raplcemark.generate.cs" />
+    <Compile Include="Code\Tnsmtp_Receivefile.generate.cs" />
     <Compile Include="Code\Tnsmtp_Recmail.generate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tnsmtp_Account.cs" />
@@ -76,6 +77,8 @@
     <Compile Include="Tnsmtp_Mailtemplate.extension.cs" />
     <Compile Include="Tnsmtp_Mailtype.cs" />
     <Compile Include="Tnsmtp_Raplcemark.extension.cs" />
+    <Compile Include="Tnsmtp_Receivefile.extension.cs" />
+    <Compile Include="Tnsmtp_ReceivefileMap.generate.cs" />
     <Compile Include="Tnsmtp_Recmail.extension.cs" />
   </ItemGroup>
   <ItemGroup>
