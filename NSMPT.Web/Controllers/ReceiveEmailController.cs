@@ -11,6 +11,8 @@ namespace NSMPT.Web.Controllers
         // GET: ReceiveEmail
         public ActionResult Index()
         {
+            NSMPT.Facade.ImapEmail imapEmail = new Facade.ImapEmail();
+            imapEmail.GetMail(37);
             return View();
         }
     }
