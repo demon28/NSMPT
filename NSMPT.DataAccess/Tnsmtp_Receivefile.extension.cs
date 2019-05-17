@@ -20,8 +20,8 @@ using Winner.Framework.Core;
 using Winner.Framework.Core.DataAccess;
 using Winner.Framework.Core.DataAccess.Oracle;
 using Winner.Framework.Utils;
-using Winner.Shop.Entities;
-namespace Winner.Shop.DataAccess
+
+namespace NSMPT.DataAccess
 {
     /// <summary>
     /// Data Access Layer Object Of Tnsmtp_Receivefile

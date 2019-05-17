@@ -29,6 +29,19 @@ namespace NSMPT.DataAccess
     public partial class Tnsmtp_Recmail : DataAccessBase
     {
         //Custom Extension Class
+
+        public bool SelectMaxRecEmail(int accountid, int userid) {
+
+            string sql = @"select a.* from tnsmtp_recmail a where a.rectimer in (
+select Max(t.rectimer)  from tnsmtp_recmail t where t.account_id=:accountid and t.userid =:userid )";
+
+            AddParameter("accountid", accountid);
+            AddParameter("userid", userid);
+
+            return SelectBySql(sql);
+
+        }
+
     }
 
     /// <summary>
@@ -37,5 +50,23 @@ namespace NSMPT.DataAccess
     public partial class Tnsmtp_RecmailCollection : DataAccessCollectionBase
     {
         //Custom Extension Class
+
+        public bool ListByAccount(int accountid, int userid,string keywords) {
+            string where = " status=0 and account_id=:accountid and userid=:userid  ";
+
+            AddParameter("accountid", accountid);
+            AddParameter("userid",userid);
+            if (!string.IsNullOrEmpty(keywords))
+            {
+                where += "  and subject like '%'|| :keyword  ||'%' ";
+                AddParameter("keyword", keywords);
+            }
+            where += " order by createtime desc";
+
+            return ListByCondition(where);
+
+        }
+
+
     }
 }

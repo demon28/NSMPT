@@ -7177,6 +7177,7 @@
     <Content Include="Reference\scripts\jquery.form.min.js.map" />
     <Content Include="Views\SendEmail\Receipt.cshtml" />
     <Content Include="Views\ReceiveEmail\Index.cshtml" />
+    <Content Include="Views\ReceiveEmail\Read.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Reference\adminLTE\bower_components\moment\moment.d.ts" />

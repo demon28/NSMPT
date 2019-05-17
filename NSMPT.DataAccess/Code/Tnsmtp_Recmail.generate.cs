@@ -9,7 +9,7 @@
 * Blog : http://www.cnblogs.com/fineblog/
 * Company ：深圳市乾海盛世移动支付有限公司
 * Copyright (C) Winner研发中心
-* CreateTime : 2019-05-16 18:17:00  
+* CreateTime : 2019-05-17 00:48:30  
 * 
 ***************************************************/
 using System;
@@ -44,7 +44,6 @@ namespace NSMPT.DataAccess
 		public const string _RECIVER_NAME="RECIVER_NAME";
 		public const string _RECIVER_MAIL="RECIVER_MAIL";
 		public const string _SUBJECT="SUBJECT";
-		public const string _CONTENT="CONTENT";
 		public const string _FLAG_READ="FLAG_READ";
 		public const string _FLAG_STATUS="FLAG_STATUS";
 		public const string _ACCOUNT_ID="ACCOUNT_ID";
@@ -54,6 +53,8 @@ namespace NSMPT.DataAccess
 		public const string _REMARKS="REMARKS";
 		public const string _RECTIMER="RECTIMER";
 		public const string _EUID="EUID";
+		public const string _HASFILE="HASFILE";
+		public const string _CONTENT="CONTENT";
 
     
         public const string _TABLENAME="Tnsmtp_Recmail";
@@ -116,15 +117,6 @@ namespace NSMPT.DataAccess
 			set { setProperty(_SUBJECT,value); }
 		}
 		/// <summary>
-		/// 内容
-		/// [default:string.Empty]
-		/// </summary>
-		public string Content
-		{
-			get { return DataRow[_CONTENT].ToString(); }
-			set { setProperty(_CONTENT,value); }
-		}
-		/// <summary>
 		/// 是否已读，0：未读，1：已读
 		/// [default:0]
 		/// </summary>
@@ -134,7 +126,7 @@ namespace NSMPT.DataAccess
 			set { setProperty(_FLAG_READ,value); }
 		}
 		/// <summary>
-		/// 接收状态,0正常接收
+		/// 标记为星
 		/// [default:0]
 		/// </summary>
 		public int FlagStatus
@@ -204,6 +196,24 @@ namespace NSMPT.DataAccess
 			get { return Helper.ToInt32(DataRow[_EUID]); }
 			set { setProperty(_EUID,Helper.FromInt32(value)); }
 		}
+		/// <summary>
+		/// 是否有附件
+		/// [default:0]
+		/// </summary>
+		public int Hasfile
+		{
+			get { return Convert.ToInt32(DataRow[_HASFILE]); }
+			set { setProperty(_HASFILE,value); }
+		}
+		/// <summary>
+		/// 邮件内容
+		/// [default:default(object)]
+		/// </summary>
+		public object Content
+		{
+			get { return DataRow[_CONTENT].ToString(); }
+			set { setProperty(_CONTENT,value); }
+		}
 
         #endregion 公开属性
         
@@ -223,7 +233,6 @@ namespace NSMPT.DataAccess
 			dt.Columns.Add(_RECIVER_NAME, typeof(string)).DefaultValue = string.Empty;
 			dt.Columns.Add(_RECIVER_MAIL, typeof(string)).DefaultValue = string.Empty;
 			dt.Columns.Add(_SUBJECT, typeof(string)).DefaultValue = string.Empty;
-			dt.Columns.Add(_CONTENT, typeof(string)).DefaultValue = string.Empty;
 			dt.Columns.Add(_FLAG_READ, typeof(int)).DefaultValue = 0;
 			dt.Columns.Add(_FLAG_STATUS, typeof(int)).DefaultValue = 0;
 			dt.Columns.Add(_ACCOUNT_ID, typeof(int)).DefaultValue = 0;
@@ -233,6 +242,8 @@ namespace NSMPT.DataAccess
 			dt.Columns.Add(_REMARKS, typeof(string)).DefaultValue = string.Empty;
 			dt.Columns.Add(_RECTIMER, typeof(DateTime)).DefaultValue = DBNull.Value;
 			dt.Columns.Add(_EUID, typeof(int)).DefaultValue = DBNull.Value;
+			dt.Columns.Add(_HASFILE, typeof(int)).DefaultValue = 0;
+			dt.Columns.Add(_CONTENT, typeof(object)).DefaultValue = default(object);
 
             return dt.NewRow();
         }
@@ -272,7 +283,6 @@ TNSMTP_RECMAIL(
   RECIVER_NAME,
   RECIVER_MAIL,
   SUBJECT,
-  CONTENT,
   FLAG_READ,
   FLAG_STATUS,
   ACCOUNT_ID,
@@ -280,7 +290,9 @@ TNSMTP_RECMAIL(
   STATUS,
   REMARKS,
   RECTIMER,
-  EUID)
+  EUID,
+  HASFILE,
+  CONTENT)
 VALUES(
   :RECID,
   :SENDER_MAIL,
@@ -288,7 +300,6 @@ VALUES(
   :RECIVER_NAME,
   :RECIVER_MAIL,
   :SUBJECT,
-  :CONTENT,
   :FLAG_READ,
   :FLAG_STATUS,
   :ACCOUNT_ID,
@@ -296,14 +307,15 @@ VALUES(
   :STATUS,
   :REMARKS,
   :RECTIMER,
-  :EUID)";
+  :EUID,
+  :HASFILE,
+  :CONTENT)";
 			AddParameter(_RECID,DataRow[_RECID]);
 			AddParameter(_SENDER_MAIL,DataRow[_SENDER_MAIL]);
 			AddParameter(_SENDER_NAME,DataRow[_SENDER_NAME]);
 			AddParameter(_RECIVER_NAME,DataRow[_RECIVER_NAME]);
 			AddParameter(_RECIVER_MAIL,DataRow[_RECIVER_MAIL]);
 			AddParameter(_SUBJECT,DataRow[_SUBJECT]);
-			AddParameter(_CONTENT,DataRow[_CONTENT]);
 			AddParameter(_FLAG_READ,DataRow[_FLAG_READ]);
 			AddParameter(_FLAG_STATUS,DataRow[_FLAG_STATUS]);
 			AddParameter(_ACCOUNT_ID,DataRow[_ACCOUNT_ID]);
@@ -312,6 +324,8 @@ VALUES(
 			AddParameter(_REMARKS,DataRow[_REMARKS]);
 			AddParameter(_RECTIMER,DataRow[_RECTIMER]);
 			AddParameter(_EUID,DataRow[_EUID]);
+			AddParameter(_HASFILE,DataRow[_HASFILE]);
+			AddParameter(_CONTENT,DataRow[_CONTENT]);
             return base.InsertBySql(sql);
         }
 		
@@ -357,7 +371,6 @@ SELECT
   RECIVER_NAME,
   RECIVER_MAIL,
   SUBJECT,
-  CONTENT,
   FLAG_READ,
   FLAG_STATUS,
   ACCOUNT_ID,
@@ -366,7 +379,9 @@ SELECT
   STATUS,
   REMARKS,
   RECTIMER,
-  EUID
+  EUID,
+  HASFILE,
+  CONTENT
 FROM TNSMTP_RECMAIL
 WHERE " + condition;
             return base.SelectBySql(sql);
@@ -426,7 +441,6 @@ SELECT
   RECIVER_NAME,
   RECIVER_MAIL,
   SUBJECT,
-  CONTENT,
   FLAG_READ,
   FLAG_STATUS,
   ACCOUNT_ID,
@@ -435,7 +449,9 @@ SELECT
   STATUS,
   REMARKS,
   RECTIMER,
-  EUID
+  EUID,
+  HASFILE,
+  CONTENT
 FROM TNSMTP_RECMAIL
 WHERE " + condition;
             return base.ListBySql(sql);

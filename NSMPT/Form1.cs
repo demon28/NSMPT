@@ -23,8 +23,7 @@ namespace NSMPT
 
         private void Button2_Click(object sender, EventArgs e)
         {
-            NSMPT.Facade.ImapEmail imapEmail = new Facade.ImapEmail();
-            imapEmail.GetMail(37);
+         
         }
     }
 }

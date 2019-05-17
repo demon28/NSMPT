@@ -9,7 +9,7 @@
 * Blog : http://www.cnblogs.com/fineblog/
 * Company ：深圳市乾海盛世移动支付有限公司
 * Copyright (C) Winner研发中心
-* CreateTime : 2019-05-16 18:17:00  
+* CreateTime : 2019-05-16 21:47:15  
 * 
 ***************************************************/
 using System;
@@ -74,7 +74,7 @@ namespace NSMPT.Entites
 		public int FlagRead { get; set; }
 
 		/// <summary>
-		/// 接收状态,0正常接收
+		/// 标记为星
 		/// [default:0]
 		/// </summary>
 		public int FlagStatus { get; set; }
@@ -120,6 +120,12 @@ namespace NSMPT.Entites
 		/// [default:DBNull.Value]
 		/// </summary>
 		public int? Euid { get; set; }
+
+		/// <summary>
+		/// 是否有附件
+		/// [default:0]
+		/// </summary>
+		public int Hasfile { get; set; }
 
 
 

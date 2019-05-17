@@ -372,9 +372,12 @@
                                 }
                                 for (var i = 0; i < result.Content.Data.length; i++) {
                                     if (result.Content.Data[i].Isdefault == 1) {
+
+
                                         $("#lb_aid").val(result.Content.Data[i].Aid);
                                         $("#txt_sendermail").val(result.Content.Data[i].Account);
-                                        $("#txt_group_sendermail").val(result.Content.Data[i].Account);
+                               
+                               
                                     }
                                 }
                             }
@@ -383,10 +386,9 @@
 
                     AccountUse: function (item) {
                         $("#lb_aid").val(item.Aid);
-                        $("#lb_group_aid").val(item.Aid);
 
                         $("#txt_sendermail").val(item.Account);
-                        $("#txt_group_sendermail").val(item.Account);
+        
 
                     }
 
