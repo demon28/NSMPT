@@ -24,14 +24,14 @@ namespace NSMPT.DataAccess
 	/// </summary>
 	public partial class Tnsmtp_Account
 	{
-        public bool SelectByDefault(int defaultstatus)
-        {
-            string strwhere = " isdefault=:defaultstatus";
-            AddParameter("defaultstatus", defaultstatus);
+        public bool SelecByUserDefault(int userid) {
 
-            return SelectByCondition(strwhere);
+            string str = " isdefault=1 and Userid=:userid";
+            AddParameter("userid", userid);
+            return SelectByCondition(str);
 
         }
+
     }
 	/// <summary>
 	/// 账户表[集合对象]
@@ -48,6 +48,8 @@ namespace NSMPT.DataAccess
            return ListBySql(sql);
 
         }
+
+       
 
       
 

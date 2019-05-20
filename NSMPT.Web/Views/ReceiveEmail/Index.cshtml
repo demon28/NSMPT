@@ -8,12 +8,12 @@
 
 
     <h1>
-        <small>  Template</small>
+        <small>  InBox</small>
 
     </h1>
     <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">MailBox</li>
+        <li class="active">InBox</li>
     </ol>
 
 }
@@ -87,22 +87,28 @@
                     <table class="table table-hover table-striped" id="tab_reclist">
                         <tbody>
                             <tr v-for="item in Items">
-                                <td><input type="checkbox" value="item.Recid"></td>
+                                <td>  <input type="checkbox" :value=item.Recid>  </td>
+
+
                                 <td class="mailbox-star">
-                                    <a href="#" v-if="item.FlagRead==0"><i class="fa  fa-envelope text-bule"></i></a>
-                                    <a href="#" v-if="item.FlagRead==1"><i class="fa  fa-eye text-bule"></i></a>
+                                    <a  v-if="item.FlagRead==0" v-on:click="ChangeRead(item)"><i class="fa  fa-envelope text-bule"></i></a>
+                                    <a  v-if="item.FlagRead==1" v-on:click="ChangeRead(item)"><i class="fa  fa-eye text-bule"></i></a>
                                 </td>
-                                <td class="mailbox-name"><a href="/ReceiveEmail/Read?recid=item.Recid">{{item.SenderName}}</a></td>
+                                <td class="mailbox-name"><a :href="'/ReceiveEmail/Read?recid='+item.Recid">{{item.SenderName}}</a></td>
                                 <td class="mailbox-subject">
-                                    <b>{{item.Subject}}</b> - {{item.Content.substring(0,20)}}...
+                                    <b>{{item.Subject}}</b>
                                 </td>
 
                                 <td class="mailbox-date"> <i class="fa fa-paperclip" v-if="item.Hasfile==1"></i></td>
                                 <td class="mailbox-date">
-                                {{item.Createtime}}</td>
-                                <td class="mailbox-star"><a href="#"><i class="fa fa-star text-yellow"></i></a></td>
+                                    {{item.Createtime}}
+                                </td>
+                                <td class="mailbox-star">
+                                <a  v-if="item.FlagStatus==0" v-on:click="ChangeStar(item)"><i class="fa fa-star text-yellow"></i></a>
+                                <a  v-if="item.FlagStatus==1" v-on:click="ChangeStar(item)"><i class="fa fa-star-o text-yellow"></i></a>
+                                </td>
                             </tr>
-                          
+
 
                         </tbody>
                     </table>
@@ -152,19 +158,18 @@
 
 
     <script>
-   
+
 
         var account_vm;
         var recmail_vm;
         $(document).ready(function () {
-            
+
             BindAccountView();
             BindRecListView();
             SetEvent();
         });
         function SetEvent() {
 
-            
 
 
         }
@@ -190,17 +195,12 @@
 
                                 if (result.Success) {
                                     $("#lb_aid").val(result.Content.Data[0].Aid);
-                                 
                                     self.AccountItems = result.Content.Data;
                                 }
-
                             }
                         })
                     },
-
                     AccountUse: function (item) {
-
-
                     }
 
                 }
@@ -224,32 +224,88 @@
                         var self = this;
                         var aid = $("#lb_aid").val();
                         var keywords = $("#txt_Search").val();
-                        
+
                         $.ajax({
                             url: "/ReceiveEmail/List",
                             type: "POST",
                             data: {
 
                                 accountid: aid,
-                                keywords:keywords
+                                keywords: keywords
                             },
                             success: function (result) {
 
                                 if (result.Success) {
-                                   
+
                                     self.Items = result.Content.Data;
                                 }
                             }
                         })
                     },
+
+                    ChangeRead: function (item) {
+                  
+                         $.ajax({
+                            url: "/ReceiveEmail/IsRead",
+                            type: "POST",
+                            data: {
+                                status:item.FlagRead,
+                                rid: item.Recid
+                            },
+                            success: function (result) {
+
+                                if (result.Success) {
+                                    recmail_vm.InitAccount();
+
+                                } else {
+
+                                    alert_danger(result.Message);
+                                }
+                            }
+                        })
+                    },
+                    ChangeStar: function (item) {
+                           $.ajax({
+                            url: "/ReceiveEmail/IsStar",
+                            type: "POST",
+                            data: {
+                                status:item.FlagStatus,
+                                rid: Recid,
+                             
+                            },
+                            success: function (result) {
+
+                                if (result.Success) {
+                                     recmail_vm.InitAccount();
+
+                                } else {
+
+                                    alert_danger(result.Message);
+                                }
+                            }
+                        })
+
+                    }
+
+                },
+                updated: function () {
+                    $('.mailbox-messages input[type="checkbox"]').iCheck({
+                        checkboxClass: 'icheckbox_flat-blue',
+                        radioClass: 'iradio_flat-blue'
+                    });
+
+
                 }
 
             });
 
         }
-             $(function(){
 
-               $('.mailbox-messages input[type="checkbox"]').iCheck({
+
+
+        $(function () {
+
+            $('.mailbox-messages input[type="checkbox"]').iCheck({
                 checkboxClass: 'icheckbox_flat-blue',
                 radioClass: 'iradio_flat-blue'
             });
@@ -293,7 +349,7 @@
 
         });
 
-   
+
     </script>
 
 

@@ -105,7 +105,7 @@ namespace NSMPT.Web.Controllers
         {
             DataAccess.Tnsmtp_Account tnsmtp_Account1 = new DataAccess.Tnsmtp_Account();
 
-            if (tnsmtp_Account1.SelectByDefault(1))
+            if (tnsmtp_Account1.SelecByUserDefault(SysUser.UserId))
             {
                 tnsmtp_Account1.Isdefault = 0;
                 if (!tnsmtp_Account1.Update())

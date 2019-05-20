@@ -28,18 +28,9 @@ namespace NSMPT.Web.Controllers
 
             if (!accountid.HasValue)
             {
-                DataAccess.Tnsmtp_AccountCollection tnsmtp_Account = new DataAccess.Tnsmtp_AccountCollection();
-                tnsmtp_Account.ListByUserId(SysUser.UserId);
-                var accountlist = MapProvider.Map<AccountModel>(tnsmtp_Account.DataTable);
-
-                foreach (var item in accountlist)
-                {
-                    if (item.Isdefault==1)
-                    {
-                        accountid = item.Aid;
-                    }
-                }
-
+                DataAccess.Tnsmtp_Account tnsmtp_Account = new DataAccess.Tnsmtp_Account();
+                tnsmtp_Account.SelecByUserDefault(SysUser.UserId);
+                accountid = tnsmtp_Account.Aid;
             }
 
 
@@ -53,6 +44,47 @@ namespace NSMPT.Web.Controllers
             var list = MapProvider.Map<Tnsmtp_RecmailMap>(recmailCollection.DataTable);
             return SuccessResultList(list, recmailCollection.ChangePage);
 
+        }
+
+
+        [HttpPost]
+        public ActionResult IsRead(int status,int rid) {
+
+            DataAccess.Tnsmtp_Recmail tnsmtp_Recmail = new DataAccess.Tnsmtp_Recmail();
+
+            if (!tnsmtp_Recmail.SelectByPK(rid))
+            {
+                return FailResult("网络连接故障！");
+
+            }
+            tnsmtp_Recmail.FlagRead = status==1?0:1;
+
+            if (!tnsmtp_Recmail.Update())
+            {
+                return FailResult("修改失败！");
+            }
+
+            return SuccessResult("修改成功！");
+        }
+
+        [HttpPost]
+        public ActionResult IsStar(int status, int rid)
+        {
+
+            DataAccess.Tnsmtp_Recmail tnsmtp_Recmail = new DataAccess.Tnsmtp_Recmail();
+
+            if (!tnsmtp_Recmail.SelectByPK(rid))
+            {
+                return FailResult("网络连接故障！");
+            }
+            tnsmtp_Recmail.FlagStatus = status == 1 ? 0 : 1;
+
+            if (!tnsmtp_Recmail.Update())
+            {
+                return FailResult("修改失败！");
+            }
+
+            return SuccessResult("修改成功！");
         }
 
 
