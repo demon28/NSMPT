@@ -32,13 +32,32 @@ namespace NSMPT.DataAccess
 
         public bool SelectMaxRecEmail(int accountid, int userid) {
 
-            string sql = @"select a.* from tnsmtp_recmail a where a.rectimer in (
+            string sql = @"select  a.recid,a.sender_mail,a.reciver_mail,a.subject,a.rectimer,a.createtime,a.status from tnsmtp_recmail a where a.rectimer in (
 select Max(t.rectimer)  from tnsmtp_recmail t where t.account_id=:accountid and t.userid =:userid )";
 
             AddParameter("accountid", accountid);
             AddParameter("userid", userid);
 
             return SelectBySql(sql);
+
+        }
+
+        public bool DeleteAllByUserId(int userid, int[] recid)
+        {
+
+            string sql = " update Tnsmtp_Recmail t set t.status=1 where userid=:userid and t.recid in (";
+
+            foreach (var item in recid)
+            {
+                sql += item + ",";
+            }
+            sql = sql.Substring(0, sql.LastIndexOf(','));
+
+            sql += ")";
+
+            AddParameter("userid", userid);
+
+            return ExecuteNonQuery(sql) > 0;
 
         }
 
@@ -51,19 +70,23 @@ select Max(t.rectimer)  from tnsmtp_recmail t where t.account_id=:accountid and 
     {
         //Custom Extension Class
 
-        public bool ListByAccount(int accountid, int userid,string keywords) {
-            string where = " status=0 and account_id=:accountid and userid=:userid  ";
+
+        public bool ListByDefault(int accountid, int userid, string keywords) {
+            string sql = "select t.recid,t.sender_mail,t.sender_name,t.reciver_name,t.reciver_mail,t.subject,t.flag_read,t.flag_status,t.account_id,t.userid,t.createtime,t.status,t.rectimer,t.euid,t.hasfile from tnsmtp_recmail t  where 1=1";
+
+            sql += " and status=0 and account_id=:accountid and userid=:userid  ";
 
             AddParameter("accountid", accountid);
-            AddParameter("userid",userid);
+            AddParameter("userid", userid);
+
             if (!string.IsNullOrEmpty(keywords))
             {
-                where += "  and subject like '%'|| :keyword  ||'%' ";
+                sql += "  and subject like '%'|| :keyword  ||'%' ";
                 AddParameter("keyword", keywords);
             }
-            where += " order by createtime desc";
+            sql += " order by createtime desc";
 
-            return ListByCondition(where);
+            return ListBySql(sql);
 
         }
 

@@ -9,7 +9,7 @@
 * Blog : http://www.cnblogs.com/fineblog/
 * Company ：深圳市乾海盛世移动支付有限公司
 * Copyright (C) Winner研发中心
-* CreateTime : 2019-04-26 15:38:41  
+* CreateTime : 2019-05-20 23:51:31  
 * 
 ***************************************************/
 using System;
@@ -20,7 +20,6 @@ using Winner.Framework.Core;
 using Winner.Framework.Core.DataAccess;
 using Winner.Framework.Core.DataAccess.Oracle;
 using Winner.Framework.Utils;
-
 
 namespace NSMPT.DataAccess
 {
@@ -85,36 +84,36 @@ namespace NSMPT.DataAccess
 		}
 		/// <summary>
 		/// 企业邮箱类型
-		/// [default:DBNull.Value]
+		/// [default:0]
 		/// </summary>
-		public int? MailType
+		public int MailType
 		{
-			get { return Helper.ToInt32(DataRow[_MAIL_TYPE]); }
-			set { setProperty(_MAIL_TYPE,Helper.FromInt32(value)); }
+			get { return Convert.ToInt32(DataRow[_MAIL_TYPE]); }
+			set { setProperty(_MAIL_TYPE,value); }
 		}
 		/// <summary>
 		/// 用户id
-		/// [default:DBNull.Value]
+		/// [default:0]
 		/// </summary>
-		public int? Userid
+		public int Userid
 		{
-			get { return Helper.ToInt32(DataRow[_USERID]); }
-			set { setProperty(_USERID,Helper.FromInt32(value)); }
+			get { return Convert.ToInt32(DataRow[_USERID]); }
+			set { setProperty(_USERID,value); }
 		}
 		/// <summary>
-		/// 状态
-		/// [default:DBNull.Value]
+		/// 状态:0启用，1删除
+		/// [default:0]
 		/// </summary>
-		public int? Status
+		public int Status
 		{
-			get { return Helper.ToInt32(DataRow[_STATUS]); }
-			set { setProperty(_STATUS,Helper.FromInt32(value)); }
+			get { return Convert.ToInt32(DataRow[_STATUS]); }
+			set { setProperty(_STATUS,value); }
 		}
 		/// <summary>
 		/// 时间
-		/// [default:DBNull.Value]
+		/// [default:new DateTime()]
 		/// </summary>
-		public DateTime? Createtime
+		public DateTime Createtime
 		{
 			get { return Convert.ToDateTime(DataRow[_CREATETIME].ToString()); }
 		}
@@ -129,12 +128,12 @@ namespace NSMPT.DataAccess
 		}
 		/// <summary>
 		/// 0,为非默认，1为默认,
-		/// [default:DBNull.Value]
+		/// [default:0]
 		/// </summary>
-		public int? Isdefault
+		public int Isdefault
 		{
-			get { return Helper.ToInt32(DataRow[_ISDEFAULT]); }
-			set { setProperty(_ISDEFAULT,Helper.FromInt32(value)); }
+			get { return Convert.ToInt32(DataRow[_ISDEFAULT]); }
+			set { setProperty(_ISDEFAULT,value); }
 		}
 
         #endregion 公开属性
@@ -152,12 +151,12 @@ namespace NSMPT.DataAccess
 			dt.Columns.Add(_AID, typeof(int)).DefaultValue = 0;
 			dt.Columns.Add(_ACCOUNT, typeof(string)).DefaultValue = string.Empty;
 			dt.Columns.Add(_PASSWORD, typeof(string)).DefaultValue = string.Empty;
-			dt.Columns.Add(_MAIL_TYPE, typeof(int)).DefaultValue = DBNull.Value;
-			dt.Columns.Add(_USERID, typeof(int)).DefaultValue = DBNull.Value;
-			dt.Columns.Add(_STATUS, typeof(int)).DefaultValue = DBNull.Value;
-			dt.Columns.Add(_CREATETIME, typeof(DateTime)).DefaultValue = DBNull.Value;
+			dt.Columns.Add(_MAIL_TYPE, typeof(int)).DefaultValue = 0;
+			dt.Columns.Add(_USERID, typeof(int)).DefaultValue = 0;
+			dt.Columns.Add(_STATUS, typeof(int)).DefaultValue = 0;
+			dt.Columns.Add(_CREATETIME, typeof(DateTime)).DefaultValue = new DateTime();
 			dt.Columns.Add(_REMARKS, typeof(string)).DefaultValue = string.Empty;
-			dt.Columns.Add(_ISDEFAULT, typeof(int)).DefaultValue = DBNull.Value;
+			dt.Columns.Add(_ISDEFAULT, typeof(int)).DefaultValue = 0;
 
             return dt.NewRow();
         }
@@ -275,12 +274,6 @@ WHERE " + condition;
             AddParameter(_AID, aid);
             return SelectByCondition(condition);
         }
-		public Tnsmtp_Mailtype Get_Tnsmtp_Mailtype_ByMailType()
-		{
-			Tnsmtp_Mailtype da=new Tnsmtp_Mailtype();
-			da.SelectByPK(MailType.Value);
-			return da;
-		}
 
 
 

@@ -54,7 +54,7 @@ namespace NSMPT.Facade
 
             #region 获取企业邮箱信息
             DataAccess.Tnsmtp_Mailtype tnsmtp_Mailtype = new DataAccess.Tnsmtp_Mailtype();
-            if (!tnsmtp_Mailtype.SelectByPK(tnsmtp_Account.MailType.Value))
+            if (!tnsmtp_Mailtype.SelectByPK(tnsmtp_Account.MailType))
             {
                 Rollback();
                 Alert("获取企业邮箱失败");
@@ -134,7 +134,7 @@ namespace NSMPT.Facade
 
             #region 获取企业邮箱信息
             DataAccess.Tnsmtp_Mailtype tnsmtp_Mailtype = new DataAccess.Tnsmtp_Mailtype();
-            if (!tnsmtp_Mailtype.SelectByPK(tnsmtp_Account.MailType.Value))
+            if (!tnsmtp_Mailtype.SelectByPK(tnsmtp_Account.MailType))
             {
                 Rollback();
                 Alert("获取企业邮箱失败");
@@ -216,7 +216,7 @@ namespace NSMPT.Facade
 
             #region 获取企业邮箱信息
             DataAccess.Tnsmtp_Mailtype tnsmtp_Mailtype = new DataAccess.Tnsmtp_Mailtype();
-            if (!tnsmtp_Mailtype.SelectByPK(tnsmtp_Account.MailType.Value))
+            if (!tnsmtp_Mailtype.SelectByPK(tnsmtp_Account.MailType))
             {
                 Rollback();
                 Alert("获取企业邮箱失败");
@@ -671,7 +671,7 @@ namespace NSMPT.Facade
                 smtp.From = tomail;
                 smtp.FromName = tomail;
                 smtp.RecipientName = inmail;
-                smtp.MailDomainPort = tnsmtp_Mailtype.SmtpSsl.Value;
+                smtp.MailDomainPort = tnsmtp_Mailtype.SmtpSsl;
                 smtp.Subject = subject;
                 smtp.Body = content;
                 smtp.AttachmentFile = filelist;
@@ -728,7 +728,7 @@ namespace NSMPT.Facade
 
             #region 获取企业邮箱信息
             DataAccess.Tnsmtp_Mailtype tnsmtp_Mailtype = new DataAccess.Tnsmtp_Mailtype();
-            if (!tnsmtp_Mailtype.SelectByPK(tnsmtp_Account.MailType.Value))
+            if (!tnsmtp_Mailtype.SelectByPK(tnsmtp_Account.MailType))
             {
                 Rollback();
                 Alert("获取企业邮箱失败");
@@ -819,7 +819,7 @@ namespace NSMPT.Facade
                 smtp.From = model.Tomail;
                 smtp.FromName = model.Tomail;
                 smtp.RecipientName = model.Inmail;
-                smtp.MailDomainPort = tnsmtp_Mailtype.SmtpSsl.Value;
+                smtp.MailDomainPort = tnsmtp_Mailtype.SmtpSsl;
                 smtp.Subject = model.Subject;
                 smtp.Body = model.Content;
                 smtp.AttachmentFile = filelist;

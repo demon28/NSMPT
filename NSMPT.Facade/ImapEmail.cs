@@ -13,9 +13,11 @@ using Winner.Framework.Utils;
 
 namespace NSMPT.Facade
 {
-    public class ImapEmail:FacadeBase
+    public class ImapEmail : FacadeBase
     {
-        public bool GetMail(int  AccountId,int userid) {
+        [Obsolete]
+        public bool GetMail(int AccountId, int userid)
+        {
 
 
             Tnsmtp_Account tnsmtp_Account = new Tnsmtp_Account();
@@ -28,7 +30,7 @@ namespace NSMPT.Facade
             }
 
             Tnsmtp_Mailtype tnsmtp_Mailtype = new Tnsmtp_Mailtype();
-            if (!tnsmtp_Mailtype.SelectByPK(tnsmtp_Account.MailType.Value))
+            if (!tnsmtp_Mailtype.SelectByPK(tnsmtp_Account.MailType))
             {
                 Alert("获取邮件配置失败！");
                 return false;
@@ -36,7 +38,7 @@ namespace NSMPT.Facade
 
 
             ImapClient client = new ImapClient();
-            client.Connect(tnsmtp_Mailtype.PopUrl, int.Parse(tnsmtp_Mailtype.PopPort), true);
+            client.Connect(tnsmtp_Mailtype.PopUrl,tnsmtp_Mailtype.PopPort, true);
 
             client.Authenticate(tnsmtp_Account.Account, tnsmtp_Account.Password);
 
@@ -45,18 +47,18 @@ namespace NSMPT.Facade
 
             //只获取收件箱文件夹
             var folder = client.GetFolder("INBOX");
-           
+
             folder.Open(MailKit.FolderAccess.ReadOnly);
 
-            var uids = folder.Search(SearchQuery.All) ;
+            var uids = folder.Search(SearchQuery.All);
 
             var header = folder.Fetch(uids, MessageSummaryItems.UniqueId | MessageSummaryItems.Full);
 
             Tnsmtp_Recmail tnsmtp_Recmail = new Tnsmtp_Recmail();
-        
+
             if (tnsmtp_Recmail.SelectMaxRecEmail(AccountId, userid))
             {
-                uids = folder.Search(SearchQuery.DeliveredBefore(tnsmtp_Recmail.Rectimer.Value));
+                uids = folder.Search(SearchQuery.DeliveredBefore(tnsmtp_Recmail.Rectimer));
             }
 
             BeginTransaction();
@@ -64,7 +66,7 @@ namespace NSMPT.Facade
             foreach (var uid in uids)
             {
                 var message = folder.GetMessage(uid);
-                if (!InserRecTable(message, tnsmtp_Account, userid,(int)uid.Id))
+                if (!InserRecTable(message, tnsmtp_Account, userid, uid.Id.ToString()))
                 {
                     Log.Info("获取邮件后添加数据库失败！");
                     Alert("获取邮件后添加数据库失败！");
@@ -81,11 +83,10 @@ namespace NSMPT.Facade
             return true;
 
         }
+        [Obsolete]
 
-
-
-
-        public bool InserRecTable(MimeMessage message, Tnsmtp_Account account, int userid,int euid) {
+        public bool InserRecTable(MimeMessage message, Tnsmtp_Account account, int userid, string euid)
+        {
 
             DataAccess.Tnsmtp_Recmail tnsmtp_Recmail = new Tnsmtp_Recmail();
             tnsmtp_Recmail.ReferenceTransactionFrom(this.Transaction);
@@ -103,31 +104,30 @@ namespace NSMPT.Facade
 
             if (!tnsmtp_Recmail.Insert())
             {
-                Log.Info("获取邮件后添加数据库失败！"+ message.MessageId);
+                Log.Info("获取邮件后添加数据库失败！" + message.MessageId);
                 Alert("获取邮件后添加数据库失败！" + message.MessageId);
-            
+
                 return false;
             }
             var attachments = message.Attachments.ToList();
             if (attachments.Any())
             {
-                    foreach (var item in attachments)
+                foreach (var item in attachments)
+                {
+                    if (!InserAttchmentFileTable(tnsmtp_Recmail.Recid, account.Aid, item))
                     {
-                        if (!InserAttchmentFileTable(tnsmtp_Recmail.Recid, account.Aid,item))
-                        {
                         Log.Info("添加附件失败！" + message.MessageId);
                         Alert("添加附件失败！" + message.MessageId);
                         return false;
-                        }
                     }
+                }
 
             }
             return true;
         }
 
-
-
-        public bool InserAttchmentFileTable(int Recid,int accountid, MimeKit.MimeEntity entity)
+        [Obsolete]
+        public bool InserAttchmentFileTable(int Recid, int accountid, MimeKit.MimeEntity entity)
         {
 
 
@@ -141,17 +141,65 @@ namespace NSMPT.Facade
             tnsmtp_Receivefile.Fileurl = entity.ContentDisposition.FileName;
             tnsmtp_Receivefile.Filename = entity.ContentDisposition.FileName;
             tnsmtp_Receivefile.Downloadurl = entity.ContentDisposition.FileName;
-            tnsmtp_Receivefile.Filesize =0;
+            tnsmtp_Receivefile.Filesize = 0;
 
             if (!tnsmtp_Receivefile.Insert())
             {
-                Alert("添加附件信息时报"+ entity.ContentDisposition);
-               
+                Alert("添加附件信息时报" + entity.ContentDisposition);
+
                 return false;
 
             }
 
             return true;
+        }
+
+
+        public bool KitEmailHelper(string PopUrl, int PopPort, string Account, string Pwd, DateTime? SerchTime, out List<MimeMessage> messages)
+        {
+            messages = new List<MimeMessage>();
+
+            try
+            {
+                ImapClient client = new ImapClient();
+                client.Connect(PopUrl, PopPort, true);
+
+                client.Authenticate(Account, Pwd);
+
+                List<IMailFolder> mailFolderList = client.GetFolders(client.PersonalNamespaces[0]).ToList();
+
+                var folder = client.GetFolder("INBOX");
+
+                folder.Open(MailKit.FolderAccess.ReadOnly);
+
+                //如果没有最新数据，就获取全部的邮件，有则获取该时间往后的
+
+                SearchQuery searchWhere = SearchQuery.All;
+                if (SerchTime.HasValue)
+                {
+                    searchWhere = SearchQuery.DeliveredBefore(SerchTime.Value);
+                }
+
+                var uids = folder.Search(searchWhere);
+
+                foreach (var uid in uids)
+                {
+                    MimeMessage message = folder.GetMessage(uid);
+                    messages.Add(message);
+                }
+
+                client.Disconnect(true);
+                return true;
+
+
+            }
+            catch (Exception ex)
+            {
+
+                Log.Info(ex);
+                return false;
+            
+            }
         }
 
     }

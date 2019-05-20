@@ -6,6 +6,7 @@
 
 @section Pageheader{
 
+    <script src="~/Reference/scripts/CommonScript.js"></script>
 
     <h1>
         <small>  Template</small>
@@ -70,7 +71,7 @@
 
                     </td>
                     <td>{{ item.Senddate}}</td>
-                    <td>{{ diaplayTime(item.Createtime)}}</td>
+                    <td>{{diaplayTime(item.Createtime)}}</td>
                     <td>
                         <button type="button" class="btn bg-purple  btn-xs" v-on:click="viewitem(item)" data-toggle="modal" data-target="#modal-default">浏览</button>
 
@@ -136,7 +137,6 @@
     <script src="~/Reference/scripts/vue-pager.js"></script>
     <script src="~/Reference/adminLTE/bower_components/ckeditor/ckeditor.js"></script>
 
-    <script src="~/Reference/scripts/CommonScript.js"></script>
 
     <script type="text/javascript">
 
@@ -184,6 +184,7 @@
                     };
                     return data;
                 },
+        
                 methods: {
 
                     deleteitem: function (item) {
@@ -220,7 +221,7 @@
             });
 
         }
- 
+
 
     </script>
 

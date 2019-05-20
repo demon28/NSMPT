@@ -9,7 +9,7 @@
 * Blog : http://www.cnblogs.com/fineblog/
 * Company ：深圳市乾海盛世移动支付有限公司
 * Copyright (C) Winner研发中心
-* CreateTime : 2019-05-17 00:48:30  
+* CreateTime : 2019-05-20 23:56:46  
 * 
 ***************************************************/
 using System;
@@ -180,21 +180,21 @@ namespace NSMPT.DataAccess
 		}
 		/// <summary>
 		/// 收件时间
-		/// [default:DBNull.Value]
+		/// [default:new DateTime()]
 		/// </summary>
-		public DateTime? Rectimer
+		public DateTime Rectimer
 		{
-			get { return Helper.ToDateTime(DataRow[_RECTIMER]); }
-			set { setProperty(_RECTIMER,Helper.FromDateTime(value)); }
+			get { return Convert.ToDateTime(DataRow[_RECTIMER]); }
+			set { setProperty(_RECTIMER,value); }
 		}
 		/// <summary>
 		/// 第三方id
-		/// [default:DBNull.Value]
+		/// [default:string.Empty]
 		/// </summary>
-		public int? Euid
+		public string Euid
 		{
-			get { return Helper.ToInt32(DataRow[_EUID]); }
-			set { setProperty(_EUID,Helper.FromInt32(value)); }
+			get { return DataRow[_EUID].ToString(); }
+			set { setProperty(_EUID,value); }
 		}
 		/// <summary>
 		/// 是否有附件
@@ -240,8 +240,8 @@ namespace NSMPT.DataAccess
 			dt.Columns.Add(_CREATETIME, typeof(DateTime)).DefaultValue = new DateTime();
 			dt.Columns.Add(_STATUS, typeof(int)).DefaultValue = 0;
 			dt.Columns.Add(_REMARKS, typeof(string)).DefaultValue = string.Empty;
-			dt.Columns.Add(_RECTIMER, typeof(DateTime)).DefaultValue = DBNull.Value;
-			dt.Columns.Add(_EUID, typeof(int)).DefaultValue = DBNull.Value;
+			dt.Columns.Add(_RECTIMER, typeof(DateTime)).DefaultValue = new DateTime();
+			dt.Columns.Add(_EUID, typeof(string)).DefaultValue = string.Empty;
 			dt.Columns.Add(_HASFILE, typeof(int)).DefaultValue = 0;
 			dt.Columns.Add(_CONTENT, typeof(object)).DefaultValue = default(object);
 

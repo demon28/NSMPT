@@ -59,7 +59,7 @@ namespace NSMPT.Entites
 		/// defaultValue: DBNull.Value;   Length: 10Byte
 		/// </para>
 		/// </summary>
-		public int? Mail_Type{ get; set; }
+		public int Mail_Type{ get; set; }
 		/// <summary>
 		/// 用户id(可空)
 		/// <para>

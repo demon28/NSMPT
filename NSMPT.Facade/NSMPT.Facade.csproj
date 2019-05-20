@@ -70,6 +70,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ImapEmail.cs" />
+    <Compile Include="ReceiveFacade.cs" />
     <Compile Include="Sender\GroupSender.cs" />
     <Compile Include="ImportContactFacade.cs" />
     <Compile Include="ISmtpMail.cs" />

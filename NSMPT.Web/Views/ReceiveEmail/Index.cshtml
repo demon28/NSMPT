@@ -34,7 +34,7 @@
 
                         <b>{{item.Account}}</b>&nbsp;&nbsp;
 
-                        <button type="button" class="btn bg-primary  btn-xs pull-right " v-on:click="AccountUse(item)">Use</button>
+                        <button type="button" class="btn bg-primary  btn-xs pull-right " v-on:click="AccountUse(item)">View</button>
                     </li>
 
                 </ul>
@@ -46,16 +46,20 @@
     </div>
     <!-- /.col -->
     <div class="col-md-9">
-        <div class="box box-primary">
+        <div class="box box-primary" id="tab_reclist">
             <div class="box-header with-border">
                 <h3 class="box-title">Inbox</h3>
                 <label id="lb_aid" style="display:block"></label>
 
                 <div class="box-tools pull-right">
-                    <div class="has-feedback">
-                        <input type="text" class="form-control input-sm" placeholder="Search Mail" id="txt_Search">
-                        <span class="glyphicon glyphicon-search form-control-feedback"></span>
+
+                    <div class="input-group input-group-sm col-md-2 pull-right">
+                        <input type="text" class="form-control " id="txt_Search">
+                        <span class="input-group-btn ">
+                            <button type="button" class="btn btn-info btn-flat" id="btn_search">search</button>
+                        </span>
                     </div>
+
                 </div>
                 <!-- /.box-tools -->
             </div>
@@ -67,27 +71,27 @@
                         <i class="fa fa-square-o"></i>
                     </button>
                     <div class="btn-group">
-                        <button type="button" class="btn btn-default btn-sm"><i class="fa fa-trash-o"></i></button>
-                        <button type="button" class="btn btn-default btn-sm"><i class="fa fa-reply"></i></button>
-                        <button type="button" class="btn btn-default btn-sm"><i class="fa fa-share"></i></button>
+                        <button type="button" class="btn btn-default btn-sm btn_alldeltemp"><i class="fa fa-trash-o"></i></button>
+                        <button type="button" class="btn btn-default btn-sm pagefront"><i class="fa fa-reply"></i></button>
+                        <button type="button" class="btn btn-default btn-sm pagenext"><i class="fa fa-share"></i></button>
                     </div>
                     <!-- /.btn-group -->
-                    <button type="button" class="btn btn-default btn-sm"><i class="fa fa-refresh"></i></button>
+                    <button type="button" class="btn btn-default btn-sm" :on-click="GetList()"><i class="fa fa-refresh"></i></button>
                     <div class="pull-right">
-                        1-50/200
+                        {{pageIndex}}-{{totalPages}}/{{totalCount}}
                         <div class="btn-group">
-                            <button type="button" class="btn btn-default btn-sm"><i class="fa fa-chevron-left"></i></button>
-                            <button type="button" class="btn btn-default btn-sm"><i class="fa fa-chevron-right"></i></button>
+                            <button type="button" class="btn btn-default btn-sm pagefront"><i class="fa fa-chevron-left"></i></button>
+                            <button type="button" class="btn btn-default btn-sm pagenext" ><i class="fa fa-chevron-right"></i></button>
                         </div>
                         <!-- /.btn-group -->
                     </div>
                     <!-- /.pull-right -->
                 </div>
                 <div class="table-responsive mailbox-messages">
-                    <table class="table table-hover table-striped" id="tab_reclist">
+                    <table class="table table-hover table-striped" >
                         <tbody>
                             <tr v-for="item in Items">
-                                <td>  <input type="checkbox" :value=item.Recid>  </td>
+                                <td>  <input  id="box_check"  type="checkbox" :value=item.Recid>  </td>
 
 
                                 <td class="mailbox-star">
@@ -124,17 +128,17 @@
                         <i class="fa fa-square-o"></i>
                     </button>
                     <div class="btn-group">
-                        <button type="button" class="btn btn-default btn-sm"><i class="fa fa-trash-o"></i></button>
-                        <button type="button" class="btn btn-default btn-sm"><i class="fa fa-reply"></i></button>
-                        <button type="button" class="btn btn-default btn-sm"><i class="fa fa-share"></i></button>
+                        <button type="button" class="btn btn-default btn-sm btn_alldeltemp"><i class="fa fa-trash-o"></i></button>
+                        <button type="button" class="btn btn-default btn-sm pagefront"><i class="fa fa-reply"></i></button>
+                        <button type="button" class="btn btn-default btn-sm pagenext"><i class="fa fa-share"></i></button>
                     </div>
                     <!-- /.btn-group -->
-                    <button type="button" class="btn btn-default btn-sm"><i class="fa fa-refresh"></i></button>
+                    <button type="button" class="btn btn-default btn-sm " :on-click="GetList()"><i class="fa fa-refresh"></i></button>
                     <div class="pull-right">
-                        1-50/200
+                        {{pageIndex}}-{{totalPages}}/{{totalCount}}
                         <div class="btn-group">
-                            <button type="button" class="btn btn-default btn-sm"><i class="fa fa-chevron-left"></i></button>
-                            <button type="button" class="btn btn-default btn-sm"><i class="fa fa-chevron-right"></i></button>
+                            <button type="button" class="btn btn-default btn-sm pagefront"><i class="fa fa-chevron-left"></i></button>
+                            <button type="button" class="btn btn-default btn-sm pagenext"><i class="fa fa-chevron-right"></i></button>
                         </div>
                         <!-- /.btn-group -->
                     </div>
@@ -162,6 +166,10 @@
 
         var account_vm;
         var recmail_vm;
+        var pageIndex = 1;
+        var pageSize = 20;
+        var totalCount;
+        var totalPages;
         $(document).ready(function () {
 
             BindAccountView();
@@ -170,8 +178,69 @@
         });
         function SetEvent() {
 
+           $(".btn_alldeltemp").click(function () {
 
+                var list = new Array();
+                var checkedbox = $("input[id^='box_']:checked");
+                if (checkedbox.length == 0) {
+                    alert_danger("请选择要删除的联系人");
+                } else {
 
+                    checkedbox.each(function () {
+                        list.push(this.value);
+                    });
+             
+                    bootbox.confirm("您确定删除该联系人吗？", function (res) {
+
+                        if (!res) {
+                            return;
+                        }
+
+                        $.ajax({
+                            url: "/ReceiveEmail/DeleteAllRecMail",
+                            type: "POST",
+                            data: {
+                                RecidList: list,
+
+                            },
+                            success: function (result) {
+                                if (result.Success) {
+
+                                    alert_success("删除成功！");
+                                    recmail_vm.Init();
+                                 
+
+                                } else {
+                                    alert_danger(result.Message);
+                                }
+                            }
+                        })
+                    });
+                }
+            });
+            
+
+            $("#btn_search").click(function () {
+                recmail_vm.Init();
+            });
+
+            $(".pagefront").click(function () {
+            
+                if (pageIndex == 1) {
+                    return
+                }
+                pageIndex = pageIndex - 1;
+                  recmail_vm.Init();
+            });
+
+            $(".pagenext").click(function () {
+           
+                if (pageIndex == totalPages) {
+                    return
+                }
+                pageIndex = pageIndex + 1;
+                recmail_vm.Init();
+            });
         }
 
 
@@ -194,13 +263,15 @@
                             success: function (result) {
 
                                 if (result.Success) {
-                                    $("#lb_aid").val(result.Content.Data[0].Aid);
+                                 
                                     self.AccountItems = result.Content.Data;
                                 }
                             }
                         })
                     },
                     AccountUse: function (item) {
+                        $("#lb_aid").val(item.Aid);
+                        recmail_vm.Init();
                     }
 
                 }
@@ -214,13 +285,17 @@
             recmail_vm = new Vue({
                 el: "#tab_reclist",
                 data: {
-                    Items: {}
+                    Items: {},
+                    pageIndex: pageIndex,
+                    pageSize: pageSize,
+                    totalCount: totalCount,
+                    totalPages:totalPages
                 },
                 created: function () {
-                    this.InitAccount();
+                    this.Init();
                 },
                 methods: {
-                    InitAccount: function () {
+                    Init: function () {
                         var self = this;
                         var aid = $("#lb_aid").val();
                         var keywords = $("#txt_Search").val();
@@ -229,20 +304,26 @@
                             url: "/ReceiveEmail/List",
                             type: "POST",
                             data: {
-
                                 accountid: aid,
-                                keywords: keywords
+                                keywords: keywords,
+                                pageIndex: pageIndex,
+                                pageSize:pageSize
                             },
                             success: function (result) {
-
                                 if (result.Success) {
+
+                                    self.pageIndex =pageIndex;
+                                    self.totalPages = result.Content.PageCount;
+                                    self.totalCount= result.Content.Count;
+
+                                    totalPages=result.Content.PageCount;
+                                    totalCount = result.Content.Count;
 
                                     self.Items = result.Content.Data;
                                 }
                             }
                         })
                     },
-
                     ChangeRead: function (item) {
                   
                          $.ajax({
@@ -255,28 +336,28 @@
                             success: function (result) {
 
                                 if (result.Success) {
-                                    recmail_vm.InitAccount();
+                                    item.FlagRead=  item.FlagRead == 1 ? 0 : 1;
 
                                 } else {
 
-                                    alert_danger(result.Message);
+                                     alert_danger(result.Message);
                                 }
                             }
                         })
                     },
                     ChangeStar: function (item) {
+                           
                            $.ajax({
                             url: "/ReceiveEmail/IsStar",
                             type: "POST",
                             data: {
                                 status:item.FlagStatus,
-                                rid: Recid,
-                             
+                                rid:item.Recid,
                             },
                             success: function (result) {
 
                                 if (result.Success) {
-                                     recmail_vm.InitAccount();
+                                      item.FlagStatus=  item.FlagStatus == 1 ? 0 : 1;
 
                                 } else {
 
@@ -285,8 +366,39 @@
                             }
                         })
 
-                    }
+                    },
+                    GetList: function () {
 
+                          var dialog = bootbox.dialog({
+                                    title: '正在收件中,请稍等...',
+                                    message: '<p><i class="fa fa-spin fa-spinner"></i> Loading...</p>'
+                                });
+
+
+                        var aid = $("#lb_aid").val();
+                           $.ajax({
+                            url: "/ReceiveEmail/GetList",
+                            type: "POST",
+                            data: {
+
+                                AccountId: aid
+                            },
+                            success: function (result) {
+                                dialog.modal('hide');
+
+                                if (result.Success) {
+                                      alert_success("更新成功");
+
+                                } else {
+
+                                    alert_danger(result.Message);
+                                }
+                                
+                            }
+                        })
+                        
+
+                    }
                 },
                 updated: function () {
                     $('.mailbox-messages input[type="checkbox"]').iCheck({

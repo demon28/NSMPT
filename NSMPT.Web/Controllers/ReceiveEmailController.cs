@@ -1,4 +1,5 @@
 ﻿using NSMPT.Entites;
+using NSMPT.Facade;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -37,7 +38,7 @@ namespace NSMPT.Web.Controllers
             DataAccess.Tnsmtp_RecmailCollection recmailCollection = new DataAccess.Tnsmtp_RecmailCollection();
             recmailCollection.ChangePage = this.ChangePage();
 
-            if (!recmailCollection.ListByAccount(accountid.Value, SysUser.UserId, keywords))
+            if (!recmailCollection.ListByDefault(accountid.Value, SysUser.UserId, keywords))
             {
                 return FailResult("查询失败！");
             }
@@ -87,6 +88,45 @@ namespace NSMPT.Web.Controllers
             return SuccessResult("修改成功！");
         }
 
+
+        [HttpPost]
+        public ActionResult DeleteAllRecMail(int[] RecidList) {
+
+            if (RecidList.Length <= 0)
+            {
+                return FailResult("请选择联系人");
+            }
+
+            DataAccess.Tnsmtp_Recmail tnsmtp = new DataAccess.Tnsmtp_Recmail();
+            if (!tnsmtp.DeleteAllByUserId(SysUser.UserId, RecidList))
+            {
+                return FailResult();
+            }
+            return SuccessResult();
+
+
+        }
+
+
+        [HttpPost]
+        public ActionResult GetList(int? accountId) {
+
+            if (!accountId.HasValue)
+            {
+                DataAccess.Tnsmtp_Account tnsmtp_Account = new DataAccess.Tnsmtp_Account();
+                tnsmtp_Account.SelecByUserDefault(SysUser.UserId);
+                accountId = tnsmtp_Account.Aid;
+            }
+
+            ReceiveFacade receive = new ReceiveFacade();
+
+            if (!receive.GetAccountEmail(accountId.Value))
+            {
+                return FailResult("获取失败！");
+            }
+            return SuccessResult();
+
+        }
 
     }
 }

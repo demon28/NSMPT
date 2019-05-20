@@ -9,7 +9,7 @@
 * Blog : http://www.cnblogs.com/fineblog/
 * Company ：深圳市乾海盛世移动支付有限公司
 * Copyright (C) Winner研发中心
-* CreateTime : 2019-05-15 19:18:19  
+* CreateTime : 2019-05-20 23:37:46  
 * 
 ***************************************************/
 using System;
@@ -85,36 +85,36 @@ namespace NSMPT.DataAccess
 		}
 		/// <summary>
 		/// 邮箱端口:25
-		/// [default:DBNull.Value]
+		/// [default:0]
 		/// </summary>
-		public int? SmtpPort
+		public int SmtpPort
 		{
-			get { return Helper.ToInt32(DataRow[_SMTP_PORT]); }
-			set { setProperty(_SMTP_PORT,Helper.FromInt32(value)); }
+			get { return Convert.ToInt32(DataRow[_SMTP_PORT]); }
+			set { setProperty(_SMTP_PORT,value); }
 		}
 		/// <summary>
 		/// SSL邮箱端口：465
-		/// [default:DBNull.Value]
+		/// [default:0]
 		/// </summary>
-		public int? SmtpSsl
+		public int SmtpSsl
 		{
-			get { return Helper.ToInt32(DataRow[_SMTP_SSL]); }
-			set { setProperty(_SMTP_SSL,Helper.FromInt32(value)); }
+			get { return Convert.ToInt32(DataRow[_SMTP_SSL]); }
+			set { setProperty(_SMTP_SSL,value); }
 		}
 		/// <summary>
 		/// 状态：0启动，1不启用
-		/// [default:DBNull.Value]
+		/// [default:0]
 		/// </summary>
-		public int? Status
+		public int Status
 		{
-			get { return Helper.ToInt32(DataRow[_STATUS]); }
-			set { setProperty(_STATUS,Helper.FromInt32(value)); }
+			get { return Convert.ToInt32(DataRow[_STATUS]); }
+			set { setProperty(_STATUS,value); }
 		}
 		/// <summary>
 		/// 创建时间
-		/// [default:DBNull.Value]
+		/// [default:new DateTime()]
 		/// </summary>
-		public DateTime? Createtime
+		public DateTime Createtime
 		{
 			get { return Convert.ToDateTime(DataRow[_CREATETIME].ToString()); }
 		}
@@ -138,11 +138,11 @@ namespace NSMPT.DataAccess
 		}
 		/// <summary>
 		/// POP3收件端口
-		/// [default:string.Empty]
+		/// [default:0]
 		/// </summary>
-		public string PopPort
+		public int PopPort
 		{
-			get { return DataRow[_POP_PORT].ToString(); }
+			get { return Convert.ToInt32(DataRow[_POP_PORT]); }
 			set { setProperty(_POP_PORT,value); }
 		}
 
@@ -161,13 +161,13 @@ namespace NSMPT.DataAccess
 			dt.Columns.Add(_MTID, typeof(int)).DefaultValue = 0;
 			dt.Columns.Add(_MAILNAME, typeof(string)).DefaultValue = string.Empty;
 			dt.Columns.Add(_SMTP_URL, typeof(string)).DefaultValue = string.Empty;
-			dt.Columns.Add(_SMTP_PORT, typeof(int)).DefaultValue = DBNull.Value;
-			dt.Columns.Add(_SMTP_SSL, typeof(int)).DefaultValue = DBNull.Value;
-			dt.Columns.Add(_STATUS, typeof(int)).DefaultValue = DBNull.Value;
-			dt.Columns.Add(_CREATETIME, typeof(DateTime)).DefaultValue = DBNull.Value;
+			dt.Columns.Add(_SMTP_PORT, typeof(int)).DefaultValue = 0;
+			dt.Columns.Add(_SMTP_SSL, typeof(int)).DefaultValue = 0;
+			dt.Columns.Add(_STATUS, typeof(int)).DefaultValue = 0;
+			dt.Columns.Add(_CREATETIME, typeof(DateTime)).DefaultValue = new DateTime();
 			dt.Columns.Add(_REMARKS, typeof(string)).DefaultValue = string.Empty;
 			dt.Columns.Add(_POP_URL, typeof(string)).DefaultValue = string.Empty;
-			dt.Columns.Add(_POP_PORT, typeof(string)).DefaultValue = string.Empty;
+			dt.Columns.Add(_POP_PORT, typeof(int)).DefaultValue = 0;
 
             return dt.NewRow();
         }
