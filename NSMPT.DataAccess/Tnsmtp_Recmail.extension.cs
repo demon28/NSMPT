@@ -84,7 +84,7 @@ select Max(t.rectimer)  from tnsmtp_recmail t where t.account_id=:accountid and 
                 sql += "  and subject like '%'|| :keyword  ||'%' ";
                 AddParameter("keyword", keywords);
             }
-            sql += " order by createtime desc";
+            sql += " order by rectimer desc";
 
             return ListBySql(sql);
 

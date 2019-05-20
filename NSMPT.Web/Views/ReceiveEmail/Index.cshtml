@@ -76,27 +76,27 @@
                         <button type="button" class="btn btn-default btn-sm pagenext"><i class="fa fa-share"></i></button>
                     </div>
                     <!-- /.btn-group -->
-                    <button type="button" class="btn btn-default btn-sm" :on-click="GetList()"><i class="fa fa-refresh"></i></button>
+                    <button type="button" class="btn btn-default btn-sm recrefresh"><i class="fa fa-refresh"></i></button>
                     <div class="pull-right">
                         {{pageIndex}}-{{totalPages}}/{{totalCount}}
                         <div class="btn-group">
                             <button type="button" class="btn btn-default btn-sm pagefront"><i class="fa fa-chevron-left"></i></button>
-                            <button type="button" class="btn btn-default btn-sm pagenext" ><i class="fa fa-chevron-right"></i></button>
+                            <button type="button" class="btn btn-default btn-sm pagenext"><i class="fa fa-chevron-right"></i></button>
                         </div>
                         <!-- /.btn-group -->
                     </div>
                     <!-- /.pull-right -->
                 </div>
                 <div class="table-responsive mailbox-messages">
-                    <table class="table table-hover table-striped" >
+                    <table class="table table-hover table-striped">
                         <tbody>
                             <tr v-for="item in Items">
-                                <td>  <input  id="box_check"  type="checkbox" :value=item.Recid>  </td>
+                                <td>  <input id="box_check" type="checkbox" :value=item.Recid>  </td>
 
 
                                 <td class="mailbox-star">
-                                    <a  v-if="item.FlagRead==0" v-on:click="ChangeRead(item)"><i class="fa  fa-envelope text-bule"></i></a>
-                                    <a  v-if="item.FlagRead==1" v-on:click="ChangeRead(item)"><i class="fa  fa-eye text-bule"></i></a>
+                                    <a v-if="item.FlagRead==0" v-on:click="ChangeRead(item)"><i class="fa  fa-envelope text-bule"></i></a>
+                                    <a v-if="item.FlagRead==1" v-on:click="ChangeRead(item)"><i class="fa  fa-eye text-bule"></i></a>
                                 </td>
                                 <td class="mailbox-name"><a :href="'/ReceiveEmail/Read?recid='+item.Recid">{{item.SenderName}}</a></td>
                                 <td class="mailbox-subject">
@@ -105,11 +105,11 @@
 
                                 <td class="mailbox-date"> <i class="fa fa-paperclip" v-if="item.Hasfile==1"></i></td>
                                 <td class="mailbox-date">
-                                    {{item.Createtime}}
+                                    {{item.Rectimer}}
                                 </td>
                                 <td class="mailbox-star">
-                                <a  v-if="item.FlagStatus==0" v-on:click="ChangeStar(item)"><i class="fa fa-star text-yellow"></i></a>
-                                <a  v-if="item.FlagStatus==1" v-on:click="ChangeStar(item)"><i class="fa fa-star-o text-yellow"></i></a>
+                                    <a v-if="item.FlagStatus==0" v-on:click="ChangeStar(item)"><i class="fa fa-star text-yellow"></i></a>
+                                    <a v-if="item.FlagStatus==1" v-on:click="ChangeStar(item)"><i class="fa fa-star-o text-yellow"></i></a>
                                 </td>
                             </tr>
 
@@ -133,7 +133,7 @@
                         <button type="button" class="btn btn-default btn-sm pagenext"><i class="fa fa-share"></i></button>
                     </div>
                     <!-- /.btn-group -->
-                    <button type="button" class="btn btn-default btn-sm " :on-click="GetList()"><i class="fa fa-refresh"></i></button>
+                    <button type="button" class="btn btn-default btn-sm recrefresh"><i class="fa fa-refresh"></i></button>
                     <div class="pull-right">
                         {{pageIndex}}-{{totalPages}}/{{totalCount}}
                         <div class="btn-group">
@@ -178,7 +178,7 @@
         });
         function SetEvent() {
 
-           $(".btn_alldeltemp").click(function () {
+            $(".btn_alldeltemp").click(function () {
 
                 var list = new Array();
                 var checkedbox = $("input[id^='box_']:checked");
@@ -189,7 +189,7 @@
                     checkedbox.each(function () {
                         list.push(this.value);
                     });
-             
+
                     bootbox.confirm("您确定删除该联系人吗？", function (res) {
 
                         if (!res) {
@@ -208,7 +208,7 @@
 
                                     alert_success("删除成功！");
                                     recmail_vm.Init();
-                                 
+
 
                                 } else {
                                     alert_danger(result.Message);
@@ -218,29 +218,63 @@
                     });
                 }
             });
-            
+
 
             $("#btn_search").click(function () {
                 recmail_vm.Init();
             });
 
             $(".pagefront").click(function () {
-            
+
                 if (pageIndex == 1) {
                     return
                 }
                 pageIndex = pageIndex - 1;
-                  recmail_vm.Init();
+                recmail_vm.Init();
             });
 
             $(".pagenext").click(function () {
-           
+
                 if (pageIndex == totalPages) {
                     return
                 }
                 pageIndex = pageIndex + 1;
                 recmail_vm.Init();
             });
+
+            $(".recrefresh").click(function () {
+                var dialog = bootbox.dialog({
+                    title: '正在收件中,请稍等...',
+                    message: '<p><i class="fa fa-spin fa-spinner"></i> Loading...</p>'
+                });
+         
+
+                var aid = $("#lb_aid").val();
+                $.ajax({
+                    url: "/ReceiveEmail/GetList",
+                    type: "POST",
+                    data: {
+
+                        AccountId: aid
+                    },
+                    success: function (result) {
+                        dialog.modal('hide');
+         
+
+                        if (result.Success) {
+                            alert_success("更新成功");
+                             recmail_vm.Init();
+
+                        } else {
+
+                            alert_danger(result.Message);
+                        }
+
+                    }
+                })
+
+            });
+
         }
 
 
@@ -263,7 +297,7 @@
                             success: function (result) {
 
                                 if (result.Success) {
-                                 
+
                                     self.AccountItems = result.Content.Data;
                                 }
                             }
@@ -289,7 +323,7 @@
                     pageIndex: pageIndex,
                     pageSize: pageSize,
                     totalCount: totalCount,
-                    totalPages:totalPages
+                    totalPages: totalPages
                 },
                 created: function () {
                     this.Init();
@@ -307,16 +341,16 @@
                                 accountid: aid,
                                 keywords: keywords,
                                 pageIndex: pageIndex,
-                                pageSize:pageSize
+                                pageSize: pageSize
                             },
                             success: function (result) {
                                 if (result.Success) {
 
-                                    self.pageIndex =pageIndex;
+                                    self.pageIndex = pageIndex;
                                     self.totalPages = result.Content.PageCount;
-                                    self.totalCount= result.Content.Count;
+                                    self.totalCount = result.Content.Count;
 
-                                    totalPages=result.Content.PageCount;
+                                    totalPages = result.Content.PageCount;
                                     totalCount = result.Content.Count;
 
                                     self.Items = result.Content.Data;
@@ -325,39 +359,39 @@
                         })
                     },
                     ChangeRead: function (item) {
-                  
-                         $.ajax({
+
+                        $.ajax({
                             url: "/ReceiveEmail/IsRead",
                             type: "POST",
                             data: {
-                                status:item.FlagRead,
+                                status: item.FlagRead,
                                 rid: item.Recid
                             },
                             success: function (result) {
 
                                 if (result.Success) {
-                                    item.FlagRead=  item.FlagRead == 1 ? 0 : 1;
+                                    item.FlagRead = item.FlagRead == 1 ? 0 : 1;
 
                                 } else {
 
-                                     alert_danger(result.Message);
+                                    alert_danger(result.Message);
                                 }
                             }
                         })
                     },
                     ChangeStar: function (item) {
-                           
-                           $.ajax({
+
+                        $.ajax({
                             url: "/ReceiveEmail/IsStar",
                             type: "POST",
                             data: {
-                                status:item.FlagStatus,
-                                rid:item.Recid,
+                                status: item.FlagStatus,
+                                rid: item.Recid,
                             },
                             success: function (result) {
 
                                 if (result.Success) {
-                                      item.FlagStatus=  item.FlagStatus == 1 ? 0 : 1;
+                                    item.FlagStatus = item.FlagStatus == 1 ? 0 : 1;
 
                                 } else {
 
@@ -367,38 +401,7 @@
                         })
 
                     },
-                    GetList: function () {
-
-                          var dialog = bootbox.dialog({
-                                    title: '正在收件中,请稍等...',
-                                    message: '<p><i class="fa fa-spin fa-spinner"></i> Loading...</p>'
-                                });
-
-
-                        var aid = $("#lb_aid").val();
-                           $.ajax({
-                            url: "/ReceiveEmail/GetList",
-                            type: "POST",
-                            data: {
-
-                                AccountId: aid
-                            },
-                            success: function (result) {
-                                dialog.modal('hide');
-
-                                if (result.Success) {
-                                      alert_success("更新成功");
-
-                                } else {
-
-                                    alert_danger(result.Message);
-                                }
-                                
-                            }
-                        })
-                        
-
-                    }
+                
                 },
                 updated: function () {
                     $('.mailbox-messages input[type="checkbox"]').iCheck({

@@ -536,11 +536,12 @@
                                             alert_success("导入成功！");
                                             contact_vm.reload();
                                             $("#file_excel").val("");
-                                            dialog.modal('hide');
+                                         
                                         }
                                         else {
                                             alert_danger(result.Message);
                                         }
+                                           dialog.modal('hide');
                                     }
                                 })
 

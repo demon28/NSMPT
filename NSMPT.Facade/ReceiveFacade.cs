@@ -58,16 +58,19 @@ namespace NSMPT.Facade
             }
 
 
+            BeginTransaction();
+
             foreach (MimeMessage item in messages)
             {
                 if (!InserRecTable(item, tnsmtp_Account))
                 {
                     Log.Info("添加收件箱失败");
                     Alert("获取邮件失败！");
+                    Rollback();
                     return false;
                 }
             }
-
+            Commit();
             return true;
 
         }
@@ -75,20 +78,20 @@ namespace NSMPT.Facade
 
         private bool InserRecTable(MimeMessage message, Tnsmtp_Account tnsmtp_Account)
         {
-            BeginTransaction();
+       
 
             DataAccess.Tnsmtp_Recmail tnsmtp_Recmail = new Tnsmtp_Recmail();
             tnsmtp_Recmail.ReferenceTransactionFrom(this.Transaction);
             tnsmtp_Recmail.Userid = tnsmtp_Account.Userid;
             tnsmtp_Recmail.AccountId = tnsmtp_Account.Aid;
-            tnsmtp_Recmail.Content = message.HtmlBody;
+            tnsmtp_Recmail.Content =  message.HtmlBody;
             tnsmtp_Recmail.Rectimer = message.Date.DateTime;
             tnsmtp_Recmail.Euid = message.MessageId;
             tnsmtp_Recmail.Subject = message.Subject;
             tnsmtp_Recmail.Hasfile = message.Attachments.Any() ? 1 : 0;
             tnsmtp_Recmail.ReciverMail = tnsmtp_Account.Account;
             tnsmtp_Recmail.ReciverName = tnsmtp_Account.Account;
-            tnsmtp_Recmail.SenderName = message.From.ToList()[0].Name;
+            tnsmtp_Recmail.SenderName = message.From[0].Name;
             tnsmtp_Recmail.SenderMail = message.From.Mailboxes.ToList()[0].Address;
 
             if (!tnsmtp_Recmail.Insert())
@@ -96,7 +99,7 @@ namespace NSMPT.Facade
                 Log.Info("获取邮件后添加数据库失败！" + message.MessageId);
                 Alert("获取邮件后添加数据库失败！" + message.MessageId);
 
-                Rollback();
+              
                 return false;
             }
 
@@ -110,7 +113,7 @@ namespace NSMPT.Facade
                     {
                         Log.Info("获取邮件后添加附件失败！");
                         Alert("获取邮件后添加附件失败！");
-                        Rollback();
+                   
                         return false;
                     }
                 }
@@ -118,7 +121,7 @@ namespace NSMPT.Facade
 
 
 
-            Commit();
+      
             return true;
 
         }

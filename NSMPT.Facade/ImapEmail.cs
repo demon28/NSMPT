@@ -177,7 +177,7 @@ namespace NSMPT.Facade
                 SearchQuery searchWhere = SearchQuery.All;
                 if (SerchTime.HasValue)
                 {
-                    searchWhere = SearchQuery.DeliveredBefore(SerchTime.Value);
+                    searchWhere = SearchQuery.DeliveredAfter(SerchTime.Value);
                 }
 
                 var uids = folder.Search(searchWhere);
