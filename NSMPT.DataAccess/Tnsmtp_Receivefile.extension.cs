@@ -40,7 +40,7 @@ namespace NSMPT.DataAccess
 
         public bool ListByRecid(int recid) {
 
-            string where = " recid=:recid";
+            string where = " rec_mailid=:recid";
             AddParameter("recid", recid);
 
             return ListByCondition(where);

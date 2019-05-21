@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Web;
 using Winner.Framework.Core.Facade;
 using Winner.Framework.Utils;
@@ -21,8 +22,10 @@ namespace NSMPT.Facade
 
             try
             {
+
                 ImapClient client = new ImapClient();
                 client.Connect(PopUrl, PopPort, true);
+
 
                 client.Authenticate(Account, Pwd);
 
@@ -30,7 +33,9 @@ namespace NSMPT.Facade
 
                 var folder = client.GetFolder("INBOX");
 
-                folder.Open(MailKit.FolderAccess.ReadOnly);
+                var TokenSource = new CancellationTokenSource(30000);//30s超时
+
+                folder.Open(MailKit.FolderAccess.ReadOnly, cancellationToken: TokenSource.Token);
 
                 //如果没有最新数据，就获取全部的邮件，有则获取该时间往后的
 
@@ -45,7 +50,7 @@ namespace NSMPT.Facade
 
                 foreach (var uid in uids)
                 {
-                    MimeMessage message = folder.GetMessage(uid);
+                    MimeMessage message = folder.GetMessage(uid, cancellationToken: TokenSource.Token);
 
                     //邮件只能获取到当天，mailkit没找到精确到秒的筛选,需要自己过滤
                     if (SerchTime.HasValue)
@@ -64,7 +69,7 @@ namespace NSMPT.Facade
 
 
                 }
-
+               
                 client.Disconnect(true);
                 return true;
 

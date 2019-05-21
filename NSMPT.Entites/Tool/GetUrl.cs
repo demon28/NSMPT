@@ -17,6 +17,13 @@ namespace NSMPT.Entites.Tool
             string url = fullUrl.Replace(querystring, "");
             return url;
         }
+        public static string ChangeLan(string text)
+        {
+            byte[] bs = Encoding.GetEncoding("UTF-8").GetBytes(text);
+            bs = Encoding.Convert(Encoding.GetEncoding("UTF-8"), Encoding.GetEncoding("GB2312"), bs);
+            return Encoding.GetEncoding("GB2312").GetString(bs);
+
+        }
 
     }
 }

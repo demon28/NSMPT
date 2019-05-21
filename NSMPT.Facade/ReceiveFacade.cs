@@ -79,13 +79,15 @@ namespace NSMPT.Facade
 
         private bool InserRecTable(MimeMessage message, Tnsmtp_Account tnsmtp_Account)
         {
-       
-
             DataAccess.Tnsmtp_Recmail tnsmtp_Recmail = new Tnsmtp_Recmail();
             tnsmtp_Recmail.ReferenceTransactionFrom(this.Transaction);
+
             tnsmtp_Recmail.Userid = tnsmtp_Account.Userid;
             tnsmtp_Recmail.AccountId = tnsmtp_Account.Aid;
+
+          
             tnsmtp_Recmail.Content =  message.HtmlBody;
+
             tnsmtp_Recmail.Rectimer = message.Date.DateTime;
             tnsmtp_Recmail.Euid = message.MessageId;
             tnsmtp_Recmail.Subject = message.Subject;
@@ -94,6 +96,9 @@ namespace NSMPT.Facade
             tnsmtp_Recmail.ReciverName = tnsmtp_Account.Account;
             tnsmtp_Recmail.SenderName = message.From[0].Name;
             tnsmtp_Recmail.SenderMail = message.From.Mailboxes.ToList()[0].Address;
+
+          
+
 
             if (!tnsmtp_Recmail.Insert())
             {

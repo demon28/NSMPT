@@ -27,6 +27,10 @@
     </div>
     <!-- /.box-header -->
     <div class="box-body no-padding">
+
+
+
+
         <div class="mailbox-read-info">
             <div class="pull-right">
                 <button type="button" class="btn btn-default"><i class="fa fa-reply"></i> Reply</button>
@@ -41,34 +45,43 @@
                 &nbsp;&nbsp;&nbsp;<span class="mailbox-read-time">{{Rectimer}}</span>
             </h5>
 
+        </div>
 
+        <div class="form-group" id="app_attchment" style="margin-left:20px;margin-top:5px">
+            附件：
+            <ul class="list-group" id="ul_attachment" style="width:400px">
+                <li class="list-group-item" v-for="item in AttItems">
+
+                    <b>{{item.Filename}}</b>&nbsp;&nbsp;
+
+                    <a :href="item.Downloadurl" class="btn btn-default btn-xs pull-right" :download="item.Filename"><i class="fa fa-cloud-download"></i></a>
+                </li>
+
+            </ul>
         </div>
 
 
-        <!-- /.mailbox-controls -->
-        <div class="mailbox-read-message">
-
+        <div class="mailbox-read-message" id="div_content">
             <textarea name="description" id="description"></textarea>
-
         </div>
-        <!-- /.mailbox-read-message -->
+
+
+
     </div>
-    <!-- /.box-body -->
-    <!-- /.box-footer -->
+
+    
+
 </div>
 <!-- /. box -->
 
 
 @section scripts{
-    <script src="~/Reference/scripts/CommonScript.js"></script>
     <script src="~/Reference/adminLTE/bower_components/ckeditor/ckeditor.js"></script>
+    <script src="~/Reference/scripts/CommonScript.js"></script>
+
 
     <script>
-        window.onload = function () {
-            CKEDITOR.replace('description', {
-                height: 500
-            });
-        }
+     
 
         var content_vm;
         var attchment_vm;
@@ -76,11 +89,10 @@
 
         $(document).ready(function () {
 
-
             recid = getQueryString("recid");
 
             BindContentView();
-            BindAttchmentView();
+          
             SetEvent();
 
         });
@@ -97,13 +109,15 @@
                     ReciverMail: "",
                     Subject: "",
                     Rectimer: "",
-                    Content: ""
+                    Content: "",
+                    AttItems: {}
                 },
                 created: function () {
-                    this.Init();
+                    this.InitConent();
+                    this.InitAttchment();
                 },
                 methods: {
-                    Init: function () {
+                    InitConent: function () {
 
                         var self = this;
                         $.ajax({
@@ -122,25 +136,36 @@
                                 self.Subject = result.subject;
                                 self.Rectimer = result.rectimer;
                                 self.Content = result.content;
-
+                                CKEDITOR.replace('description', {  height: 500,allowedContent: true });
                                 CKEDITOR.instances['description'].setData(self.Content);
+                              
                             }
                         })
                     },
-                    AccountUse: function (item) {
-                        $("#lb_aid").val(item.Aid);
-                        recmail_vm.Init();
-                    }
+                    InitAttchment: function () {
+
+                        var self = this;
+                        $.ajax({
+                            url: "/ReceiveEmail/GetAttchmentList",
+                            type: "POST",
+                            data: {
+                                recid: recid
+                            },
+                            success: function (result) {
+                                if (result.Success) {
+                                    self.AttItems =  result.Content.Data;
+                                }
+                            }
+                        })
+                    },
 
                 }
+             
 
             });
 
         }
-        function BindAttchmentView() {
-
-
-        }
+      
 
         function SetEvent() {
 

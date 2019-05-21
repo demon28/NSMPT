@@ -45,7 +45,7 @@ namespace NSMPT.Web.Controllers
             {
                 return FailResult("查询失败！");
             }
-            var list = MapProvider.Map<Tnsmtp_RecmailMap>(recmailCollection.DataTable);
+            var list = MapProvider.Map<Tnsmtp_ReceivefilelMap>(recmailCollection.DataTable);
             return SuccessResultList(list, recmailCollection.ChangePage);
 
         }
@@ -138,6 +138,12 @@ namespace NSMPT.Web.Controllers
             if (!tnsmtp_Recmail.SelectByUserId(recid, SysUser.UserId)) {
                 return FailResult();
             }
+            tnsmtp_Recmail.FlagRead = 1;
+
+            if (!tnsmtp_Recmail.Update())
+            {
+                return FailResult();
+            }
             return JsonResult(tnsmtp_Recmail.DataRow.ToDynamic());
         }
 
@@ -149,7 +155,7 @@ namespace NSMPT.Web.Controllers
             {
                 return FailResult("查询失败！");
             }
-            var list = MapProvider.Map<Tnsmtp_RecmailMap>(tnsmtp_ReceivefileCollection.DataTable);
+            var list = MapProvider.Map<Tnsmtp_ReceivefileMap>(tnsmtp_ReceivefileCollection.DataTable);
             return SuccessResultList(list, tnsmtp_ReceivefileCollection.ChangePage);
         }
     }

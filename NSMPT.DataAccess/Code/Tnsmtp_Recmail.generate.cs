@@ -209,7 +209,7 @@ namespace NSMPT.DataAccess
 		/// 邮件内容
 		/// [default:default(object)]
 		/// </summary>
-		public object Content
+		public string Content
 		{
 			get { return DataRow[_CONTENT].ToString(); }
 			set { setProperty(_CONTENT,value); }

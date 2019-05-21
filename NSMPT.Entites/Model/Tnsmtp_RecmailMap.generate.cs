@@ -21,7 +21,7 @@ namespace NSMPT.Entites
     /// <summary>
     /// Data Access Layer Object Of Tnsmtp_Recmail
     /// </summary>
-    public partial class Tnsmtp_RecmailMap
+    public partial class Tnsmtp_ReceivefilelMap
     {
         #region 公开属性
         
