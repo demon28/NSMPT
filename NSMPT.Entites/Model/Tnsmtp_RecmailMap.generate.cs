@@ -125,7 +125,7 @@ namespace NSMPT.Entites
 		/// 邮件内容
 		/// [default:default(object)]
 		/// </summary>
-		public object Content { get; set; }
+		public string Content { get; set; }
 
 
 

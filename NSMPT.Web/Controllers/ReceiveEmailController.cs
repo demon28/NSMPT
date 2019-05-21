@@ -9,7 +9,7 @@ using System.Web.Mvc;
 using Winner.Framework.MVC;
 using Winner.Framework.MVC.Controllers;
 using Winner.Framework.Utils;
-
+using Javirs.Common;
 namespace NSMPT.Web.Controllers
 {
     [AuthLogin]
@@ -21,7 +21,10 @@ namespace NSMPT.Web.Controllers
         {
             return View();
         }
+        public ActionResult Read() {
 
+            return View();
+        }
 
         [HttpPost]
         public ActionResult List(int? accountid,string keywords)
@@ -128,5 +131,26 @@ namespace NSMPT.Web.Controllers
 
         }
 
+        [HttpPost]
+        public ActionResult GetContent(int recid) {
+
+            DataAccess.Tnsmtp_Recmail tnsmtp_Recmail = new DataAccess.Tnsmtp_Recmail();
+            if (!tnsmtp_Recmail.SelectByUserId(recid, SysUser.UserId)) {
+                return FailResult();
+            }
+            return JsonResult(tnsmtp_Recmail.DataRow.ToDynamic());
+        }
+
+        [HttpPost]
+        public ActionResult GetAttchmentList(int recid) {
+
+            DataAccess.Tnsmtp_ReceivefileCollection tnsmtp_ReceivefileCollection = new DataAccess.Tnsmtp_ReceivefileCollection();
+            if (!tnsmtp_ReceivefileCollection.ListByRecid(recid))
+            {
+                return FailResult("查询失败！");
+            }
+            var list = MapProvider.Map<Tnsmtp_RecmailMap>(tnsmtp_ReceivefileCollection.DataTable);
+            return SuccessResultList(list, tnsmtp_ReceivefileCollection.ChangePage);
+        }
     }
 }

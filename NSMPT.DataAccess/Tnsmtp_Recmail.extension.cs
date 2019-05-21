@@ -61,6 +61,14 @@ select Max(t.rectimer)  from tnsmtp_recmail t where t.account_id=:accountid and 
 
         }
 
+        public bool SelectByUserId(int recid, int userid) {
+
+            string where = " recid=:recid and userid=:userid";
+            AddParameter("recid", recid);
+            AddParameter("userid", userid);
+
+            return SelectByCondition(where);
+        }
     }
 
     /// <summary>

@@ -2,21 +2,18 @@
 using MailKit.Net.Imap;
 using MailKit.Search;
 using MimeKit;
-using NSMPT.DataAccess;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Net.Mail;
-using System.Text;
-using System.Threading.Tasks;
+using System.Web;
 using Winner.Framework.Core.Facade;
 using Winner.Framework.Utils;
-
 namespace NSMPT.Facade
 {
     public class ImapEmail : FacadeBase
     {
-   
+
 
         public bool KitEmailHelper(string PopUrl, int PopPort, string Account, string Pwd, DateTime? SerchTime, out List<MimeMessage> messages)
         {
@@ -37,7 +34,7 @@ namespace NSMPT.Facade
 
                 //如果没有最新数据，就获取全部的邮件，有则获取该时间往后的
 
-               
+
                 SearchQuery searchWhere = SearchQuery.All;
                 if (SerchTime.HasValue)
                 {
@@ -64,8 +61,8 @@ namespace NSMPT.Facade
                         messages.Add(message);
                     }
 
-                   
-                   
+
+
                 }
 
                 client.Disconnect(true);
@@ -78,13 +75,58 @@ namespace NSMPT.Facade
 
                 Log.Info(ex);
                 return false;
-            
+
             }
         }
 
-        public bool KitAttFileHelper() {
+        public bool KitAttFileHelper(MimeEntity attachment, int userid, out string url)
+        {
 
-            return false;
+            try
+            {
+                if (!attachment.IsAttachment)
+                {
+                    url = string.Empty;
+                    return false;
+                }
+                string filepath = "/File/UserFile/" + userid + "/RecAttachment/";
+                filepath = HttpContext.Current.Server.MapPath(filepath);
+                if (Directory.Exists(filepath) == false)
+                {
+                    Directory.CreateDirectory(filepath);
+                }
+
+                var fileName = attachment.ContentDisposition?.FileName ?? attachment.ContentType.Name;
+                fileName = fileName.Remove(fileName.LastIndexOf('.')) + "(" + DateTime.Now.ToString("yyyyMMddHHmmss") + ")" + Path.GetExtension(fileName);
+
+                filepath += fileName;
+
+                using (var stream = File.Create(filepath))
+                {
+                    if (attachment is MessagePart rfc822)
+                    {
+                        rfc822.Message.WriteTo(stream);
+                    }
+                    else
+                    {
+                        var part = (MimePart)attachment;
+                        part.Content.DecodeTo(stream);
+                    }
+                }
+                url = filepath;
+                var mailFileInfo = new FileInfo(filepath);
+
+
+                return true;
+
+            }
+            catch (Exception)
+            {
+                url = string.Empty;
+                Log.Info("下载附件失败!");
+                return false;
+
+            }
 
         }
 

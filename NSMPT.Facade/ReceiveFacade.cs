@@ -130,10 +130,16 @@ namespace NSMPT.Facade
 
         private bool InsertAttTable(MimeEntity entity, Tnsmtp_Account tnsmtp_Account, Tnsmtp_Recmail tnsmtp_Recmail)
         {
+            string url = string.Empty;
+            ImapEmail imapEmail = new ImapEmail();
 
+            if (!imapEmail.KitAttFileHelper(entity, tnsmtp_Account.Userid,out url))
+            {
+                Log.Info("文件下载失败！" + entity.ContentDisposition.FileName);
+                Alert("文件下载失败");
+                return false;
+            }
            
-
-
 
             DataAccess.Tnsmtp_Receivefile tnsmtp_Receivefile = new Tnsmtp_Receivefile();
 
@@ -142,10 +148,12 @@ namespace NSMPT.Facade
             tnsmtp_Receivefile.RecMailid = tnsmtp_Recmail.Recid;
             tnsmtp_Receivefile.Userid = tnsmtp_Recmail.Recid;
             tnsmtp_Receivefile.Accountid = tnsmtp_Account.Aid;
-            tnsmtp_Receivefile.Fileurl = entity.ContentDisposition.FileName;
+            tnsmtp_Receivefile.Fileurl = url;
             tnsmtp_Receivefile.Filename = entity.ContentDisposition.FileName;
-            tnsmtp_Receivefile.Downloadurl = entity.ContentDisposition.FileName;
-            tnsmtp_Receivefile.Filesize = 0;
+            tnsmtp_Receivefile.Downloadurl = "/File/UserFile/" + tnsmtp_Account.Userid + "/RecAttachment/"+Path.GetFileName(url);
+
+            FileInfo fileInfo  = new FileInfo(url);
+            tnsmtp_Receivefile.Filesize = (int)Math.Ceiling(fileInfo.Length / 1048576.0) ;
 
             if (!tnsmtp_Receivefile.Insert())
             {

@@ -37,5 +37,14 @@ namespace NSMPT.DataAccess
     public partial class Tnsmtp_ReceivefileCollection : DataAccessCollectionBase
     {
         //Custom Extension Class
+
+        public bool ListByRecid(int recid) {
+
+            string where = " recid=:recid";
+            AddParameter("recid", recid);
+
+            return ListByCondition(where);
+
+        }
     }
 }
