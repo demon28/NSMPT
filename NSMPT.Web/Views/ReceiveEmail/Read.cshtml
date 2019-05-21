@@ -28,21 +28,22 @@
     <!-- /.box-header -->
     <div class="box-body no-padding">
         <div class="mailbox-read-info">
-            <h3>{{Subject}}</h3>
-            <h5>
-                From: {{SenderMail}}
-                <span class="mailbox-read-time pull-right">{{Rectimer}}</span>
-            </h5>
-        </div>
-
-        <div class="mailbox-controls with-border">
             <div class="pull-right">
                 <button type="button" class="btn btn-default"><i class="fa fa-reply"></i> Reply</button>
                 <button type="button" class="btn btn-default"><i class="fa fa-share"></i> Forward</button>
+
+                <button type="button" class="btn btn-default"><i class="fa fa-trash-o"></i> Delete</button>
+                <button type="button" class="btn btn-default"><i class="fa fa-print"></i> Print</button>
             </div>
-            <button type="button" class="btn btn-default"><i class="fa fa-trash-o"></i> Delete</button>
-            <button type="button" class="btn btn-default"><i class="fa fa-print"></i> Print</button>
+            <h3>{{Subject}}</h3>
+            <h5>
+                From: {{SenderMail}}
+                &nbsp;&nbsp;&nbsp;<span class="mailbox-read-time">{{Rectimer}}</span>
+            </h5>
+
+
         </div>
+
 
         <!-- /.mailbox-controls -->
         <div class="mailbox-read-message">
