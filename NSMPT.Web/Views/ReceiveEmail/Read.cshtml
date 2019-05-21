@@ -28,59 +28,31 @@
     <!-- /.box-header -->
     <div class="box-body no-padding">
         <div class="mailbox-read-info">
-            <h3>Message Subject Is Placed Here</h3>
+            <h3>{{Subject}}</h3>
             <h5>
-                From: help@example.com
-                <span class="mailbox-read-time pull-right">15 Feb. 2016 11:03 PM</span>
+                From: {{SenderMail}}
+                <span class="mailbox-read-time pull-right">{{Rectimer}}</span>
             </h5>
         </div>
-        <!-- /.mailbox-read-info -->
-        <div class="mailbox-controls with-border text-center">
 
+        <div class="mailbox-controls with-border">
+            <div class="pull-right">
+                <button type="button" class="btn btn-default"><i class="fa fa-reply"></i> Reply</button>
+                <button type="button" class="btn btn-default"><i class="fa fa-share"></i> Forward</button>
+            </div>
+            <button type="button" class="btn btn-default"><i class="fa fa-trash-o"></i> Delete</button>
+            <button type="button" class="btn btn-default"><i class="fa fa-print"></i> Print</button>
         </div>
+
         <!-- /.mailbox-controls -->
         <div class="mailbox-read-message">
-            {{Content}}
+
+            <textarea name="description" id="description"></textarea>
+
         </div>
         <!-- /.mailbox-read-message -->
     </div>
     <!-- /.box-body -->
-    <div class="box-footer">
-        <ul class="mailbox-attachments clearfix" id="app_attchment">
-            <li>
-                <span class="mailbox-attachment-icon"><i class="fa fa-file-pdf-o"></i></span>
-
-                <div class="mailbox-attachment-info">
-                    <a href="#" class="mailbox-attachment-name"><i class="fa fa-paperclip"></i> Sep2014-report.pdf</a>
-                    <span class="mailbox-attachment-size">
-                        1,245 KB
-                        <a href="#" class="btn btn-default btn-xs pull-right"><i class="fa fa-cloud-download"></i></a>
-                    </span>
-                </div>
-            </li>
-            <li>
-                <span class="mailbox-attachment-icon"><i class="fa fa-file-word-o"></i></span>
-
-                <div class="mailbox-attachment-info">
-                    <a href="#" class="mailbox-attachment-name"><i class="fa fa-paperclip"></i> App Description.docx</a>
-                    <span class="mailbox-attachment-size">
-                        1,245 KB
-                        <a href="#" class="btn btn-default btn-xs pull-right"><i class="fa fa-cloud-download"></i></a>
-                    </span>
-                </div>
-            </li>
-
-        </ul>
-    </div>
-    <!-- /.box-footer -->
-    <div class="box-footer">
-        <div class="pull-right">
-            <button type="button" class="btn btn-default"><i class="fa fa-reply"></i> Reply</button>
-            <button type="button" class="btn btn-default"><i class="fa fa-share"></i> Forward</button>
-        </div>
-        <button type="button" class="btn btn-default"><i class="fa fa-trash-o"></i> Delete</button>
-        <button type="button" class="btn btn-default"><i class="fa fa-print"></i> Print</button>
-    </div>
     <!-- /.box-footer -->
 </div>
 <!-- /. box -->
@@ -88,28 +60,34 @@
 
 @section scripts{
     <script src="~/Reference/scripts/CommonScript.js"></script>
-
+    <script src="~/Reference/adminLTE/bower_components/ckeditor/ckeditor.js"></script>
 
     <script>
+        window.onload = function () {
+            CKEDITOR.replace('description', {
+                height: 500
+            });
+        }
 
         var content_vm;
         var attchment_vm;
         var recid;
 
-           $(document).ready(function () {
+        $(document).ready(function () {
 
 
-               recid = getQueryString(recid);
-               BindContentView();
-               BindAttchmentView();
-               SetEvent();
+            recid = getQueryString("recid");
 
-            });
+            BindContentView();
+            BindAttchmentView();
+            SetEvent();
+
+        });
 
         function BindContentView() {
             content_vm = new Vue({
 
-                  el: "#app_content",
+                el: "#app_content",
                 data: {
                     Recid: "",
                     SenderMail: "",
@@ -117,10 +95,8 @@
                     ReciverName: "",
                     ReciverMail: "",
                     Subject: "",
-                    FlagRead: "",
-                    FlagStatus: "",
-                    Rectimer:"",
-                    Content:""
+                    Rectimer: "",
+                    Content: ""
                 },
                 created: function () {
                     this.Init();
@@ -133,15 +109,20 @@
                             url: "/ReceiveEmail/GetContent",
                             type: "POST",
                             data: {
-                                recid=recid
+                                recid: recid
                             },
                             success: function (result) {
+                                self.Content = result.content;
+                                self.Recid = result.recid;
+                                self.SenderMail = result.sender_mail;
+                                self.SenderName = result.sender_name;
+                                self.ReciverName = result.reciver_name;
+                                self.ReciverMail = result.reciver_mail;
+                                self.Subject = result.subject;
+                                self.Rectimer = result.rectimer;
+                                self.Content = result.content;
 
-                                if (result.Success) {
-                                    console.log(result.Content.Data);
-                                   // self.AccountItems = result.Content.Data;
-
-                                }
+                                CKEDITOR.instances['description'].setData(self.Content);
                             }
                         })
                     },
