@@ -2,6 +2,7 @@
 using NSMPT.DataAccess;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -13,9 +14,39 @@ namespace NSMPT.Facade
 {
     public class ReceiveFacade : FacadeBase
     {
+        /// <summary>
+        /// Windows服务获取所有用户邮件更新
+        /// </summary>
+        /// <returns></returns>
+        public bool ServiceGetAllMail()
+        {
+
+            DataAccess.Tnsmtp_AccountCollection tnsmtp_Account = new Tnsmtp_AccountCollection();
+
+            if (!tnsmtp_Account.ListAll())
+            {
+                Log.Info("数据库连接失败");
+                return false;
+            }
+
+            foreach (DataRow item in tnsmtp_Account.DataTable.Rows)
+            {
+                if (!GetAccountEmail((int)item[Tnsmtp_Account._AID]))
+                {
+                    return false;
+                } 
+            }
+
+            return true;
+        }
 
 
 
+        /// <summary>
+        /// 刷新获取邮件更新
+        /// </summary>
+        /// <param name="accountId"></param>
+        /// <returns></returns>
         public bool GetAccountEmail(int accountId)
         {
 
