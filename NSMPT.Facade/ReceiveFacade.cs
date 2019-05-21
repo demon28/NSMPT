@@ -2,6 +2,7 @@
 using NSMPT.DataAccess;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -50,7 +51,7 @@ namespace NSMPT.Facade
                 Alert("获取邮件失败！");
                 return false;
             }
-
+          
             if (messages.Count <= 0)
             {
                 Alert("没有信息的邮件！");
@@ -104,9 +105,10 @@ namespace NSMPT.Facade
             }
 
 
-
+        
             if (message.Attachments.Any())
             {
+
                 foreach (MimeEntity item in message.Attachments)
                 {
                     if (!InsertAttTable(item, tnsmtp_Account, tnsmtp_Recmail))
@@ -120,7 +122,6 @@ namespace NSMPT.Facade
             }
 
 
-
       
             return true;
 
@@ -129,6 +130,11 @@ namespace NSMPT.Facade
 
         private bool InsertAttTable(MimeEntity entity, Tnsmtp_Account tnsmtp_Account, Tnsmtp_Recmail tnsmtp_Recmail)
         {
+
+           
+
+
+
             DataAccess.Tnsmtp_Receivefile tnsmtp_Receivefile = new Tnsmtp_Receivefile();
 
             tnsmtp_Receivefile.ReferenceTransactionFrom(this.Transaction);
@@ -143,6 +149,7 @@ namespace NSMPT.Facade
 
             if (!tnsmtp_Receivefile.Insert())
             {
+                Log.Info("获取邮件后添加附件失败！" + entity.ContentDisposition.FileName);
                 Alert("添加附件信息失败" );
                 return false;
 
