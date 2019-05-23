@@ -1,0 +1,181 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+@section Pageheader{
+
+    <script src="~/Reference/scripts/CommonScript.js"></script>
+
+    <h1>
+        <small>  Spider</small>
+
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Spider</li>
+    </ol>
+
+}
+
+<div class="box">
+    <div class="box-header">
+        <h3 class="box-title">Spider List</h3>
+
+
+
+
+        <div class="box-tools">
+
+       
+        </div>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body table-responsive no-padding" id="App_Email">
+        <table class="table table-hover" id="tab_contact">
+            <tbody>
+                <tr>
+                    <th>
+                        <button type="button" class="btn btn-default btn-sm checkbox-toggle">
+                            <i class="fa fa-square-o"></i>
+                        </button>
+                    </th>
+                    <th>Firstname</th>
+                    <th>Lastname</th>
+                    <th>Email</th>
+                    <th>Address</th>
+                    <th>City</th>
+                    <th>State</th>
+                    <th>Zip</th>
+                    <th>Homephone</th>
+                    <th>Status</th>
+                    <th>Createtime</th>
+                    <th>Operation</th>
+                </tr>
+                <tr v-for="item in Items">
+
+                    <td>  <input id="box_check" type="checkbox" :value=item.Spid>  </td>
+
+                    <td>{{item.Firstname}}</td>
+                    <td>{{item.Lastname}}</td>
+                    <td>{{item.Email}}</td>
+                    <td>{{item.Address}}</td>
+                    <td>{{item.City}}</td>
+                    <td>{{item.State}}</td>
+                    <td>{{ item.Zip}}</td>
+                    <td>{{item.Homephone}}</td>
+                    <td>{{ item.Status}}</td>
+                    <td>{{ item.Createtime}}</td>
+                    <td>
+                        <button type="button" class="btn bg-maroon  btn-xs" v-on:click="Add(item)">Add</button>
+
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+    <div class="box-footer">
+
+
+        <button type="button" class="btn btn-sm m-4 btn-success pull-left" id="btn_downloadtemp">批量添加</button>
+
+        <button type="button" class="btn btn-default btn-sm pagenext pull-right"><i class="fa fa-chevron-right"></i></button>
+
+        <button type="button" class="btn btn-default btn-sm pagefront pull-right"><i class="fa fa-chevron-left"></i></button>
+
+
+
+    </div>
+    <!-- /.box-body -->
+</div>
+@section scripts{
+    <link href="~/Reference/adminLTE/plugins/iCheck/flat/blue.css" rel="stylesheet" />
+    <script src="~/Reference/adminLTE/bower_components/jquery-slimscroll/jquery.slimscroll.js"></script>
+    <script src="~/Reference/adminLTE/bower_components/fastclick/lib/fastclick.js"></script>
+    <script src="~/Reference/adminLTE/plugins/iCheck/icheck.js"></script>
+    <script src="~/Reference/scripts/CommonScript.js"></script>
+
+
+    <script>
+
+           var recmail_vm;
+        var pageIndex = 1;
+        var pageSize = 1000;
+        var totalCount;
+        var totalPages;
+        $(document).ready(function () {
+
+         
+            BindView();
+            SetEvent();
+        });
+        function SetEvent() {
+
+
+
+        }
+
+
+         function BindView() {
+                  recmail_vm = new Vue({
+                el: "#App_Email",
+                data: {
+                    Items: {},
+                    pageIndex: pageIndex,
+                    pageSize: pageSize,
+                    totalCount: totalCount,
+                    totalPages: totalPages
+                },
+                created: function () {
+                    this.Init();
+                },
+                methods: {
+                    Init: function () {
+                        var self = this;
+
+                        $.ajax({
+                            url: "/Spider/List",
+                            type: "POST",
+                            data: {
+                                pageIndex: pageIndex,
+                                pageSize: pageSize
+                            },
+                            success: function (result) {
+                                if (result.Success) {
+
+                                    self.pageIndex = pageIndex;
+                                    self.totalPages = result.Content.PageCount;
+                                    self.totalCount = result.Content.Count;
+
+                                    totalPages = result.Content.PageCount;
+                                    totalCount = result.Content.Count;
+
+                                    self.Items = result.Content.Data;
+                                }
+                            }
+                        })
+                    },
+                    Add: function () {
+
+
+                    }
+                },
+                updated: function () {
+                    $('.mailbox-messages input[type="checkbox"]').iCheck({
+                        checkboxClass: 'icheckbox_flat-blue',
+                        radioClass: 'iradio_flat-blue'
+                    });
+
+
+                }
+
+            });
+
+
+        }
+        
+    </script>
+        
+        
+ }

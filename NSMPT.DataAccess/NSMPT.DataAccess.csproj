@@ -66,6 +66,7 @@
     <Compile Include="Code\Tnsmtp_Raplcemark.generate.cs" />
     <Compile Include="Code\Tnsmtp_Receivefile.generate.cs" />
     <Compile Include="Code\Tnsmtp_Recmail.generate.cs" />
+    <Compile Include="Code\Tnsmtp_Spidermail.generate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tnsmtp_Account.cs" />
     <Compile Include="Tnsmtp_Attachment.extension.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="Tnsmtp_Receivefile.extension.cs" />
     <Compile Include="Tnsmtp_ReceivefileMap.generate.cs" />
     <Compile Include="Tnsmtp_Recmail.extension.cs" />
+    <Compile Include="Tnsmtp_Spidermail.extension.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

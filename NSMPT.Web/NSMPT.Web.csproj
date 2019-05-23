@@ -176,6 +176,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ReceiveEmailController.cs" />
     <Compile Include="Controllers\SendEmailController.cs" />
+    <Compile Include="Controllers\SpiderController.cs" />
     <Compile Include="Controllers\TemplateController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -7174,6 +7175,7 @@
     <Content Include="Views\SendEmail\Receipt.cshtml" />
     <Content Include="Views\ReceiveEmail\Index.cshtml" />
     <Content Include="Views\ReceiveEmail\Read.cshtml" />
+    <Content Include="Views\Spider\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Reference\adminLTE\bower_components\moment\moment.d.ts" />
