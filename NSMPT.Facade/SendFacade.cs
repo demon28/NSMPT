@@ -498,6 +498,9 @@ namespace NSMPT.Facade
                 tnsmtp_Attachment.MailId = model.MailId;
                 tnsmtp_Attachment.Status = 0;
                 tnsmtp_Attachment.UserId = model.Userid;
+                string path = HttpContext.Current.Server.MapPath("~/File/UserFile/" + model.Userid + "/Attachment/" + tnsmtp_Attachment.FileName);
+
+                tnsmtp_Attachment.Remarks = path;   //保存物理路径
 
                 if (!tnsmtp_Attachment.Insert())
                 {
@@ -505,7 +508,7 @@ namespace NSMPT.Facade
                     return false;
                 }
 
-                string path = HttpContext.Current.Server.MapPath("~/File/UserFile/" + model.Userid + "/Attachment/" + tnsmtp_Attachment.FileName);
+            
 
                 dic.Add(tnsmtp_Attachment.FileName, path);
             }
@@ -607,7 +610,7 @@ namespace NSMPT.Facade
 
             #region 获取企业邮箱信息
             DataAccess.Tnsmtp_Mailtype tnsmtp_Mailtype = new DataAccess.Tnsmtp_Mailtype();
-            if (!tnsmtp_Mailtype.SelectByPK(mailid))
+            if (!tnsmtp_Mailtype.SelectByPK(tnsmtp_Account.MailType))
             {
 
                 Alert("获取企业邮箱失败");
@@ -845,6 +848,7 @@ namespace NSMPT.Facade
             }
             catch (Exception e)
             {
+                Log.Info("发送异常！"+e);
                 Rollback();
                 Alert(e.Message);
                 return false;
@@ -885,8 +889,7 @@ namespace NSMPT.Facade
 
             foreach (DataRow dr in tnsmtp_AttachmentCollection.DataTable.Rows)
             {
-
-                list.Add(dr[Tnsmtp_Attachment._FILE_NAME].ToString(), dr[Tnsmtp_Attachment._FILE_URL].ToString());
+                list.Add(dr[Tnsmtp_Attachment._FILE_NAME].ToString(), dr[Tnsmtp_Attachment._REMARKS].ToString());
 
             }
             filelist = list;

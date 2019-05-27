@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NSMPT.Facade;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -19,11 +20,27 @@ namespace NSMPT
 
         private void Button1_Click(object sender, EventArgs e)
         {
+            TimerSender timerSender = new TimerSender();
+            timerSender.Send();
+
         }
 
         private void Button2_Click(object sender, EventArgs e)
         {
          
+        }
+
+        private void Button3_Click(object sender, EventArgs e)
+        {
+            GroupSender groupSender = new GroupSender();
+            groupSender.Send();
+
+        }
+
+        private void Button4_Click(object sender, EventArgs e)
+        {
+            GroupTimeSender groupTimeSender = new GroupTimeSender();
+            groupTimeSender.Send();
         }
     }
 }

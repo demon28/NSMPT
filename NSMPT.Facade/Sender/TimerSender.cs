@@ -36,6 +36,8 @@ namespace NSMPT.Facade
                 return true;
             }
 
+            Log.Info("需要发送邮件数量：" + tnsmtp_EmailCollection.DataTable.Rows.Count );
+
             foreach (DataRow dr in tnsmtp_EmailCollection.DataTable.Rows)
             {
                 DateTime sendtime = new DateTime();
@@ -47,10 +49,14 @@ namespace NSMPT.Facade
 
                 int mailid = int.Parse(dr[Tnsmtp_Email._MAIL_ID].ToString());
 
-                if (sendtime < DateTime.Now)
+                Log.Info("发送时间"+sendtime+"***");
+
+                if (sendtime > DateTime.Now)
                 {
                     continue;
                 }
+
+                Log.Info("准备发送邮件：" + mailid + "***");
 
 
                 DataAccess.Tnsmtp_Email tnsmtp_Email = new Tnsmtp_Email();

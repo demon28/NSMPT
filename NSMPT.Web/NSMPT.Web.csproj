@@ -7176,6 +7176,7 @@
     <Content Include="Views\ReceiveEmail\Index.cshtml" />
     <Content Include="Views\ReceiveEmail\Read.cshtml" />
     <Content Include="Views\Spider\Index.cshtml" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Reference\adminLTE\bower_components\moment\moment.d.ts" />

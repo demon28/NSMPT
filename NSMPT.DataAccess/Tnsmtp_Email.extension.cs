@@ -94,9 +94,9 @@ namespace NSMPT.DataAccess
         public bool ListSendByFlagStatus(int status)
         {
 
-            string where = "  status=1 ";
+            string where = "  status=1 and flag_status=:flagstatus";
           
-            AddParameter("flag_status", status);
+            AddParameter("flagstatus", status);
 
             where += " order by mail_id desc";
 

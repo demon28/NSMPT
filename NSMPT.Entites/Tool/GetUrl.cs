@@ -12,6 +12,11 @@ namespace NSMPT.Entites.Tool
 
         public static string GetSiteUrl()
         {
+            if (HttpContext.Current==null)
+            {
+                return "http://www.napemail.com"; 
+            }
+
             string fullUrl = HttpContext.Current.Request.Url.AbsoluteUri;
             string querystring = HttpContext.Current.Request.Url.PathAndQuery;
             string url = fullUrl.Replace(querystring, "");

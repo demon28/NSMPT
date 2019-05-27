@@ -26,7 +26,7 @@ namespace NSMPT.WinService
              System.Timers.Timer  SendTimer = new System.Timers.Timer();
 
             SendTimer.Interval = 1000;  //设置计时器事件间隔执行时间
-
+            Log.Info("开始监控定时与群发");
             SendTimer.Elapsed += new System.Timers.ElapsedEventHandler(timer1_Elapsed);
 
             SendTimer.Enabled = true;
@@ -34,6 +34,7 @@ namespace NSMPT.WinService
             System.Timers.Timer GetTimer= new System.Timers.Timer();
             GetTimer.Interval = 60000;  //设置计时器事件间隔执行时间
 
+            Log.Info("开始监控收件箱");
             GetTimer.Elapsed += new System.Timers.ElapsedEventHandler(timer2_Elapsed);
 
             GetTimer.Enabled = true;
@@ -48,15 +49,24 @@ namespace NSMPT.WinService
 
         private void timer1_Elapsed(object sender, ElapsedEventArgs e)
         {
+            try
+            {
+         
             TimerSender timerSender = new TimerSender();
             timerSender.Send();
-
+          
             GroupSender groupSender = new GroupSender();
             groupSender.Send();
 
             GroupTimeSender groupTimeSender = new GroupTimeSender();
             groupTimeSender.Send();
 
+            }
+            catch (Exception ex)
+            {
+                Log.Info(" ========== 发生异常 ============ ");
+                Log.Info(" =========="+ ex + " ============ ");
+            }
         }
 
         protected override void OnStop()
