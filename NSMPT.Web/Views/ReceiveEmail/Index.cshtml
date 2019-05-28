@@ -175,7 +175,36 @@
             BindAccountView();
             BindRecListView();
             SetEvent();
+          //  setInterval(GetMail,10000);
         });
+
+       
+
+        function GetMail() {
+
+               var aid = $("#lb_aid").val();
+                $.ajax({
+                    url: "/ReceiveEmail/GetList",
+                    type: "POST",
+                    data: {
+                        AccountId: aid
+                    },
+                    success: function (result) {
+
+                        if (result.Success) {
+                             recmail_vm.Init();
+                        } else {
+                            alert_danger(result.Message);
+                        }
+
+                    }
+                })
+
+
+        } 
+           
+
+
         function SetEvent() {
 
             $(".btn_alldeltemp").click(function () {

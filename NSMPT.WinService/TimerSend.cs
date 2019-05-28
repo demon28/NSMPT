@@ -17,7 +17,7 @@ namespace NSMPT.WinService
     {
 
         private static object obj = new object();
-        private static object obj2 = new object();
+     
         public TimerSend()
         {
             InitializeComponent();
@@ -34,33 +34,11 @@ namespace NSMPT.WinService
 
             SendTimer.Enabled = true;
 
-            System.Timers.Timer GetTimer= new System.Timers.Timer();
-            GetTimer.Interval = 60000;  //设置计时器事件间隔执行时间
-
-            Log.Info("开始监控收件箱");
-            GetTimer.Elapsed += new System.Timers.ElapsedEventHandler(timer2_Elapsed);
-
-            GetTimer.Enabled = true;
+         
 
         }
 
-        private void timer2_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            try
-            {
-                lock (obj2)
-                {
-                    ReceiveFacade receiveFacade = new ReceiveFacade();
-                    receiveFacade.ServiceGetAllMail();
-                }
-            }
-            catch(Exception ex)
-            {
-                Log.Info(" ========== 发生异常 ============ ");
-                Log.Info(" ==========" + ex + " ============ ");
-
-            }
-        }
+      
         private void timer1_Elapsed(object sender, ElapsedEventArgs e)
         {
             try
