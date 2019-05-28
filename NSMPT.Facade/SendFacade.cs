@@ -480,7 +480,7 @@ namespace NSMPT.Facade
 
             Dictionary<string, string> dic = new Dictionary<string, string>();
 
-            if (model.Atthachment == null && model.Atthachment.Length <= 0)
+            if (model.Atthachment == null || model.Atthachment.Length <= 0)
             {
                 filelist = dic;
                 return true;
