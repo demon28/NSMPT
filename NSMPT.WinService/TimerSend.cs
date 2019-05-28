@@ -15,6 +15,9 @@ namespace NSMPT.WinService
 {
     public partial class TimerSend : ServiceBase
     {
+
+        private static object obj = new object();
+        private static object obj2 = new object();
         public TimerSend()
         {
             InitializeComponent();
@@ -43,24 +46,38 @@ namespace NSMPT.WinService
 
         private void timer2_Elapsed(object sender, ElapsedEventArgs e)
         {
-            ReceiveFacade receiveFacade = new ReceiveFacade();
-            receiveFacade.ServiceGetAllMail();
-        }
+            try
+            {
+                lock (obj2)
+                {
+                    ReceiveFacade receiveFacade = new ReceiveFacade();
+                    receiveFacade.ServiceGetAllMail();
+                }
+            }
+            catch(Exception ex)
+            {
+                Log.Info(" ========== 发生异常 ============ ");
+                Log.Info(" ==========" + ex + " ============ ");
 
+            }
+        }
         private void timer1_Elapsed(object sender, ElapsedEventArgs e)
         {
             try
             {
-         
-            TimerSender timerSender = new TimerSender();
-            timerSender.Send();
-          
-            GroupSender groupSender = new GroupSender();
-            groupSender.Send();
 
-            GroupTimeSender groupTimeSender = new GroupTimeSender();
-            groupTimeSender.Send();
+                lock (obj)
+                {
 
+                    TimerSender timerSender = new TimerSender();
+                    timerSender.Send();
+
+                    GroupSender groupSender = new GroupSender();
+                    groupSender.Send();
+
+                    GroupTimeSender groupTimeSender = new GroupTimeSender();
+                    groupTimeSender.Send();
+                }
             }
             catch (Exception ex)
             {

@@ -14,12 +14,11 @@ namespace NSMPT.Facade
 {
     public class TimerSender : FacadeBase, ISender
     {
-        object obj = new object();
+    
         public bool Send()
         {
             //防止并发加锁
-            lock (obj)
-            {
+          
 
                 Log.Info("=====开始发送定时邮件=====");
                 DataAccess.Tnsmtp_EmailCollection tnsmtp_EmailCollection = new DataAccess.Tnsmtp_EmailCollection();
@@ -54,8 +53,9 @@ namespace NSMPT.Facade
 
                     Log.Info("发送时间" + sendtime + "***");
 
-                    if (sendtime < DateTime.Now)
+                    if (DateTime.Compare(DateTime.Now ,sendtime)<0 )
                     {
+                        Log.Info("没到发送时间，继续等待：" + mailid + "***"+ sendtime);
                         continue;
                     }
 
@@ -66,6 +66,7 @@ namespace NSMPT.Facade
                     SendFacade send = new SendFacade();
                     if (!send.SendEmail(dr))
                     {
+                        Log.Info("发送邮件失败：" + mailid + "***");
                         tnsmtp_Email.FlagStatus = (int)EmailFlagStatus.发送失败;
                         tnsmtp_Email.Senddate = DateTime.Now;
                         if (!tnsmtp_Email.Update())
@@ -102,7 +103,7 @@ namespace NSMPT.Facade
                 return true;
             }
 
-        }
+        
 
 
     }
