@@ -95,7 +95,16 @@ namespace NSMPT.Facade
                     return false;
                 }
                 string filepath = "/File/UserFile/" + userid + "/RecAttachment/";
-                filepath = HttpContext.Current.Server.MapPath(filepath);
+
+                if (HttpContext.Current != null)
+                {
+                    filepath = HttpContext.Current.Server.MapPath(filepath);
+                }
+                else {
+                    filepath = "d:\\web\\nampemail\\File\\UserFile\\" + userid + "\\RecAttachment\\";
+                }
+              
+
                 if (Directory.Exists(filepath) == false)
                 {
                     Directory.CreateDirectory(filepath);
@@ -125,7 +134,7 @@ namespace NSMPT.Facade
                 return true;
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 url = string.Empty;
                 Log.Info("下载附件失败!");

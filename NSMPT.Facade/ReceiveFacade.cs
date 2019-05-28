@@ -31,9 +31,10 @@ namespace NSMPT.Facade
 
             foreach (DataRow item in tnsmtp_Account.DataTable.Rows)
             {
-                if (!GetAccountEmail((int)item[Tnsmtp_Account._AID]))
+                if (!GetAccountEmail(int.Parse(item[Tnsmtp_Account._AID].ToString())))
                 {
-                    return false;
+                    Log.Info("获取邮件失败"+ item[Tnsmtp_Account._ACCOUNT].ToString());
+                    continue;
                 } 
             }
 
@@ -63,6 +64,7 @@ namespace NSMPT.Facade
             Tnsmtp_Mailtype tnsmtp_Mailtype = new Tnsmtp_Mailtype();
             if (!tnsmtp_Mailtype.SelectByPK(tnsmtp_Account.MailType))
             {
+                Log.Info("获取邮件配置失败");
                 Alert("获取邮件配置失败！");
                 return false;
             }
@@ -79,12 +81,14 @@ namespace NSMPT.Facade
 
             if (!imap.KitEmailHelper(tnsmtp_Mailtype.PopUrl, tnsmtp_Mailtype.PopPort, tnsmtp_Account.Account, tnsmtp_Account.Password, beforeDate, out messages))
             {
+                Log.Info("获取邮件失败");
                 Alert("获取邮件失败！");
                 return false;
             }
           
             if (messages.Count <= 0)
             {
+                Log.Info("没有信息的邮件");
                 Alert("没有信息的邮件！");
                 return true;
             }

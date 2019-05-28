@@ -14,12 +14,9 @@ namespace NSMPT.Facade
 {
     public class GroupTimeSender : FacadeBase, ISender
     {
-        object obj = new object();
         public bool Send()
         {
-            //防止并发加锁
-            lock (obj)
-            {
+          
 
                 Log.Info("=====开始发送定时群发=====");
                 DataAccess.Tnsmtp_EmailCollection tnsmtp_EmailCollection = new DataAccess.Tnsmtp_EmailCollection();
@@ -50,14 +47,18 @@ namespace NSMPT.Facade
 
                     int mailid = int.Parse(dr[Tnsmtp_Email._MAIL_ID].ToString());
 
-                    if (sendtime < DateTime.Now)
-                    {
-                        
-                        continue;
-                    }
+                Log.Info("发送时间" + sendtime + "***");
+
+                if (DateTime.Compare(DateTime.Now, sendtime) < 0)
+                {
+                    Log.Info("没到发送时间，继续等待：" + mailid + "***" + sendtime);
+                    continue;
+                }
+
+                Log.Info("准备发送邮件：" + mailid + "***");
 
 
-                    DataAccess.Tnsmtp_Email tnsmtp_Email = new Tnsmtp_Email();
+                DataAccess.Tnsmtp_Email tnsmtp_Email = new Tnsmtp_Email();
                     SendFacade send = new SendFacade();
                     if (!send.SendEmail(dr))
                     {
@@ -95,7 +96,7 @@ namespace NSMPT.Facade
 
                 Log.Info("=====结束发送定时群发=====");
                 return true;
-            }
+         
 
         }
 

@@ -183,14 +183,14 @@
                 var list = new Array();
                 var checkedbox = $("input[id^='box_']:checked");
                 if (checkedbox.length == 0) {
-                    alert_danger("请选择要删除的联系人");
+                    alert_danger("请选择要删除的邮件");
                 } else {
 
                     checkedbox.each(function () {
                         list.push(this.value);
                     });
 
-                    bootbox.confirm("您确定删除该联系人吗？", function (res) {
+                    bootbox.confirm("您确定删除该邮件吗？", function (res) {
 
                         if (!res) {
                             return;

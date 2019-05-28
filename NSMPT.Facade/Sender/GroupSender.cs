@@ -17,12 +17,10 @@ namespace NSMPT.Facade
     /// </summary>
    public class GroupSender:FacadeBase, ISender
     {
-        object obj = new object();
+    
         public bool Send()
         {
-            //防止并发加锁
-            lock (obj)
-            {
+        
 
                 Log.Info("=====开始发送群发邮件=====");
                 DataAccess.Tnsmtp_EmailCollection tnsmtp_EmailCollection = new DataAccess.Tnsmtp_EmailCollection();
@@ -86,7 +84,7 @@ namespace NSMPT.Facade
                 Log.Info("=====结束发送群发邮件=====");
                 return true;
 
-            }
+            
 
         }
 

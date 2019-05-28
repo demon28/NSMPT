@@ -27,7 +27,8 @@ namespace NSMPT
 
         private void Button2_Click(object sender, EventArgs e)
         {
-         
+            ReceiveFacade receiveFacade = new ReceiveFacade();
+            receiveFacade.ServiceGetAllMail();
         }
 
         private void Button3_Click(object sender, EventArgs e)
