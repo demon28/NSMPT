@@ -28,6 +28,17 @@ namespace NSMPT.DataAccess
     /// </summary>
     public partial class Tnsmtp_Spidermail : DataAccessBase
     {
+
+        public bool SelectByEmail(string mail)
+        {
+            string where = " email=:email";
+            AddParameter("email", mail);
+
+            return SelectByCondition(where);
+
+        }
+
+
         //Custom Extension Class
     }
 

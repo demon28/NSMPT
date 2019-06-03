@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NSMPT.Web", "NSMPT.Web\NSMP
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NSMPT.WinService", "NSMPT.WinService\NSMPT.WinService.csproj", "{8D6F642E-F21F-4BAC-9847-5CFA1A49B87D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NSMPT.ImpDate", "NSMPT.ImpDate\NSMPT.ImpDate.csproj", "{A2EF16B3-EE72-47FC-81BC-BF8169203BC9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -58,6 +60,12 @@ Global
 		{8D6F642E-F21F-4BAC-9847-5CFA1A49B87D}.My Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8D6F642E-F21F-4BAC-9847-5CFA1A49B87D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8D6F642E-F21F-4BAC-9847-5CFA1A49B87D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2EF16B3-EE72-47FC-81BC-BF8169203BC9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2EF16B3-EE72-47FC-81BC-BF8169203BC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2EF16B3-EE72-47FC-81BC-BF8169203BC9}.My Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2EF16B3-EE72-47FC-81BC-BF8169203BC9}.My Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2EF16B3-EE72-47FC-81BC-BF8169203BC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2EF16B3-EE72-47FC-81BC-BF8169203BC9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

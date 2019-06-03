@@ -22,7 +22,7 @@ namespace NSMPT.Entites
     public enum EmailFlagStatus
     {
         已发送 = 0,
-        发送中= 1, //群发
+        群发= 1, //群发
         发送失败=2,
         定时邮件=3,
         定时群发=4

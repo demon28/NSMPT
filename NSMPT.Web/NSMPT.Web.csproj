@@ -6656,6 +6656,9 @@
     <Folder Include="File\UserFile\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="File\ContactTemp.xls">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="packages.config" />
     <Content Include="Reference\font\font-awesome\.bower.json" />
     <Content Include="Reference\font\font-awesome\.npmignore" />
