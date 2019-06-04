@@ -15,13 +15,21 @@ namespace NSMPT.ImpDate
 {
     public partial class Form1 : Form
     {
+        StringBuilder stringBuilder = new StringBuilder();
+        static int count = 0;
+        SynchronizationContext m_SyncContext = null;
+
         public Form1()
         {
             InitializeComponent();
+            m_SyncContext = SynchronizationContext.Current;
         }
 
-        StringBuilder stringBuilder = new StringBuilder();
-        static int count = 0;
+        private void SetTextSafePost(object text)
+        {
+            this.tb_log.Text = text.ToString();
+        }
+
         private void Btn_file_Click(object sender, EventArgs e)
         {
             OpenFileDialog fileDialog = new OpenFileDialog();
@@ -39,44 +47,41 @@ namespace NSMPT.ImpDate
         {
             stringBuilder.Append("开始导入");
             this.tb_log.Text = stringBuilder.ToString();
-            string path = this.tb_url.Text;
+          
 
-            DataTable excelTable = new DataTable();
-            excelTable = ImportExcel.GetExcelDataTable(path);
+            Thread thread = new Thread(new ThreadStart(this.Import));
 
-            Thread thread = new Thread(new ThreadStart(delegate
-            {
-                if (!Import(excelTable))
-                {
-                    MessageBox.Show("导入失败！");
-                }
-            }));
-            thread.IsBackground = true;
             thread.Start();
         }
 
 
-        public bool Import(DataTable dt)
+        public void Import()
         {
+            string path = this.tb_url.Text;
+
+            DataTable dt = new DataTable();
+            dt = ImportExcel.GetExcelDataTable(path);
 
             if (dt.Rows.Count <= 0)
             {
                 MessageBox.Show("没有数据！");
-                return false;
+                return ;
             }
             RemoveEmpty(dt);
      
 
             for (int i = 0; i < dt.Rows.Count; i++)
             {
-                count = i;
+              
+
+                    count = i;
                 string email= dt.Rows[i]["Email"].ToString();
                 DataAccess.Tnsmtp_Spidermail spidermailexist = new DataAccess.Tnsmtp_Spidermail();
 
                 if (spidermailexist.SelectByEmail(email))
                 {
                     stringBuilder.AppendLine(count + "==已存在：" + email);
-                    this.tb_log.Text = stringBuilder.ToString();
+                    m_SyncContext.Post(SetTextSafePost, stringBuilder.ToString());
                     continue;
                 } 
 
@@ -94,19 +99,21 @@ namespace NSMPT.ImpDate
                 spidermail.Source = dt.Rows[i]["Source"].ToString();
                 spidermail.Ipaddress = dt.Rows[i]["IPAddress"].ToString();
                 spidermail.Regdate = DateTime.Parse( dt.Rows[i]["Regdate1"].ToString());
-        
-                //if (!spidermail.Insert())
-                //{
-                //    stringBuilder.AppendLine(count + "==添加失败：" + email);
-                //    this.tb_log.Text = stringBuilder.ToString();
-                //    return false;
-                //}
+
+                if (!spidermail.Insert())
+                {
+                    stringBuilder.AppendLine(count + "==添加失败：" + email);
+                    m_SyncContext.Post(SetTextSafePost, stringBuilder.ToString());
+                    return ;
+                }
                 stringBuilder.AppendLine(count + "==添加成功：" + email);
-                this.tb_log.Text = stringBuilder.ToString();
+                m_SyncContext.Post(SetTextSafePost, stringBuilder.ToString());
+                Thread.Sleep(100);
             }
 
+            stringBuilder.AppendLine(count + "==导入结束：");
+            m_SyncContext.Post(SetTextSafePost, stringBuilder.ToString());
 
-            return true;
         }
         protected void RemoveEmpty(DataTable dt)
         {
@@ -131,5 +138,10 @@ namespace NSMPT.ImpDate
                 dt.Rows.Remove(removelist[i]);
             }
         }
+
+
+
+
+  
     }
 }

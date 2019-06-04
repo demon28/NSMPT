@@ -336,7 +336,7 @@
                             contact_vm.reload();
 
                         } else {
-                            alert_danger("添加失败！");
+                        alert_danger(result.Message);
                         }
 
                     }
@@ -450,7 +450,7 @@
                     checkedbox.each(function () {
                         list.push(this.value);
                     });
-                    console.log(list);
+          
 
                     var boxchecklist = [];
                     boxchecklist.push({ "text": "请选择", "value": "" });

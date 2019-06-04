@@ -25,7 +25,7 @@ namespace NSMPT.Facade
             Log.Info("=====开始发送群发邮件=====");
             DataAccess.Tnsmtp_EmailCollection tnsmtp_EmailCollection = new DataAccess.Tnsmtp_EmailCollection();
 
-
+            Log.Info("开始查询群发数据");
             if (!tnsmtp_EmailCollection.ListSendByFlagStatus((int)EmailFlagStatus.群发))
             {
                 Log.Info("查询群发件失败");
@@ -33,7 +33,7 @@ namespace NSMPT.Facade
                 return false;
             }
             int sendcount = tnsmtp_EmailCollection.DataTable.Rows.Count;
-
+            Log.Info("群发邮件数量：" + sendcount);
             if (sendcount == 0)
             {
                 Log.Info("没有群发邮件");
@@ -42,26 +42,25 @@ namespace NSMPT.Facade
             }
 
 
-            Log.Info("群发邮件数量：" + sendcount);
+            Log.Info("开始遍历数据");
 
             foreach (DataRow dr in tnsmtp_EmailCollection.DataTable.Rows)
             {
-
-
                 int mailid = int.Parse(dr[Tnsmtp_Email._MAIL_ID].ToString());
 
                 DataAccess.Tnsmtp_Email tnsmtp_Email = new Tnsmtp_Email();
-
+                Log.Info("开始查询邮件内容！");
                 if (!tnsmtp_Email.SelectByPK(mailid))
                 {
                     Log.Info("异常，邮件不存在！");
                     Alert("邮件不存在");
                     return false;
                 }
-
+                Log.Info("创建发送对象！");
                 SendFacade send = new SendFacade();
                 if (!send.SendEmail(dr))
                 {
+                    Log.Info("SendFacade 发送失败，修改发送状态");
                     tnsmtp_Email.FlagStatus = (int)EmailFlagStatus.发送失败;
                     tnsmtp_Email.Senddate = DateTime.Now;
                     tnsmtp_Email.Remarks = tnsmtp_Email.PromptInfo.Message;
@@ -75,7 +74,7 @@ namespace NSMPT.Facade
                     continue;
                 }
 
-             
+                Log.Info("SendFacade发送成功！，开始修改发送状态");
 
                 tnsmtp_Email.FlagStatus = (int)EmailFlagStatus.已发送;
                 tnsmtp_Email.Senddate = DateTime.Now;

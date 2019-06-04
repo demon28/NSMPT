@@ -75,6 +75,17 @@ namespace NSMPT.DataAccess
             return SelectByCondition(where);
         }
 
+        public bool SelectIsExtByEmail(int userid, string mail,int gid)
+        {
+
+            string where = " user_id=:userid  and email=:mail and gid=:gid and status=0";
+            AddParameter("userid", userid);
+            AddParameter("mail", mail);
+            AddParameter("gid", gid);
+            return SelectByCondition(where);
+        }
+
+
         public bool SelectByUserId(int userid,int contactid) {
             string where = " user_id=:userid  and CONTACT_ID=:contactid";
             AddParameter("userid", userid);
@@ -84,7 +95,7 @@ namespace NSMPT.DataAccess
         }
         public bool SelectByGidCount(int Gid)
         {
-            string sql = "select  count(0) gcount  from tnsmtp_contact t where t.gid=:gid";
+            string sql = "select  count(0) gcount  from tnsmtp_contact t where t.gid=:gid and ";
             AddParameter("gid",Gid);
             return SelectBySql(sql);
 
@@ -123,7 +134,14 @@ namespace NSMPT.DataAccess
             return ListBySql(sql);
         }
 
+        public bool ListCount(int userid,int gid)
+        {
+            string where = "gid=:gid and user_id=:userid";
+            AddParameter("userid", userid);
+            AddParameter("gid", gid);
 
+            return ListByCondition(where);
+        }
 
     }
 }

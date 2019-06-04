@@ -48,5 +48,28 @@ namespace NSMPT.DataAccess
     public partial class Tnsmtp_SpidermailCollection : DataAccessCollectionBase
     {
         //Custom Extension Class
+
+        public bool ListByAllSp()
+        {
+            string sql = "select t.spid,t.firstname,t.lastname,t.email,t.address,t.city,t.state,t.zip,t.homephone,t.status,t.createtime from tnsmtp_spidermail t  order by t.spid asc";
+            return ListBySql(sql);
+
+        }
+
+        public bool ListBySpids(List<int> spids)
+        {
+
+            string sql = " select t.spid,t.firstname,t.email from tnsmtp_spidermail t where  t.spid in (";
+
+            foreach (var item in spids)
+            {
+                sql += item + ",";
+                    
+            }
+            sql = sql.Substring(0, sql.LastIndexOf(','));
+            sql += ")";
+            return ListBySql(sql);
+        }
+
     }
 }

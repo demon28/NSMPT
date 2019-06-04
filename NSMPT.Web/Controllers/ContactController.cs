@@ -30,6 +30,20 @@ namespace NSMPT.Web.Controllers
                 return FailResult("请先添加小组！");
             }
 
+            DataAccess.Tnsmtp_Contact tnsmtp = new DataAccess.Tnsmtp_Contact();
+            if (tnsmtp.SelectIsExtByEmail(SysUser.UserId,model.Email,model.Gid.Value))
+            {
+                return FailResult("该联系人已存在！");
+            }
+
+            DataAccess.Tnsmtp_ContactCollection tnsmtp_ContactCollection = new DataAccess.Tnsmtp_ContactCollection();
+            tnsmtp_ContactCollection.ListCount(SysUser.UserId, model.Gid.Value);
+            if (tnsmtp_ContactCollection.DataTable.Rows.Count>2000)
+            {
+                return FailResult("该小组已超过2000条邮箱！");
+            }
+                
+
             DataAccess.Tnsmtp_Contact tnsmtp_Contact = new DataAccess.Tnsmtp_Contact();
             tnsmtp_Contact.ContactName = model.ContactName;
             tnsmtp_Contact.Email = model.Email;
@@ -150,15 +164,7 @@ namespace NSMPT.Web.Controllers
         public ActionResult DeleteGroup(int Gid)
         {
 
-            DataAccess.Tnsmtp_Contact tnsmtp_Contact = new DataAccess.Tnsmtp_Contact();
-
-            if (tnsmtp_Contact.SelectByGidCount(Gid))
-            {
-                if (Convert.ToInt32(tnsmtp_Contact.DataRow["gcount"])>0)
-                {
-                    return FailResult("该分类包含联系人信息，不可删除！");
-                }
-            }
+  
            
             DataAccess.Tnsmtp_Contactgroup tnsmtp_Contactgroup = new DataAccess.Tnsmtp_Contactgroup();
 

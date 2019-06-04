@@ -781,6 +781,7 @@
                 methods: {
                     useitem: function (item) {
                         CKEDITOR.instances['description'].setData(item.TempContent);
+                        $("#txt_mailtitle").val(item.TempName);
                     }
                 },
                 showTips: alert_danger

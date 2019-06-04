@@ -18,7 +18,7 @@
 
 }
 
-<div class="box">
+<div class="box" id="App_Email">
     <div class="box-header">
         <h3 class="box-title">Spider List</h3>
 
@@ -27,19 +27,41 @@
 
         <div class="box-tools">
 
-       
+
+
+
         </div>
     </div>
     <!-- /.box-header -->
-    <div class="box-body table-responsive no-padding" id="App_Email">
-        <table class="table table-hover" id="tab_contact">
+
+
+    <div class="mailbox-controls">
+        <!-- Check all button -->
+        <button type="button" class="btn btn-default btn-sm checkbox-toggle pull-left " style="margin-right:10px">
+            <i class="fa fa-square-o"></i>全选
+        </button>
+        <div class="btn-group">
+            <button type="button" class="btn btn-sm m-4 btn-success pull-left addallsp" id="btn_downloadtemp2" style="margin-right:10px">批量添加</button>
+        </div>
+
+        <div class="pull-right">
+            当前第： {{pageIndex}}页，一共{{totalPages}}页，每页{{pageSize}}条 ，一共：{{totalCount}} 条
+            <button type="button" class="btn btn-default btn-sm pagefront "><i class="fa fa-chevron-left"></i></button>
+            <button type="button" class="btn btn-default btn-sm pagenext "><i class="fa fa-chevron-right"></i></button>
+
+            <!-- /.btn-group -->
+        </div>
+        <!-- /.pull-right -->
+    </div>
+
+    <div class="box-body table-responsive no-padding">
+        <table class="table table-hover mailbox-messages" id="tab_contact">
             <tbody>
                 <tr>
                     <th>
-                        <button type="button" class="btn btn-default btn-sm checkbox-toggle">
-                            <i class="fa fa-square-o"></i>
-                        </button>
+
                     </th>
+                    <th>ID</th>
                     <th>Firstname</th>
                     <th>Lastname</th>
                     <th>Email</th>
@@ -55,7 +77,7 @@
                 <tr v-for="item in Items">
 
                     <td>  <input id="box_check" type="checkbox" :value=item.Spid>  </td>
-
+                    <td>{{item.Spid}}</td>
                     <td>{{item.Firstname}}</td>
                     <td>{{item.Lastname}}</td>
                     <td>{{item.Email}}</td>
@@ -78,8 +100,8 @@
     <div class="box-footer">
 
 
-        <button type="button" class="btn btn-sm m-4 btn-success pull-left" id="btn_downloadtemp">批量添加</button>
-
+        <button type="button" class="btn btn-sm m-4 btn-success pull-left addallsp" id="btn_downloadtemp">批量添加</button>
+        当前第： {{pageIndex}}页，一共{{totalPages}}页，每页{{pageSize}}条 ，一共：{{totalCount}} 条
         <button type="button" class="btn btn-default btn-sm pagenext pull-right"><i class="fa fa-chevron-right"></i></button>
 
         <button type="button" class="btn btn-default btn-sm pagefront pull-right"><i class="fa fa-chevron-left"></i></button>
@@ -99,26 +121,120 @@
 
     <script>
 
-           var recmail_vm;
+        var recmail_vm;
         var pageIndex = 1;
-        var pageSize = 1000;
+        var pageSize = 100;
         var totalCount;
         var totalPages;
         $(document).ready(function () {
 
-         
+
             BindView();
             SetEvent();
         });
         function SetEvent() {
+            $(".pagefront").click(function () {
+
+                if (pageIndex == 1) {
+                    alert_success("最前一页");
+                    return
+                }
+                pageIndex = pageIndex - 1;
+                recmail_vm.Init();
+            });
+
+            $(".pagenext").click(function () {
+
+                if (pageIndex == totalPages) {
+                    alert_success("最后一页");
+                    return
+                }
+                pageIndex = pageIndex + 1;
+                recmail_vm.Init();
+            });
+
+            $(".addallsp").click(function () {
+                    var Options = [];
+                var list = new Array();
+                var checkedbox = $("input[id^='box_']:checked");
+                if (checkedbox.length == 0) {
+                    alert_danger("请选要添加的邮箱");
+                } else {
+
+                    checkedbox.each(function () {
+                        list.push(this.value);
+                    });
+
+                    $.ajax({
+                        url: "/Contact/ListGroup",
+                        type: "POST",
+                        success: function (result) {
+
+                            if (result.Success) {
+
+                                for (var i = 0; i < result.Content.Data.length; i++) {
+                                    var optionitem = { 'text': result.Content.Data[i].Groupname, 'value': result.Content.Data[i].Gid };
+                                    Options.push(optionitem);
+                                }
+                                bootbox.prompt({
+                                    title: "选择加入的小组",
+                                    inputType: 'select',
+                                    inputOptions: Options,
+                                    callback: function (result) {
+
+                                        if (result == null) {
+                                            return
+                                        }
+                                        var groupid = result;
+
+                                         var dialog = bootbox.dialog({
+                                    title: '正在导入中,请稍等...',
+                                    message: '<p><i class="fa fa-spin fa-spinner"></i> Loading...</p>'
+                                });
+
+                                        $.ajax({
+                                            url: "/Spider/BatchInsert",
+                                            type: "POST",
+                                            data: {
+                                                spids: list,
+                                                Gid: groupid
+                                            },
+                                            success: function (result) {
+
+                                                if (result.Success) {
+                                                    alert_success("添加成功！");
+                                                      
+
+                                                } else {
+                                                    alert_danger(result.Message);
+                                                }
+                                                 dialog.modal('hide');
+                                            }
+                                        })
 
 
+                                    }
+                                });
+
+
+                            }
+
+                        }
+                    })
+
+
+
+
+
+                }
+
+
+            });
 
         }
 
-
-         function BindView() {
-                  recmail_vm = new Vue({
+        function BindView() {
+            recmail_vm = new Vue({
                 el: "#App_Email",
                 data: {
                     Items: {},
@@ -156,26 +272,135 @@
                             }
                         })
                     },
-                    Add: function () {
+                    Add: function (item) {
+                        var Options = [];
+
+                        $.ajax({
+                            url: "/Contact/ListGroup",
+                            type: "POST",
+                            success: function (result) {
+
+                                if (result.Success) {
+
+                                    for (var i = 0; i < result.Content.Data.length; i++) {
+                                        var optionitem = { 'text': result.Content.Data[i].Groupname, 'value': result.Content.Data[i].Gid };
+                                        Options.push(optionitem);
+                                    }
+                                    bootbox.prompt({
+                                        title: "选择加入的小组",
+                                        inputType: 'select',
+                                        inputOptions: Options,
+                                        callback: function (result) {
+                                                if (result == null) {
+                                            return
+                                        }
+                                            var groupid = result;
 
 
-                    }
-                },
-                updated: function () {
-                    $('.mailbox-messages input[type="checkbox"]').iCheck({
-                        checkboxClass: 'icheckbox_flat-blue',
-                        radioClass: 'iradio_flat-blue'
-                    });
+                                            $.ajax({
+                                                url: "/Contact/AddContact",
+                                                type: "POST",
+                                                data: {
+                                                    ContactName: item.Firstname,
+                                                    Email: item.Email,
+                                                    Gid: groupid
+                                                },
+                                                success: function (result) {
 
+                                                    if (result.Success) {
+                                                        alert_success("添加成功！");
+                                                        contact_vm.reload();
+
+                                                    } else {
+                                                        alert_danger(result.Message);
+                                                    }
+
+                                                }
+                                            })
+
+
+
+
+
+
+
+
+                                        }
+                                    });
+
+
+                                }
+
+                            }
+                        })
+
+
+
+
+
+
+                    },
+                    updated: function () {
+                        $('.mailbox-messages input[type="checkbox"]').iCheck({
+                            checkboxClass: 'icheckbox_flat-blue',
+                            radioClass: 'iradio_flat-blue'
+                        });
+
+
+                    },
 
                 }
+            });
 
+        }
+
+
+        $(function () {
+
+            $('.mailbox-messages input[type="checkbox"]').iCheck({
+                checkboxClass: 'icheckbox_flat-blue',
+                radioClass: 'iradio_flat-blue'
+            });
+
+            //Enable check and uncheck all functionality
+            $(".checkbox-toggle").click(function () {
+                var clicks = $(this).data('clicks');
+                if (clicks) {
+                    //Uncheck all checkboxes
+                    $(".mailbox-messages input[type='checkbox']").iCheck("uncheck");
+                    $(".fa", this).removeClass("fa-check-square-o").addClass('fa-square-o');
+                } else {
+                    //Check all checkboxes
+                    $(".mailbox-messages input[type='checkbox']").iCheck("check");
+                    $(".fa", this).removeClass("fa-square-o").addClass('fa-check-square-o');
+                }
+                $(this).data("clicks", !clicks);
+            });
+
+            //Handle starring for glyphicon and font awesome
+            $(".mailbox-star").click(function (e) {
+                e.preventDefault();
+                //detect type
+                var $this = $(this).find("a > i");
+                var glyph = $this.hasClass("glyphicon");
+                var fa = $this.hasClass("fa");
+
+                //Switch states
+                if (glyph) {
+                    $this.toggleClass("glyphicon-star");
+                    $this.toggleClass("glyphicon-star-empty");
+                }
+
+                if (fa) {
+                    $this.toggleClass("fa-star");
+                    $this.toggleClass("fa-star-o");
+                }
             });
 
 
-        }
-        
+
+        });
     </script>
-        
-        
- }
+
+
+}

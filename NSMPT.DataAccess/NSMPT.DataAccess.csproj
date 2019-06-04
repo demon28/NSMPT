@@ -79,7 +79,6 @@
     <Compile Include="Tnsmtp_Mailtype.cs" />
     <Compile Include="Tnsmtp_Raplcemark.extension.cs" />
     <Compile Include="Tnsmtp_Receivefile.extension.cs" />
-    <Compile Include="Tnsmtp_ReceivefileMap.generate.cs" />
     <Compile Include="Tnsmtp_Recmail.extension.cs" />
     <Compile Include="Tnsmtp_Spidermail.extension.cs" />
   </ItemGroup>

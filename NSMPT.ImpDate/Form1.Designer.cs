@@ -49,6 +49,7 @@
             this.tb_log.Location = new System.Drawing.Point(49, 75);
             this.tb_log.Multiline = true;
             this.tb_log.Name = "tb_log";
+            this.tb_log.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.tb_log.Size = new System.Drawing.Size(645, 304);
             this.tb_log.TabIndex = 1;
             // 
