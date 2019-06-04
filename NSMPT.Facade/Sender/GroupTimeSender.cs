@@ -59,8 +59,8 @@ namespace NSMPT.Facade
 
 
                 DataAccess.Tnsmtp_Email tnsmtp_Email = new Tnsmtp_Email();
-                    SendFacade send = new SendFacade();
-                    if (!send.SendEmail(dr))
+                GroupSendFacade sender = new GroupSendFacade();
+                    if (!sender.SendEmail(dr))
                     {
                         tnsmtp_Email.FlagStatus = (int)EmailFlagStatus.发送失败;
                         tnsmtp_Email.Senddate = DateTime.Now;

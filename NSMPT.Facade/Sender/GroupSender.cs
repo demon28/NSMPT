@@ -57,13 +57,13 @@ namespace NSMPT.Facade
                     return false;
                 }
                 Log.Info("创建发送对象！");
-                SendFacade send = new SendFacade();
+                GroupSendFacade send = new GroupSendFacade();
                 if (!send.SendEmail(dr))
                 {
                     Log.Info("SendFacade 发送失败，修改发送状态");
                     tnsmtp_Email.FlagStatus = (int)EmailFlagStatus.发送失败;
                     tnsmtp_Email.Senddate = DateTime.Now;
-                    tnsmtp_Email.Remarks = tnsmtp_Email.PromptInfo.Message;
+                    tnsmtp_Email.Remarks = send.PromptInfo.Message;
 
                     if (!tnsmtp_Email.Update())
                     {

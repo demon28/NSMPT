@@ -63,7 +63,7 @@ namespace NSMPT.Facade
 
 
                     DataAccess.Tnsmtp_Email tnsmtp_Email = new Tnsmtp_Email();
-                    SendFacade send = new SendFacade();
+                    GroupSendFacade send = new GroupSendFacade();
                     if (!send.SendEmail(dr))
                     {
                         Log.Info("发送邮件失败：" + mailid + "***");

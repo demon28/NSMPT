@@ -63,7 +63,7 @@ namespace NSMPT.Web.Controllers
         {
             model.Userid = SysUser.UserId;
 
-            SendFacade sendFacade = new SendFacade();
+            GroupSendFacade sendFacade = new GroupSendFacade();
 
             if (!sendFacade.GroupSend(model,Gid))
             {
@@ -81,7 +81,7 @@ namespace NSMPT.Web.Controllers
         {
             model.Userid = SysUser.UserId;
 
-            SendFacade sendFacade = new SendFacade();
+            GroupSendFacade sendFacade = new GroupSendFacade();
 
             if (!sendFacade.GroupTimerSend(model, Gid))
             {

@@ -82,6 +82,7 @@
     <Compile Include="Tnsmtp_EmailMap.generate.cs" />
     <Compile Include="Tool\GetUrl.cs" />
     <Compile Include="Tool\ImportExcel.cs" />
+    <Compile Include="Tool\SplitContact.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

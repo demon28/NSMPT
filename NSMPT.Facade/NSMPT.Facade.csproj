@@ -69,8 +69,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AttchmentFacade.cs" />
+    <Compile Include="GroupSendFacade.cs" />
     <Compile Include="ImapEmail.cs" />
+    <Compile Include="Receipt.cs" />
     <Compile Include="ReceiveFacade.cs" />
+    <Compile Include="ReplaceMark.cs" />
     <Compile Include="Sender\GroupSender.cs" />
     <Compile Include="ImportContactFacade.cs" />
     <Compile Include="ISmtpMail.cs" />
