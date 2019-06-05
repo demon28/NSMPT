@@ -49,6 +49,21 @@ namespace NSMPT.DataAccess
             return SelectByCondition(where);
         }
 
+        public bool SelectByTotal(int userid) {
+
+            string sql = @"select  count(0) total,
+         sum(decode(t.flag_status, 0, 1, 0)) completed,
+         sum(decode(t.flag_status, 1, 1, 0)) sending,
+         sum(decode(t.flag_status, 2, 1, 0)) Faileds
+    from tnsmtp_email t
+   where t.userid = :userid";
+
+            AddParameter("userid", userid);
+
+            return SelectBySql(sql);
+
+        }
+
     }
 
     /// <summary>

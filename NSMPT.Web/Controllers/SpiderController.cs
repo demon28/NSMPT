@@ -43,7 +43,7 @@ namespace NSMPT.Web.Controllers
             Spider2Contact spider = new Spider2Contact();
             if (!spider.Enter(spids,gid,SysUser.UserId))
             {
-                return FailResult(spider.PromptInfo.CustomMessage);
+                return FailResult(spider.PromptInfo.Message);
             }
             return SuccessResult("添加成功！");
         }

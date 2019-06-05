@@ -20,6 +20,16 @@ namespace NSMPT.Facade
                 Alert("查询失败！");
                 return false;
             }
+            DataAccess.Tnsmtp_ContactCollection tnsmtp_ContactCollection = new DataAccess.Tnsmtp_ContactCollection();
+            tnsmtp_ContactCollection.ListCount(userid, gid);
+            if (tnsmtp_ContactCollection.DataTable.Rows.Count > 2000)
+            {
+               Alert("该小组已超过2000条邮箱！");
+                return false;
+            }
+
+
+
             BeginTransaction();
 
             for (int i = 0; i < collection.DataTable.Rows.Count; i++)
