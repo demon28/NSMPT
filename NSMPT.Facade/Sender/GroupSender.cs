@@ -86,7 +86,7 @@ namespace NSMPT.Facade
                     return false;
                 }
 
-                Thread.Sleep(1000);  //降低发件频率
+                Thread.Sleep(10000);  //降低发件频率
 
             }
 

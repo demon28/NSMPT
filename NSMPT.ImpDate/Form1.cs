@@ -15,6 +15,10 @@ namespace NSMPT.ImpDate
 {
     public partial class Form1 : Form
     {
+
+        // <add name="Winner.Framework.Oracle.ConnectionStringV2" connectionString="Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = 114.215.210.3 )(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED) (SERVICE_NAME = ORCL)));Persist Security Info=True;User ID=mykm;Password=mykm_test2018_mykm" />
+        //    <add name="Winner.Framework.Oracle.ConnectionStringV2" connectionString="Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = 112.124.14.124 )(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED) (SERVICE_NAME = STARK124)));Persist Security Info=True;User ID=mykm;Password=mykm_winner2018_MYKM" />
+
         StringBuilder stringBuilder = new StringBuilder();
         static int count = 0;
         SynchronizationContext m_SyncContext = null;
@@ -72,6 +76,7 @@ namespace NSMPT.ImpDate
 
             for (int i = 0; i < dt.Rows.Count; i++)
             {
+                Thread.Sleep(300);
               
 
                     count = i;
