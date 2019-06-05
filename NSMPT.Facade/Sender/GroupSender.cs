@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Winner.Framework.Core.Facade;
 using Winner.Framework.Utils;
@@ -60,7 +61,7 @@ namespace NSMPT.Facade
                 GroupSendFacade send = new GroupSendFacade();
                 if (!send.SendEmail(dr))
                 {
-                    Log.Info("SendFacade 发送失败，修改发送状态");
+                    Log.Info("SendFacade 发送失败，修改发送状态======================"+ tnsmtp_Email.Inmail);
                     tnsmtp_Email.FlagStatus = (int)EmailFlagStatus.发送失败;
                     tnsmtp_Email.Senddate = DateTime.Now;
                     tnsmtp_Email.Remarks = send.PromptInfo.Message;
@@ -85,7 +86,7 @@ namespace NSMPT.Facade
                     return false;
                 }
 
-
+                Thread.Sleep(1000);  //降低发件频率
 
             }
 

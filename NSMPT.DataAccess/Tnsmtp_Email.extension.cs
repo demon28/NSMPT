@@ -67,7 +67,7 @@ inner join
 ( select sum(decode(t.flag_read,0,1,0)) noread,
         sum(decode(t.flag_read,1,1,0)) isread
         from tnsmtp_email t
-   where t.userid = :userid and  t.status=1 
+   where t.userid = :userid and  t.status=1 and t.flag_status=0
   )b
  
  on 1=1 ";
